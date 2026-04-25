@@ -3,13 +3,7 @@ package com.budgetapp.infrastructure;
 // you can't acces subpackages from the parent package, they are just names
 import com.budgetapp.model.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.List;
-
-import java.sql.Statement;
-import java.sql.PreparedStatement;
 import java.sql.*;
 
 public class DatabaseManager {
@@ -40,12 +34,16 @@ public class DatabaseManager {
 
         String pragmaSql = "PRAGMA foreign_keys = ON;";
         String[] sqlQueries = {
-            "CREATE TABLE IF NOT EXISTS users (uId INTEGER PRIMARY KEY, fullName TEXT, email TEXT UNIQUE, passwordHash TEXT, currency TEXT, language TEXT);",
-            "CREATE TABLE IF NOT EXISTS accounts (aId INTEGER PRIMARY KEY, password TEXT, userId INTEGER UNIQUE NOT NULL, FOREIGN KEY(uId) REFERENCES users(uId) on DELETE CASCADE );",
-            "CREATE TABLE IF NOT EXISTS transactions (tId INTEGER PRIMARY KEY, uId INTEGER NOT NULL, type TEXT CHECK(type IN ('income', 'expense')), amount REAL, category TEXT, description TEXT, date TEXT, source TEXT, paymentMethod TEXT, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
-            "CREATE TABLE IF NOT EXISTS budgets (bId INTEGER PRIMARY KEY, uId INTEGER NOT NULL, category TEXT, limitAmount REAL, currentSpent REAL, startDate TEXT, endDate TEXT, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
-            "CREATE TABLE IF NOT EXISTS categories (cId INTEGER PRIMARY KEY, name TEXT, isActive INTEGER);",
-            "CREATE TABLE IF NOT EXISTS notifications (nId INTEGER PRIMARY KEY, uId INTEGER NOT NULL, message TEXT, isRead INTEGER, date TEXT, FOREIGN KEY(uId) REFERENCES users(uId));"};
+            //! I MUST DISSCUSSE THE CATEGORY
+            "CREATE TABLE IF NOT EXISTS users (uId INTEGER PRIMARY KEY AUTOINCREMENT, fullName TEXT NOT NULL, email TEXT UNIQUE NOT NULL, passwordHash TEXT NOT NULL, currency TEXT DEFAULT 'Pound', language TEXT DEFAULT 'English');",
+            // why a seperate table for accouts?
+            // "CREATE TABLE IF NOT EXISTS accounts (aId INTEGER PRIMARY KEY AUTOINCREMENT, password TEXT NOT NULL, uId INTEGER UNIQUE NOT NULL, FOREIGN KEY(uId) REFERENCES users(uId) on DELETE CASCADE );",
+            "CREATE TABLE IF NOT EXISTS accounts (password TEXT NOT NULL, uId INTEGER PRIMARY KEY, FOREIGN KEY(uId) REFERENCES users(uId) on DELETE CASCADE );",
+            // if source is null, then it is an expense, if paymentMethod is null, then it is an income
+            "CREATE TABLE IF NOT EXISTS transactions (tId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, type TEXT CHECK(type IN ('income', 'expense')) NOT NULL, amount REAL NOT NULL, cId INTEGER,category TEXT, description TEXT, date TEXT DEFAULT (datetime('now')), source TEXT, paymentMethod TEXT, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
+            "CREATE TABLE IF NOT EXISTS budgets (bId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, category TEXT NOT NULL,  limitAmount REAL NOT NULL, currentSpent REAL DEFAULT 0, startDate TEXT, endDate TEXT, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
+            "CREATE TABLE IF NOT EXISTS categories (cId INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE, type TEXT CHECK(type IN ('income', 'expense', 'both')) DEFAULT 'both', isActive INTEGER DEFAULT 1);",
+            "CREATE TABLE IF NOT EXISTS notifications (nId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, message TEXT NOT NULL, isRead INTEGER DEFAULT 0, date TEXT DEFAULT (datetime('now')), FOREIGN KEY(uId) REFERENCES users(uId));"};
 
         try (Connection conn = getConnection(); Statement st = conn.createStatement()) {
             st.execute(pragmaSql);
@@ -57,9 +55,43 @@ public class DatabaseManager {
         }
     }
 
+    public void insertDefaultCategories() {
+        String sql = "INSERT OR IGNORE INTO categories (name, type) VALUES (?, ?)";
+
+        String[][] defaults = {
+            // expense categories
+            {"Food & Dining", "expense"},
+            {"Transport", "expense"},
+            {"Bills & Utilities", "expense"},
+            {"Entertainment", "expense"},
+            {"Shopping", "expense"},
+            {"Health", "expense"},
+            {"Education", "expense"},
+            // income categories
+            {"Salary", "income"},
+            {"Freelance", "income"},
+            {"Gift", "income"},
+            // both
+            {"Other", "both"}
+        };
+
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            for (String[] cat : defaults) {
+                ps.setString(1, cat[0]);
+                ps.setString(2, cat[1]);
+                ps.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.err.println("insertDefaultCategories failed: " + e.getMessage());
+        }
+    }
+
     // here we start to use prepared statments, unlike normal statements
     // prepared statments are precompiled sql statement that run with different values each time
     // we use placeholder ? and set them by setString
+    //** user
     public boolean saveUser(User u) {
         String command = "Insert into users (fullName, email, passwordHash, currency, language) values( ?,  ?,  ?,  ?,  ?);";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
@@ -132,11 +164,13 @@ public class DatabaseManager {
         return null;
     }
 
-    public Account fetchAccount(String email) {
+    //** account
+    public Account fetchAccount(int userId) {
         return null;
     }
 
     // ── Person 2 needs these ──
+    //** transaction
     public boolean saveTransaction(Transaction t) {
         return false;
     }
@@ -145,7 +179,20 @@ public class DatabaseManager {
         return null;
     }
 
+    public List<Transaction> fetchTransactionsByCatgegory(int uId, String category) {
+        return null;
+    }
+
+    public boolean deleteTransaction(int tId) {
+        return true;
+    }
+
+    //** budget
     public boolean saveBudget(Budget b) {
+        return false;
+    }
+
+    public boolean updateBudget(Budget b) {
         return false;
     }
 
@@ -153,12 +200,18 @@ public class DatabaseManager {
         return null;
     }
 
+    //** */ category
     public boolean saveCategory(Category c) {
         return false;
     }
 
+    //** */ notification
     public boolean saveNotification(Notification n) {
         return false;
+    }
+
+    public List<Notification> fetchNotifications(int userId) {
+        return null;
     }
 
 }
