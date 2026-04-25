@@ -41,11 +41,11 @@ public class DatabaseManager {
         String pragmaSql = "PRAGMA foreign_keys = ON;";
         String[] sqlQueries = {
             "CREATE TABLE IF NOT EXISTS users (uId INTEGER PRIMARY KEY, fullName TEXT, email TEXT UNIQUE, passwordHash TEXT, currency TEXT, language TEXT);",
-            "CREATE TABLE IF NOT EXISTS accounts (aId INTEGER PRIMARY KEY, password TEXT, userId INTEGER, FOREIGN KEY(userId) REFERENCES users(userId));",
-            "CREATE TABLE IF NOT EXISTS transactions (tId INTEGER PRIMARY KEY, userId INTEGER, type TEXT, amount REAL, category TEXT, description TEXT, date TEXT, FOREIGN KEY(userId) REFERENCES users(userId));",
-            "CREATE TABLE IF NOT EXISTS budgets (bId INTEGER PRIMARY KEY, userId INTEGER, category TEXT, limitAmount REAL, currentSpent REAL, startDate TEXT, endDate TEXT, FOREIGN KEY(userId) REFERENCES users(userId));",
+            "CREATE TABLE IF NOT EXISTS accounts (aId INTEGER PRIMARY KEY, password TEXT, userId INTEGER UNIQUE NOT NULL, FOREIGN KEY(uId) REFERENCES users(uId) on DELETE CASCADE );",
+            "CREATE TABLE IF NOT EXISTS transactions (tId INTEGER PRIMARY KEY, uId INTEGER NOT NULL, type TEXT CHECK(type IN ('income', 'expense')), amount REAL, category TEXT, description TEXT, date TEXT, source TEXT, paymentMethod TEXT, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
+            "CREATE TABLE IF NOT EXISTS budgets (bId INTEGER PRIMARY KEY, uId INTEGER NOT NULL, category TEXT, limitAmount REAL, currentSpent REAL, startDate TEXT, endDate TEXT, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
             "CREATE TABLE IF NOT EXISTS categories (cId INTEGER PRIMARY KEY, name TEXT, isActive INTEGER);",
-            "CREATE TABLE IF NOT EXISTS notifications (nId INTEGER PRIMARY KEY, userId INTEGER, message TEXT, isRead INTEGER, date TEXT, FOREIGN KEY(userId) REFERENCES users(userId));"};
+            "CREATE TABLE IF NOT EXISTS notifications (nId INTEGER PRIMARY KEY, uId INTEGER NOT NULL, message TEXT, isRead INTEGER, date TEXT, FOREIGN KEY(uId) REFERENCES users(uId));"};
 
         try (Connection conn = getConnection(); Statement st = conn.createStatement()) {
             st.execute(pragmaSql);
