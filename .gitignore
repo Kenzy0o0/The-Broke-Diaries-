@@ -1,0 +1,61 @@
+# Dependencies
+node_modules/
+venv/
+env/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+target/
+build/
+dist/
+out/
+bin/
+obj/
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.crt
+
+# Logs & databases
+*.log
+*.sqlite
+*.db
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor folders
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# Build tools & package manager caches
+.npm/
+.yarn/
+.pnpm-store/
+.eslintcache
+.parcel-cache/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Misc
+*.tmp
+*.temp
+*.bak
+*.orig
+*.cache
