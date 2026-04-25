@@ -14,7 +14,8 @@ import java.sql.*;
 
 public class DatabaseManager {
 
-    private static final String URL = "jdbc:sqlite:TheBrokeDiariesDatabase";
+    // make it .db to view it
+    private static final String URL = "jdbc:sqlite:TheBrokeDiariesDatabase.db";
 
     // for it to be singleton, it has to has one instance only;
     private static DatabaseManager instance;
