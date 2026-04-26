@@ -2,15 +2,12 @@ package com.budgetapp.model;
 
 public class Account {
 
-    public boolean setAccountId(Integer accountId) {
-        return true;
+    // constructor 1
+    public Account(Integer userId, String password, Double balance) {
+
     }
 
-    public boolean setUserId(Integer userId) {
-        return true;
-    }
-
-    public boolean setPasswordHash(String passwordHash) {
+    public boolean setPassword(String passwordHash) {
         return true;
     }
 
@@ -18,15 +15,11 @@ public class Account {
         return true;
     }
 
-    public Integer getAccountId() {
-        return 221;
-    }
-
     public Integer getUserId() {
         return 221;
     }
 
-    public String getPasswordHash() {
+    public String getPassword() {
         return "12345678";
     }
 

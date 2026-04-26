@@ -2,48 +2,53 @@ package com.budgetapp.model;
 
 public class User {
 
-    public boolean setUserId(Integer userId) {
-        return true;
+    // Constructor 1, for creating a NEW user (no ID yet, DB assigns it)
+    // for general use
+    public User(String fullName, String email, String passwordHash) {
     }
 
-    public boolean setFullName(String fullName) {
-        return true;
+    // Constructor 2,  for rebuilding a user FROM the database (all fields known)
+    // Used in fetchUser()
+    public User(int userId, String fullName, String email,
+            String passwordHash, String currency, String language) {
     }
 
-    public boolean setEmail(String email) {
-        return true;
+    // Setters only for fields that are allowed to change
+    //! do you want the user to be able to change their email or password?
+    public void setFullName(String fullName) {
     }
 
-    public boolean setPasswordHash(String passwordHash) {
-        return true;
+    public void setPasswordHash(String passwordHash) {
     }
 
-    public boolean setCurrency(String currency) {
-        return true;
+    public void setEmail(String email) {
     }
 
-    public boolean setLanguage(String language) {
-        return true;
+    public void setCurrency(String currency) {
     }
 
-    public Integer getUserId() {
-        return 221;
+    public void setLanguage(String language) {
+    }
+
+    // Getters for everything
+    public int getUserId() {
+        return 1;
     }
 
     public String getFullName() {
-        return "jamesBond";
+        return "John james";
     }
 
     public String getEmail() {
-        return "james@gmail.com";
+        return "john@example.com";
     }
 
     public String getPasswordHash() {
-        return "12345678";
+        return "passwordHash";
     }
 
     public String getCurrency() {
-        return "USD";
+        return "Pound";
     }
 
     public String getLanguage() {
