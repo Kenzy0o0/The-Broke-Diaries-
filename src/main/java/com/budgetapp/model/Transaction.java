@@ -43,7 +43,7 @@ public class Transaction {
         return true;
     }
 
-    public Integer getTransactionId(Integer transactionId) {
+    public int getTransactionId() {
         return 1;
     }
 
