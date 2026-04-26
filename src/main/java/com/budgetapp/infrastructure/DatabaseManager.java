@@ -19,6 +19,7 @@ import com.budgetapp.model.User;
 
 public class DatabaseManager {
 
+    // to be or not to be, this is the biggest question
     // make it .db to view it
     private static final String URL = "jdbc:sqlite:TheBrokeDiariesDatabase.db";
 
