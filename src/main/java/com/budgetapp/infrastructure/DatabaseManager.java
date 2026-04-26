@@ -166,10 +166,64 @@ public class DatabaseManager {
 
     //** account
     public Account fetchAccount(int userId) {
+
+        String command = "SELECT * FROM accountsWHERE uId = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
+            ps.setInt(1, userId);
+
+            ps.executeQuery();
+
+            // we use executeQuery for select statements, it returns a ResultSet object that contains the data returned by the query
+            // we can use the ResultSet object to iterate through the rows of the result and get the values of the columns by using the getString, getInt, etc. methods
+            // for example, if we want to get the fullName column value of the first row, we can use rs.getString("fullName") or rs.getString(2) if fullName is the second column in the select statement
+            // we can also check if there are more rows by using rs.next() method, which returns true if there is a next row and moves the cursor to that row, or false if there are no more rows
+            // in this case, we expect only one row to be returned, so we can just check if rs.next() is true and then get the values of the columns to create a User object and return it
+            // if rs.next() is false, it means there is no user with the given userId, so we can return null
+            ResultSet rs = ps.getResultSet();
+            if (rs.next()) {
+                Account account = new Account();
+                // get returns the attributes of the current row
+                account.setAccountId(rs.getInt("aId"));
+                account.setUserId(rs.getInt("uId"));
+                account.setBalance(rs.getDouble("balance"));
+                return account;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Account fetch failed: " + e.getMessage());
+        }
         return null;
     }
 
-    // ── Person 2 needs these ──
+    public boolean saveAccount(Account a) {
+        String command = "Insert into accounts (password, uId, balance) values(?,?,?);";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
+            ps.setString(1, a.getPasswordHash());
+            ps.setInt(2, a.getUserId());
+            ps.setDouble(3, a.getBalance());
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Account save failed: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean updateAccount(Account a) {
+        String command = "UPDATE accounts SET password = ?, balance = ? WHERE uId = ?";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
+            ps.setString(1, a.getPasswordHash());
+            ps.setDouble(2, a.getBalance());
+            ps.setInt(3, a.getUserId());
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Account update failed: " + e.getMessage());
+        }
+        return false;
+    }
+
     //** transaction
     public boolean saveTransaction(Transaction t) {
         return false;
