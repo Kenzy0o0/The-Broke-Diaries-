@@ -13,5 +13,8 @@ public class DatabaseManager {
     public void initializeDatabase() {
         // Implementation for initializing the database
     }
+    public void saveNotification(Object notification) {
+        // Implementation for saving a notification to the database
+    }
     
 }

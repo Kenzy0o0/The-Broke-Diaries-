@@ -9,7 +9,7 @@ public class Budget {
     private int userId;
     private double limit;
     private double currentSpent;
-    // private List<IBudgetObserver> observers; // For observer pattern
+    private final List<IBudgetObserver> observers = new ArrayList<>();
 
     public Budget( int userId, double limit) {
         this.userId = userId;
@@ -50,10 +50,12 @@ public class Budget {
     }
 
     public void AddObserver(IBudgetObserver observer) {
-        // Placeholder for observer pattern implementation
+        this.observers.add(observer);
     }
 
     public void notifyObservers() {
-        // Placeholder for observer pattern implementation
+        for (IBudgetObserver observer : observers) {
+            observer.updateAlert(this);
+        }
     }
 }

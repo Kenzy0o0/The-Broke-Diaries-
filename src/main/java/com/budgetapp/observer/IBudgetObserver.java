@@ -1,5 +1,7 @@
 package com.budgetapp.observer;
 
-public class IBudgetObserver {
-    
+import com.budgetapp.model.Budget;
+
+public interface IBudgetObserver {
+    void updateAlert(Budget budget);
 }
