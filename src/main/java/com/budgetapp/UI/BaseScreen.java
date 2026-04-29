@@ -1,6 +1,5 @@
 package com.budgetapp.UI;
 
-public class LoginController {
+public class BaseScreen {
     
 }
-

@@ -1,5 +1,5 @@
 package com.budgetapp.UI;
 
-public class ProfileController {
+public class TransactionScreen {
     
 }
