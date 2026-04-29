@@ -53,8 +53,8 @@ public class DatabaseManager {
             "CREATE TABLE IF NOT EXISTS accounts (password TEXT NOT NULL, uId INTEGER PRIMARY KEY, balance REAL DEFAULT 0, FOREIGN KEY(uId) REFERENCES users(uId) on DELETE CASCADE );",
             // if source is null, then it is an expense, if paymentMethod is null, then it is an income
             "CREATE TABLE IF NOT EXISTS transactions (tId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, type TEXT CHECK(type IN ('income', 'expense')) NOT NULL, amount REAL NOT NULL, cId INTEGER,category TEXT, description TEXT, date TEXT DEFAULT (datetime('now')), source TEXT, paymentMethod TEXT, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
-            "CREATE TABLE IF NOT EXISTS budgets (bId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, category TEXT NOT NULL,  limitAmount REAL NOT NULL, currentSpent REAL DEFAULT 0, startDate TEXT, endDate TEXT, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
-            "CREATE TABLE IF NOT EXISTS categories (cId INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE, type TEXT CHECK(type IN ('income', 'expense', 'both')) DEFAULT 'both', isActive INTEGER DEFAULT 1);",
+            "CREATE TABLE IF NOT EXISTS budgets (bId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, category TEXT NOT NULL,  limitAmount REAL NOT NULL, currentSpent REAL DEFAULT 0, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
+            "CREATE TABLE IF NOT EXISTS categories (cId INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE, isActive BOOLEAN DEFAULT 1);",
             "CREATE TABLE IF NOT EXISTS notifications (nId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, message TEXT NOT NULL, isRead INTEGER DEFAULT 0, date TEXT DEFAULT (datetime('now')), FOREIGN KEY(uId) REFERENCES users(uId));"};
 
         try (Connection conn = getConnection(); Statement st = conn.createStatement()) {
