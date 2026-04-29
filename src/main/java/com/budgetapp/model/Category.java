@@ -1,53 +1,36 @@
 package com.budgetapp.model;
 
 public class Category {
-    
-}
-private int Id;
+    private int CategoryId;
     private String name;
-    private boolean isActive; // To track if the category is active[for expenses] or not
+    private String type;     
+    private boolean isActive;
 
-    public Category( String name) {
+    
+    public Category(int CategoryId, String name, String type, boolean isActive) {
+        this.CategoryId = CategoryId;
         this.name = name;
-        this.isActive = true; // Default to active when created
+        this.type = type;
+        this.isActive = isActive;
     }
 
-    public int getId() { return Id; }
-    public void setId(int Id) { this.Id = Id; }
+    
+    public Category(int CategoryId, String name, String type) {
+        this(CategoryId, name, type, true);
+    }
+
+    public int getCategoryId() { return CategoryId; }
+    public void setCategoryId(int CategoryId) { this.CategoryId = CategoryId; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
+
     public boolean isActive() { return isActive; }
-    public void deactivate() { this.isActive = false; }
-    public void activate()   { this.isActive = true;  }
-}
- // Constructor for creating new category
-    public Category(String name, String type) {
-    }
+    public void setActive(boolean active) { isActive = active; }
 
-    // Constructor for rebuilding from DB
-    public Category(int categoryId, String name, String type) {
-    }
-
-    // setters for things that can change
-    public boolean setName(String name) {
-        return true;
-    }
-
-    public boolean setType(String type) {
-        return true;
-    }
-
-    public Integer getCategoryId() {
-        return 1;
-    }
-
-    public String getName() {
-        return "Sample Category";
-    }
-
-    public String getType() {
-        return "Sample Type";
-    }
+    public void activate() { isActive = true; }
+    public void deactivate() { isActive = false; }
 }

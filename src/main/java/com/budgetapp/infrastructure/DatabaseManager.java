@@ -351,14 +351,15 @@ public class DatabaseManager {
     //budget
     public boolean saveBudget(Budget b) {
         // budgets uId INTEGER, category TEXT,  limitAmount REAL, currentSpent REAL, startDate TEXT, endDate TEXT
-        String command = "Insert into budgets (uId, category, limitAmount, currentSpent, startDate, endDate) values( ?,  ?,  ?,  ?, ?);";
+        String command = "Insert into budgets (bId, uId, category, limitAmount, currentSpent, startDate, endDate) values( ?, ?,  ?,  ?,  ?, ?);";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
-            ps.setInt(1, b.getUserId());
-            ps.setInt(2, b.getCategoryId());
-            ps.setDouble(3, b.getLimitAmount());
-            ps.setDouble(4, b.getCurrentSpent());
-            ps.setString(5, b.getStartDate());
-            ps.setString(6, b.getEndDate());
+            ps.setInt(1, b.getBudgetId());
+            ps.setInt(2, b.getUserId());
+            ps.setInt(3, b.getCategoryId());
+            ps.setDouble(4, b.getLimitAmount());
+            ps.setDouble(5, b.getCurrentSpent());
+            ps.setString(6, b.getStartDate());
+            ps.setString(7, b.getEndDate());
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -396,6 +397,7 @@ public class DatabaseManager {
             List<Budget> budgets = new ArrayList<>();
             while (rs.next()) {
                 Budget b = new Budget(
+                        rs.getInt("bId"),
                         rs.getInt("uId"),
                         rs.getInt("cId"),
                         rs.getDouble("limitAmount"),
@@ -414,10 +416,11 @@ public class DatabaseManager {
 
     //** category
     public boolean saveCategory(Category c) {
-        String command = "Insert into categories (name, type) values( ?, ?);";
+        String command = "Insert into categories (cId, name, type) values( ?, ?, ?);";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
-            ps.setString(1, c.getName());
-            ps.setString(2, c.getType());
+            ps.setInt(1, c.getCategoryId());
+            ps.setString(2, c.getName());
+            ps.setString(3, c.getType());
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
