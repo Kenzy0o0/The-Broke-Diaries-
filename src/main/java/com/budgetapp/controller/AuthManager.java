@@ -1,11 +1,11 @@
 package com.budgetapp.controller;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import com.budgetapp.infrastructure.DatabaseManager;
 import com.budgetapp.model.Account;
 import com.budgetapp.model.User;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class AuthManager {
 

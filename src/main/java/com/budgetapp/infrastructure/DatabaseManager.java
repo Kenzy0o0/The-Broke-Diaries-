@@ -13,6 +13,8 @@ import java.util.List;
 import com.budgetapp.model.Account;
 import com.budgetapp.model.Budget;
 import com.budgetapp.model.Category;
+import com.budgetapp.model.Expense;
+import com.budgetapp.model.Income;
 import com.budgetapp.model.Notification;
 import com.budgetapp.model.Transaction;
 import com.budgetapp.model.User;
@@ -47,15 +49,15 @@ public class DatabaseManager {
         String pragmaSql = "PRAGMA foreign_keys = ON;";
         String[] sqlQueries = {
             //! I MUST DISSCUSSE THE CATEGORY
-            "CREATE TABLE IF NOT EXISTS users (uId INTEGER PRIMARY KEY AUTOINCREMENT, fullName TEXT NOT NULL, passwordHash TEXT NOT NULL, currency TEXT DEFAULT 'Pound');",
+            "CREATE TABLE IF NOT EXISTS users (uId INTEGER PRIMARY KEY AUTOINCREMENT, fullName TEXT NOT NULL, currency TEXT DEFAULT 'Pound');",
             // why a seperate table for accouts?
             // "CREATE TABLE IF NOT EXISTS accounts (aId INTEGER PRIMARY KEY AUTOINCREMENT, password TEXT NOT NULL, uId INTEGER UNIQUE NOT NULL, FOREIGN KEY(uId) REFERENCES users(uId) on DELETE CASCADE );",
             "CREATE TABLE IF NOT EXISTS accounts (password TEXT NOT NULL, uId INTEGER PRIMARY KEY, email TEXT UNIQUE NOT NULL, FOREIGN KEY(uId) REFERENCES users(uId) on DELETE CASCADE );",
             // if source is null, then it is an expense, if paymentMethod is null, then it is an income
-            "CREATE TABLE IF NOT EXISTS transactions (tId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, type TEXT CHECK(type IN ('income', 'expense')) NOT NULL, amount REAL NOT NULL, cId INTEGER,category TEXT, description TEXT, date TEXT DEFAULT (datetime('now')), source TEXT, paymentMethod TEXT, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
-            "CREATE TABLE IF NOT EXISTS budgets (bId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, category TEXT NOT NULL,  limitAmount REAL NOT NULL, currentSpent REAL DEFAULT 0, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
+            "CREATE TABLE IF NOT EXISTS transactions (tId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, type TEXT CHECK(type IN ('income', 'expense')) NOT NULL, amount REAL NOT NULL, cId INTEGER, description TEXT, date DATE DEFAULT (datetime('now')), source TEXT, paymentMethod TEXT, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
+            "CREATE TABLE IF NOT EXISTS budgets (bId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, cId NOT NULL, limit REAL NOT NULL, currentSpent REAL DEFAULT 0, startDate DATE DEFAULT (datetime('now')), endDate DATE, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
             "CREATE TABLE IF NOT EXISTS categories (cId INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE, isActive BOOLEAN DEFAULT 1);",
-            "CREATE TABLE IF NOT EXISTS notifications (nId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, message TEXT NOT NULL, isRead INTEGER DEFAULT 0, date TEXT DEFAULT (datetime('now')), FOREIGN KEY(uId) REFERENCES users(uId));"};
+            "CREATE TABLE IF NOT EXISTS notifications (nId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, message TEXT NOT NULL, isRead INTEGER DEFAULT 0, date DATE DEFAULT (datetime('now')), FOREIGN KEY(uId) REFERENCES users(uId));"};
 
         try (Connection conn = getConnection(); Statement st = conn.createStatement()) {
             st.execute(pragmaSql);
@@ -72,19 +74,19 @@ public class DatabaseManager {
 
         String[][] defaults = {
             // expense categories
-            {"Food & Dining", "expense"},
-            {"Transport", "expense"},
-            {"Bills & Utilities", "expense"},
-            {"Entertainment", "expense"},
-            {"Shopping", "expense"},
-            {"Health", "expense"},
-            {"Education", "expense"},
+            {"Food & Dining"},
+            {"Transport"},
+            {"Bills & Utilities"},
+            {"Entertainment"},
+            {"Shopping"},
+            {"Health"},
+            {"Education"},
             // income categories
-            {"Salary", "income"},
-            {"Freelance", "income"},
-            {"Gift", "income"},
+            {"Salary"},
+            {"Freelance"},
+            {"Gift"},
             // both
-            {"Other", "both"}
+            {"Other"}
         };
 
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -262,24 +264,85 @@ public class DatabaseManager {
     }
 
     //** transaction
+    // you can save an income or an expense using the same method, because they are both transactions, and they have the same attributes, except for the source and paymentMethod, which can be null for one of them
     public boolean saveTransaction(Transaction t) {
-        String command = "Insert into transactions (uId, type ,amount, category, description , source , date, paymentMethod) values( ?,  ?,  ?,  ?, ?);";
+        String command = "Insert into transactions (uId, type ,amount, cId, description ,date, source ,  paymentMethod) values( ?,  ?,  ?,  ?, ?, ?, ?, ?);";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
+
+            //   source , date, paymentMethod) 
             ps.setInt(1, t.getUserId());
-            ps.setDouble(2, t.getAmount());
-            ps.setInt(3, t.getCategoryId());
-            ps.setDate(4, t.getDate());
-            ps.setString(5, t.getType());
-            ps.setString(6, t.getDescription());
-            ps.setString(7, t.getSource());
-            ps.setDate(8, t.getDate());
-            ps.setString(9, t.getPaymentMethod());
+            ps.setString(2, t instanceof Income ? "income" : "expense");
+            ps.setDouble(3, t.getAmount());
+            ps.setInt(4, t instanceof Income ? ((Income) t).getCategoryId() : ((Expense) t).getCategoryId());
+            ps.setString(5, t.getDescription());
+            ps.setDate(6, new java.sql.Date(t.getDate().getTime()));
+            ps.setString(7, t instanceof Income ? ((Income) t).getSource() : null);
+            ps.setString(8, t instanceof Income ? null : ((Expense) t).getPaymentMethod());
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
             System.err.println("Transaction save failed: " + e.getMessage());
         }
         return false;
+    }
+
+    public boolean updateTransaction(Transaction t) {
+        String command = "UPDATE transactions SET amount = ?, cId = ?, description = ?, date = ?, source = ?, paymentMethod = ? WHERE tId = ?";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
+            ps.setDouble(1, t.getAmount());
+            ps.setInt(2, t instanceof Income ? ((Income) t).getCategoryId() : ((Expense) t).getCategoryId());
+            ps.setString(3, t.getDescription());
+            ps.setDate(4, new java.sql.Date(t.getDate().getTime()));
+            ps.setString(5, t instanceof Income ? ((Income) t).getSource() : null);
+            ps.setString(6, t instanceof Income ? null : ((Expense) t).getPaymentMethod());
+            ps.setInt(7, t.getId());
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Transaction update failed: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public Transaction fetchTransaction(int tId) {
+        String command = "SELECT * FROM transactions WHERE tId = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
+            ps.setInt(1, tId);
+
+            ps.executeQuery();
+
+            ResultSet rs = ps.getResultSet();
+            if (rs.next()) {
+                Transaction t;
+                if (rs.getString("type").equals("income")) {
+                    t = new Income(
+                            rs.getInt("tId"),
+                            rs.getInt("uId"),
+                            rs.getDouble("amount"),
+                            rs.getDate("date"),
+                            rs.getString("description"),
+                            rs.getString("source"),
+                            rs.getInt("categoryId")
+                    );
+                } else {
+                    t = new Expense(
+                            rs.getInt("tId"),
+                            rs.getInt("uId"),
+                            rs.getDouble("amount"),
+                            rs.getDate("date"),
+                            rs.getString("description"),
+                            rs.getInt("categoryId"),
+                            rs.getString("paymentMethod")
+                    );
+                }
+                return t;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Transaction fetch failed: " + e.getMessage());
+        }
+        return null;
     }
 
     public List<Transaction> fetchTransactions(int userId) {
@@ -307,17 +370,29 @@ public class DatabaseManager {
                 //         double amount, int categoryId, String description,
                 //         String date, String source, String paymentMethod) {
                 // }
-                Transaction t = new Transaction(
-                        rs.getInt("tId"),
-                        rs.getInt("uId"),
-                        rs.getString("type"),
-                        rs.getDouble("amount"),
-                        rs.getInt("categoryId"),
-                        rs.getString("description"),
-                        rs.getString("date"),
-                        rs.getString("source"),
-                        rs.getString("paymentMethod")
-                );
+
+                Transaction t;
+                if (rs.getString("type").equals("income")) {
+                    t = new Income(
+                            rs.getInt("tId"),
+                            rs.getInt("uId"),
+                            rs.getDouble("amount"),
+                            rs.getDate("date"),
+                            rs.getString("description"),
+                            rs.getString("source"),
+                            rs.getInt("categoryId")
+                    );
+                } else {
+                    t = new Expense(
+                            rs.getInt("tId"),
+                            rs.getInt("uId"),
+                            rs.getDouble("amount"),
+                            rs.getDate("date"),
+                            rs.getString("description"),
+                            rs.getInt("categoryId"),
+                            rs.getString("paymentMethod")
+                    );
+                }
                 transactions.add(t);
             }
             return transactions;
@@ -340,22 +415,34 @@ public class DatabaseManager {
             ResultSet rs = ps.getResultSet();
             List<Transaction> transactions = new ArrayList<>();
             while (rs.next()) {
-                Transaction t = new Transaction(
-                        rs.getInt("tId"),
-                        rs.getInt("uId"),
-                        rs.getString("type"),
-                        rs.getDouble("amount"),
-                        rs.getInt("categoryId"),
-                        rs.getString("description"),
-                        rs.getString("date"),
-                        rs.getString("source"),
-                        rs.getString("paymentMethod")
-                );
+                Transaction t;
+                if (rs.getString("type").equals("income")) {
+                    t = new Income(
+                            rs.getInt("tId"),
+                            rs.getInt("uId"),
+                            rs.getDouble("amount"),
+                            rs.getDate("date"),
+                            rs.getString("description"),
+                            rs.getString("source"),
+                            rs.getInt("categoryId")
+                    );
+                } else {
+                    t = new Expense(
+                            rs.getInt("tId"),
+                            rs.getInt("uId"),
+                            rs.getDouble("amount"),
+                            rs.getDate("date"),
+                            rs.getString("description"),
+                            rs.getInt("categoryId"),
+                            rs.getString("paymentMethod")
+                    );
+                }
                 transactions.add(t);
             }
             return transactions;
         } catch (SQLException e) {
             System.err.println("Transaction fetch failed: " + e.getMessage());
+
         }
         return null;
     }
@@ -379,28 +466,79 @@ public class DatabaseManager {
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
             ps.setInt(1, b.getUserId());
             ps.setInt(2, b.getCategoryId());
-            ps.setDouble(3, b.getLimitAmount());
+            ps.setDouble(3, b.getLimit());
             ps.setDouble(4, b.getCurrentSpent());
-            ps.setString(5, b.getStartDate());
-            ps.setString(6, b.getEndDate());
+            ps.setDate(5, new java.sql.Date(b.getStartDate().getTime()));
+            ps.setDate(6, new java.sql.Date(b.getEndDate().getTime()));
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
             System.err.println("Budget save failed: " + e.getMessage());
         }
         return false;
-
     }
 
-    public boolean updateBudget(Budget b) {
-        String command = "UPDATE budgets SET limitAmount = ?, currentSpent = ?, startDate = ?, endDate = ? WHERE uId = ? AND category = ?";
+    public boolean deleteBudgetsByUserId(int userId) {
+        String command = "DELETE from budgets where uId = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
-            ps.setDouble(1, b.getLimitAmount());
+            ps.setInt(1, userId);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Budgets delete failed: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean deleteBudget(int bId) {
+        String command = "DELETE from budgets where bId = ?";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
+            ps.setInt(1, bId);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Budget delete failed: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public Budget fetchBudget(int bId) {
+        String command = "SELECT * FROM budgets WHERE bId = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
+            ps.setInt(1, bId);
+
+            ps.executeQuery();
+
+            ResultSet rs = ps.getResultSet();
+            if (rs.next()) {
+                Budget b = new Budget(
+                        rs.getInt("bId"),
+                        rs.getInt("uId"),
+                        rs.getInt("cId"),
+                        rs.getDouble("limitAmount"),
+                        rs.getDouble("currentSpent"),
+                        rs.getDate("startDate"),
+                        rs.getDate("endDate")
+                );
+                return b;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Budget fetch failed: " + e.getMessage());
+        }
+        return null;
+    }
+
+    //! wrong, we should update by budget id, not by user id and category, because a user can have multiple budgets for the same category but different time periods
+    public boolean updateBudget(Budget b) {
+        String command = "UPDATE budgets SET limitAmount = ?, currentSpent = ?, startDate = ?, endDate = ? WHERE bId = ?";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
+            ps.setDouble(1, b.getLimit());
             ps.setDouble(2, b.getCurrentSpent());
-            ps.setString(3, b.getStartDate());
-            ps.setString(4, b.getEndDate());
-            ps.setInt(5, b.getUserId());
-            ps.setInt(6, b.getCategoryId());
+            ps.setDate(3, new java.sql.Date(b.getStartDate().getTime()));
+            ps.setDate(4, new java.sql.Date(b.getEndDate().getTime()));
+            ps.setInt(5, b.getBudgetId());
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -420,12 +558,13 @@ public class DatabaseManager {
             List<Budget> budgets = new ArrayList<>();
             while (rs.next()) {
                 Budget b = new Budget(
+                        rs.getInt("bId"),
                         rs.getInt("uId"),
                         rs.getInt("cId"),
                         rs.getDouble("limitAmount"),
                         rs.getDouble("currentSpent"),
-                        rs.getString("startDate"),
-                        rs.getString("endDate")
+                        rs.getDate("startDate"),
+                        rs.getDate("endDate")
                 );
                 budgets.add(b);
             }
@@ -510,6 +649,18 @@ public class DatabaseManager {
         }
         return false;
 
+    }
+
+    public boolean markNotificationRead(int notificationId) {
+        String command = "UPDATE notifications SET isRead = 1 WHERE nId = ?";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
+            ps.setInt(1, notificationId);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Mark notification read failed: " + e.getMessage());
+        }
+        return false;
     }
 
     public List<Notification> fetchNotifications(int userId) {

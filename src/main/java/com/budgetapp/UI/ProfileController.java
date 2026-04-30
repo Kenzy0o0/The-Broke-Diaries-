@@ -39,7 +39,7 @@ public class ProfileController {
 
     }
     @FXML
-   public void handleGoTODashboard(ActionEvent e){
+    public void handleGoTODashboard(ActionEvent e){
         label.setText("Returning to DashBoard");
         //???
     }

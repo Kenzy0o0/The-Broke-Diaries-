@@ -1,33 +1,36 @@
 package com.budgetapp.model;
 
 public class Category {
+    private int CategoryId;
+    private String name;
+    private String type;     
+    private boolean isActive;
 
-    // Constructor for creating new category
-    public Category(String name, String type) {
+    
+    public Category(int CategoryId, String name, String type, boolean isActive) {
+        this.CategoryId = CategoryId;
+        this.name = name;
+        this.type = type;
+        this.isActive = isActive;
     }
 
-    // Constructor for rebuilding from DB
-    public Category(int categoryId, String name, String type) {
+    
+    public Category(int CategoryId, String name, String type) {
+        this(CategoryId, name, type, true);
     }
 
-    // setters for things that can change
-    public boolean setName(String name) {
-        return true;
-    }
+    public int getCategoryId() { return CategoryId; }
+    public void setCategoryId(int CategoryId) { this.CategoryId = CategoryId; }
 
-    public boolean setType(String type) {
-        return true;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public Integer getCategoryId() {
-        return 1;
-    }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 
-    public String getName() {
-        return "Sample Category";
-    }
+    public boolean isActive() { return isActive; }
+    public void setActive(boolean active) { isActive = active; }
 
-    public String getType() {
-        return "Sample Type";
-    }
+    public void activate() { isActive = true; }
+    public void deactivate() { isActive = false; }
 }

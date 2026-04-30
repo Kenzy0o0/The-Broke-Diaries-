@@ -1,58 +1,85 @@
 package com.budgetapp.model;
 
+import com.budgetapp.observer.IBudgetObserver;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Date;
+
 public class Budget {
+    private int budgetId;
+    private int userId;
+    private int categoryId;
+    private double limit;
+    private double currentSpent;
+    private Date startDate;
+    private Date endDate;
+    private final List<IBudgetObserver> observers = new ArrayList<>();
 
-    public Budget(Integer userId, Integer categoryId, double limitAmount, double currentSpent, String startDate, String endDate) {
-        // Constructor implementation
+    
+    public Budget( int budgetId, int userId, int categoryId,  double limit, double currentSpent, Date startDate, Date endDate) {
+        this.budgetId = budgetId;
+        this.userId = userId;
+        this.categoryId = categoryId;
+        this.limit = limit;
+        this.currentSpent = currentSpent;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
-    //second constructor
-    public Budget(Integer bId, Integer userId, Integer categoryId, double limitAmount, double currentSpent, String startDate, String endDate) {
-        // Constructor implementation
+    // Getters and setters 
+    public int getBudgetId() { return budgetId; }
+    public void setBudgetId(int budgetId) { this.budgetId = budgetId; }
+
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
+
+    public int getCategoryId() { return categoryId; }
+    public void setCategoryId(int categoryId) { this.categoryId = categoryId; }
+
+    public double getLimit() { return limit; }
+    public void setLimit(double limit) {
+        if (limit >= 0) this.limit = limit;
+        else throw new IllegalArgumentException("Limit must be non negative");
     }
 
-    // Integer categoryId, double limitAmount, double currentSpent, String startDate, String endDate) {
-    public boolean setCategoryId(Integer categoryId) {
-        return true;
+    public double getCurrentSpent() { return currentSpent; }
+    public void setCurrentSpent(double currentSpent) {
+        if (currentSpent >= 0) {
+            this.currentSpent = currentSpent;
+            checkLimit();
+        } else throw new IllegalArgumentException("Current spent must be non negative");
     }
 
-    public boolean setLimitAmount(double limitAmount) {
-        return true;
+    public Date getStartDate() { return startDate; }
+    public void setStartDate(Date startDate) { this.startDate = startDate; }
+
+    public Date getEndDate() { return endDate; }
+    public void setEndDate(Date endDate) { this.endDate = endDate; }
+
+    
+    public void updateSpent(double amount) {
+        if (amount > 0) {
+            this.currentSpent += amount;
+            checkLimit();
+        } else throw new IllegalArgumentException("Amount must be positive");
     }
 
-    public boolean setCurrentSpent(double currentSpent) {
-        return true;
+    private void checkLimit() {
+        if (currentSpent > limit) notifyObservers();
     }
 
-    public boolean setStartDate(String startDate) {
-        return true;
+    // Observer pattern
+    public void addObserver(IBudgetObserver observer) {
+        if (observer != null && !observers.contains(observer))
+            observers.add(observer);
     }
 
-    public boolean setEndDate(String endDate) {
-        return true;
+    public void removeObserver(IBudgetObserver observer) {
+        observers.remove(observer);
     }
 
-    public Integer getUserId() {
-        return 1;
-    }
-
-    public Integer getCategoryId() {
-        return 1;
-    }
-
-    public double getLimitAmount() {
-        return 1000;
-    }
-
-    public double getCurrentSpent() {
-        return 500;
-    }
-
-    public String getStartDate() {
-        return "2023-01-01";
-    }
-
-    public String getEndDate() {
-        return "2023-12-31";
+    public void notifyObservers() {
+        for (IBudgetObserver observer : observers)
+            observer.updateAlert(this);
     }
 }
