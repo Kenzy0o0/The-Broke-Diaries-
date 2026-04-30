@@ -19,7 +19,7 @@ public class LoginController {
         authManager=new AuthManager();
     }
     @FXML
-     public void handleLoginAction(ActionEvent e){
+    public void handleLoginAction(ActionEvent e){
         String email = emailField.getText();
         String password=passwordField.getText();
         if(email.isEmpty()|| password.isEmpty()){
@@ -38,14 +38,13 @@ public class LoginController {
             label.setStyle("-fx-text-fill:red;");
         }
 
-     }
+    }
     @FXML
-     public void handleGoToRegister(ActionEvent e){
+    public void handleGoToRegister(ActionEvent e){
         label.setText("Redirecting to Registration form....");
         //open Register
 
-     }
+    }
 
 
 }
-
