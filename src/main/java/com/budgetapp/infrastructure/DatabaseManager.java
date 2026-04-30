@@ -47,10 +47,10 @@ public class DatabaseManager {
         String pragmaSql = "PRAGMA foreign_keys = ON;";
         String[] sqlQueries = {
             //! I MUST DISSCUSSE THE CATEGORY
-            "CREATE TABLE IF NOT EXISTS users (uId INTEGER PRIMARY KEY AUTOINCREMENT, fullName TEXT NOT NULL, email TEXT UNIQUE NOT NULL, passwordHash TEXT NOT NULL, currency TEXT DEFAULT 'Pound', language TEXT DEFAULT 'English');",
+            "CREATE TABLE IF NOT EXISTS users (uId INTEGER PRIMARY KEY AUTOINCREMENT, fullName TEXT NOT NULL, passwordHash TEXT NOT NULL, currency TEXT DEFAULT 'Pound');",
             // why a seperate table for accouts?
             // "CREATE TABLE IF NOT EXISTS accounts (aId INTEGER PRIMARY KEY AUTOINCREMENT, password TEXT NOT NULL, uId INTEGER UNIQUE NOT NULL, FOREIGN KEY(uId) REFERENCES users(uId) on DELETE CASCADE );",
-            "CREATE TABLE IF NOT EXISTS accounts (password TEXT NOT NULL, uId INTEGER PRIMARY KEY, balance REAL DEFAULT 0, FOREIGN KEY(uId) REFERENCES users(uId) on DELETE CASCADE );",
+            "CREATE TABLE IF NOT EXISTS accounts (password TEXT NOT NULL, uId INTEGER PRIMARY KEY, email TEXT UNIQUE NOT NULL, FOREIGN KEY(uId) REFERENCES users(uId) on DELETE CASCADE );",
             // if source is null, then it is an expense, if paymentMethod is null, then it is an income
             "CREATE TABLE IF NOT EXISTS transactions (tId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, type TEXT CHECK(type IN ('income', 'expense')) NOT NULL, amount REAL NOT NULL, cId INTEGER,category TEXT, description TEXT, date TEXT DEFAULT (datetime('now')), source TEXT, paymentMethod TEXT, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
             "CREATE TABLE IF NOT EXISTS budgets (bId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, category TEXT NOT NULL,  limitAmount REAL NOT NULL, currentSpent REAL DEFAULT 0, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
@@ -103,36 +103,39 @@ public class DatabaseManager {
     // here we start to use prepared statements, unlike normal statements
     // prepared statements are precompiled sql statement that run with different values each time
     // we use placeholder ? and set them by setString
+    // saving a user in register
     //** user
-    public boolean saveUser(User u) {
-        String command = "Insert into users (fullName, email, passwordHash, currency, language) values( ?,  ?,  ?,  ?,  ?);";
-        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
-            ps.setString(1, u.getFullName());
-            ps.setString(2, u.getEmail());
-            ps.setString(3, u.getPasswordHash());
-            ps.setString(4, u.getCurrency());
-            ps.setString(5, u.getLanguage());
+    // returns the generated user id, or -1 if failed
+    public int saveUser(User u) {
+        String command = "Insert into users (fullName, currency, balance) values( ?,  ?,  ?,  ?,  ?);";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, u.getName());
+            ps.setString(2, u.getCurrency());
+            ps.setDouble(3, u.getBalance());
 
             // we use executeUpdate for insert, update and delete statements, it returns the number of affected rows
             ps.executeUpdate();
 
-            return true;
+            // getGeneratedKeys returns a ResultSet containing the auto-generated keys
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                return generatedKeys.getInt(1);
+            }
+
         } catch (SQLException e) {
             System.err.println("User save failed: " + e.getMessage());
         }
 
-        return false;
+        return -1;
     }
 
     public boolean updateUser(User u) {
-        String command = "UPDATE users SET fullName = ?, email = ?, passwordHash = ?, currency = ?, language = ? WHERE uId = ?";
+        String command = "UPDATE users SET fullName = ?, balance = ?, currency = ? WHERE uId = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
-            ps.setString(1, u.getFullName());
-            ps.setString(2, u.getEmail());
-            ps.setString(3, u.getPasswordHash());
-            ps.setString(4, u.getCurrency());
-            ps.setString(5, u.getLanguage());
-            ps.setInt(6, u.getUserId());
+            ps.setString(1, u.getName());
+            ps.setDouble(2, u.getBalance());
+            ps.setString(3, u.getCurrency());
+            ps.setInt(4, u.getId());
 
             ps.executeUpdate();
             return true;
@@ -162,10 +165,8 @@ public class DatabaseManager {
                 User user = new User(
                         rs.getInt("uId"),
                         rs.getString("fullName"),
-                        rs.getString("email"),
-                        rs.getString("passwordHash"),
-                        rs.getString("currency"),
-                        rs.getString("language")
+                        rs.getDouble("balance"),
+                        rs.getString("currency")
                 );
                 // get returns the attributes of the current row
                 return user;
@@ -178,7 +179,7 @@ public class DatabaseManager {
     }
 
     //** account
-    public Account fetchAccount(int userId) {
+    public Account fetchAccountByUserId(int userId) {
 
         String command = "SELECT * FROM accounts WHERE uId = ?";
 
@@ -196,9 +197,9 @@ public class DatabaseManager {
             ResultSet rs = ps.getResultSet();
             if (rs.next()) {
                 Account account = new Account(
-                        rs.getInt("uId"),
+                        rs.getString("email"),
                         rs.getString("password"),
-                        rs.getDouble("balance"));
+                        rs.getInt("uId"));
                 // get returns the attributes of the current row
                 return account;
             }
@@ -209,12 +210,35 @@ public class DatabaseManager {
         return null;
     }
 
+    public Account fetchAccountByEmail(String email) {
+        String command = "SELECT * FROM accounts WHERE email = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
+            ps.setString(1, email);
+
+            ps.executeQuery();
+
+            ResultSet rs = ps.getResultSet();
+            if (rs.next()) {
+                Account account = new Account(
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getInt("uId"));
+                return account;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Account fetch failed: " + e.getMessage());
+        }
+        return null;
+    }
+
     public boolean saveAccount(Account a) {
-        String command = "Insert into accounts (password, uId, balance) values(?,?,?);";
+        String command = "Insert into accounts (password, uId, email) values(?,?,?);";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
             ps.setString(1, a.getPassword());
             ps.setInt(2, a.getUserId());
-            ps.setDouble(3, a.getBalance());
+            ps.setString(3, a.getEmail());
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -224,10 +248,10 @@ public class DatabaseManager {
     }
 
     public boolean updateAccount(Account a) {
-        String command = "UPDATE accounts SET password = ?, balance = ? WHERE uId = ?";
+        String command = "UPDATE accounts SET email = ?, password = ? WHERE uId = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
-            ps.setString(1, a.getPassword());
-            ps.setDouble(2, a.getBalance());
+            ps.setString(1, a.getEmail());
+            ps.setString(2, a.getPassword());
             ps.setInt(3, a.getUserId());
             ps.executeUpdate();
             return true;
