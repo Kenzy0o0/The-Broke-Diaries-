@@ -32,7 +32,13 @@ public class DatabaseManager {
     private DatabaseManager() {
     }
 
-    public static DatabaseManager getInstance() {
+    // public static DatabaseManager getInstance() {
+    //     if (instance == null) {
+    //         instance = new DatabaseManager();
+    //     }
+    //     return instance;
+    // }
+    public static synchronized DatabaseManager getInstance() {
         if (instance == null) {
             instance = new DatabaseManager();
         }
@@ -48,14 +54,14 @@ public class DatabaseManager {
 
         String pragmaSql = "PRAGMA foreign_keys = ON;";
         String[] sqlQueries = {
-            //! I MUST DISSCUSSE THE CATEGORY
-            "CREATE TABLE IF NOT EXISTS users (uId INTEGER PRIMARY KEY AUTOINCREMENT, fullName TEXT NOT NULL, currency TEXT DEFAULT 'Pound');",
+            //! I MUST DISCUSSE THE CATEGORY
+            "CREATE TABLE IF NOT EXISTS users (uId INTEGER PRIMARY KEY AUTOINCREMENT, fullName TEXT NOT NULL, currency TEXT DEFAULT 'Pound',balance REAL DEFAULT 0);",
             // why a seperate table for accouts?
             // "CREATE TABLE IF NOT EXISTS accounts (aId INTEGER PRIMARY KEY AUTOINCREMENT, password TEXT NOT NULL, uId INTEGER UNIQUE NOT NULL, FOREIGN KEY(uId) REFERENCES users(uId) on DELETE CASCADE );",
             "CREATE TABLE IF NOT EXISTS accounts (password TEXT NOT NULL, uId INTEGER PRIMARY KEY, email TEXT UNIQUE NOT NULL, FOREIGN KEY(uId) REFERENCES users(uId) on DELETE CASCADE );",
             // if source is null, then it is an expense, if paymentMethod is null, then it is an income
             "CREATE TABLE IF NOT EXISTS transactions (tId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, type TEXT CHECK(type IN ('income', 'expense')) NOT NULL, amount REAL NOT NULL, cId INTEGER, description TEXT, date DATE DEFAULT (datetime('now')), source TEXT, paymentMethod TEXT, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
-            "CREATE TABLE IF NOT EXISTS budgets (bId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, cId NOT NULL, limit REAL NOT NULL, currentSpent REAL DEFAULT 0, startDate DATE DEFAULT (datetime('now')), endDate DATE, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
+            "CREATE TABLE IF NOT EXISTS budgets (bId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, cId INTEGER NOT NULL, limitAmount REAL NOT NULL, currentSpent REAL DEFAULT 0, startDate DATE DEFAULT (datetime('now')), endDate DATE, FOREIGN KEY(uId) REFERENCES users(uId), FOREIGN KEY(cId) REFERENCES categories(cId));",
             "CREATE TABLE IF NOT EXISTS categories (cId INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE, isActive BOOLEAN DEFAULT 1);",
             "CREATE TABLE IF NOT EXISTS notifications (nId INTEGER PRIMARY KEY AUTOINCREMENT, uId INTEGER NOT NULL, message TEXT NOT NULL, isRead INTEGER DEFAULT 0, date DATE DEFAULT (datetime('now')), FOREIGN KEY(uId) REFERENCES users(uId));"};
 
@@ -70,30 +76,29 @@ public class DatabaseManager {
     }
 
     public void insertDefaultCategories() {
-        String sql = "INSERT OR IGNORE INTO categories (name, type) VALUES (?, ?)";
+        String sql = "INSERT OR IGNORE INTO categories (name) VALUES (?)";
 
-        String[][] defaults = {
+        String[] defaults = {
             // expense categories
-            {"Food & Dining"},
-            {"Transport"},
-            {"Bills & Utilities"},
-            {"Entertainment"},
-            {"Shopping"},
-            {"Health"},
-            {"Education"},
+            "Food & Dining",
+            "Transport",
+            "Bills & Utilities",
+            "Entertainment",
+            "Shopping",
+            "Health",
+            "Education",
             // income categories
-            {"Salary"},
-            {"Freelance"},
-            {"Gift"},
+            "Salary",
+            "Freelance",
+            "Gift",
             // both
-            {"Other"}
+            "Other"
         };
 
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            for (String[] cat : defaults) {
-                ps.setString(1, cat[0]);
-                ps.setString(2, cat[1]);
+            for (String cat : defaults) {
+                ps.setString(1, cat);
                 ps.executeUpdate();
             }
 
@@ -109,7 +114,7 @@ public class DatabaseManager {
     //** user
     // returns the generated user id, or -1 if failed
     public int saveUser(User u) {
-        String command = "Insert into users (fullName, currency, balance) values( ?,  ?,  ?,  ?,  ?);";
+        String command = "Insert into users (fullName, currency, balance) values( ?,  ?,  ?);";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, u.getName());
             ps.setString(2, u.getCurrency());
@@ -154,15 +159,13 @@ public class DatabaseManager {
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
             ps.setInt(1, userId);
 
-            ps.executeQuery();
-
             // we use executeQuery for select statements, it returns a ResultSet object that contains the data returned by the query
             // we can use the ResultSet object to iterate through the rows of the result and get the values of the columns by using the getString, getInt, etc. methods
             // for example, if we want to get the fullName column value of the first row, we can use rs.getString("fullName") or rs.getString(2) if fullName is the second column in the select statement
             // we can also check if there are more rows by using rs.next() method, which returns true if there is a next row and moves the cursor to that row, or false if there are no more rows
             // in this case, we expect only one row to be returned, so we can just check if rs.next() is true and then get the values of the columns to create a User object and return it
             // if rs.next() is false, it means there is no user with the given userId, so we can return null
-            ResultSet rs = ps.getResultSet();
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 User user = new User(
                         rs.getInt("uId"),
@@ -188,15 +191,13 @@ public class DatabaseManager {
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
             ps.setInt(1, userId);
 
-            ps.executeQuery();
-
             // we use executeQuery for select statements, it returns a ResultSet object that contains the data returned by the query
             // we can use the ResultSet object to iterate through the rows of the result and get the values of the columns by using the getString, getInt, etc. methods
             // for example, if we want to get the fullName column value of the first row, we can use rs.getString("fullName") or rs.getString(2) if fullName is the second column in the select statement
             // we can also check if there are more rows by using rs.next() method, which returns true if there is a next row and moves the cursor to that row, or false if there are no more rows
             // in this case, we expect only one row to be returned, so we can just check if rs.next() is true and then get the values of the columns to create a User object and return it
             // if rs.next() is false, it means there is no user with the given userId, so we can return null
-            ResultSet rs = ps.getResultSet();
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 Account account = new Account(
                         rs.getString("email"),
@@ -218,9 +219,8 @@ public class DatabaseManager {
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
             ps.setString(1, email);
 
-            ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
-            ResultSet rs = ps.getResultSet();
             if (rs.next()) {
                 Account account = new Account(
                         rs.getString("email"),
@@ -310,9 +310,8 @@ public class DatabaseManager {
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
             ps.setInt(1, tId);
 
-            ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
-            ResultSet rs = ps.getResultSet();
             if (rs.next()) {
                 Transaction t;
                 if (rs.getString("type").equals("income")) {
@@ -323,7 +322,7 @@ public class DatabaseManager {
                             rs.getDate("date"),
                             rs.getString("description"),
                             rs.getString("source"),
-                            rs.getInt("categoryId")
+                            rs.getInt("cId")
                     );
                 } else {
                     t = new Expense(
@@ -332,7 +331,7 @@ public class DatabaseManager {
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
-                            rs.getInt("categoryId"),
+                            rs.getInt("cId"),
                             rs.getString("paymentMethod")
                     );
                 }
@@ -352,15 +351,14 @@ public class DatabaseManager {
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
             ps.setInt(1, userId);
 
-            ps.executeQuery();
-
+            // ps.executeQuery();
             // we use executeQuery for select statements, it returns a ResultSet object that contains the data returned by the query
             // we can use the ResultSet object to iterate through the rows of the result and get the values of the columns by using the getString, getInt, etc. methods
             // for example, if we want to get the fullName column value of the first row, we can use rs.getString("fullName") or rs.getString(2) if fullName is the second column in the select statement
             // we can also check if there are more rows by using rs.next() method, which returns true if there is a next row and moves the cursor to that row, or false if there are no more rows
             // in this case, we expect only one row to be returned, so we can just check if rs.next() is true and then get the values of the columns to create a User object and return it
             // if rs.next() is false, it means there is no user with the given userId, so we can return null
-            ResultSet rs = ps.getResultSet();
+            ResultSet rs = ps.executeQuery();
 
             // in new, it is better to just type <> instead of the type itself, it is called diamond operator, it is used to infer the type of the list from the context, it makes the code cleaner and less redundant
             List<Transaction> transactions = new ArrayList<>();
@@ -380,7 +378,7 @@ public class DatabaseManager {
                             rs.getDate("date"),
                             rs.getString("description"),
                             rs.getString("source"),
-                            rs.getInt("categoryId")
+                            rs.getInt("cId")
                     );
                 } else {
                     t = new Expense(
@@ -389,7 +387,7 @@ public class DatabaseManager {
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
-                            rs.getInt("categoryId"),
+                            rs.getInt("cId"),
                             rs.getString("paymentMethod")
                     );
                 }
@@ -410,9 +408,10 @@ public class DatabaseManager {
             ps.setInt(1, uId);
             ps.setInt(2, category);
 
-            ps.executeQuery();
+            // ps.executeQuery();
+            // ResultSet rs = ps.getResultSet();
+            ResultSet rs = ps.executeQuery();
 
-            ResultSet rs = ps.getResultSet();
             List<Transaction> transactions = new ArrayList<>();
             while (rs.next()) {
                 Transaction t;
@@ -424,7 +423,7 @@ public class DatabaseManager {
                             rs.getDate("date"),
                             rs.getString("description"),
                             rs.getString("source"),
-                            rs.getInt("categoryId")
+                            rs.getInt("cId")
                     );
                 } else {
                     t = new Expense(
@@ -433,7 +432,7 @@ public class DatabaseManager {
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
-                            rs.getInt("categoryId"),
+                            rs.getInt("cId"),
                             rs.getString("paymentMethod")
                     );
                 }
@@ -462,7 +461,7 @@ public class DatabaseManager {
     //budget
     public boolean saveBudget(Budget b) {
         // budgets uId INTEGER, category TEXT,  limitAmount REAL, currentSpent REAL, startDate TEXT, endDate TEXT
-        String command = "Insert into budgets (uId, category, limitAmount, currentSpent, startDate, endDate) values( ?,  ?,  ?,  ?, ?);";
+        String command = "Insert into budgets (uId, cId, limitAmount, currentSpent, startDate, endDate) values( ?,  ?,  ?,  ?, ?, ?);";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
             ps.setInt(1, b.getUserId());
             ps.setInt(2, b.getCategoryId());
@@ -508,9 +507,9 @@ public class DatabaseManager {
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
             ps.setInt(1, bId);
 
-            ps.executeQuery();
+            // ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
-            ResultSet rs = ps.getResultSet();
             if (rs.next()) {
                 Budget b = new Budget(
                         rs.getInt("bId"),
@@ -553,8 +552,9 @@ public class DatabaseManager {
 
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
             ps.setInt(1, userId);
-            ps.executeQuery();
-            ResultSet rs = ps.getResultSet();
+            // ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
+
             List<Budget> budgets = new ArrayList<>();
             while (rs.next()) {
                 Budget b = new Budget(
@@ -577,10 +577,9 @@ public class DatabaseManager {
 
     //** category
     public boolean saveCategory(Category c) {
-        String command = "Insert into categories (name, type) values( ?, ?);";
+        String command = "Insert into categories (name) values(?);";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
             ps.setString(1, c.getName());
-            ps.setString(2, c.getType());
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -590,10 +589,10 @@ public class DatabaseManager {
     }
 
     public boolean updateCategory(Category c) {
-        String command = "UPDATE categories SET name = ?, type = ? WHERE cId = ?";
+        String command = "UPDATE categories SET name = ?, isActive = ? WHERE cId = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
             ps.setString(1, c.getName());
-            ps.setString(2, c.getType());
+            ps.setBoolean(2, c.isActive());
             ps.setInt(3, c.getCategoryId());
             ps.executeUpdate();
             return true;
@@ -606,14 +605,15 @@ public class DatabaseManager {
     public List<Category> fetchCategories(int userId) {
         String command = "Select * from categories where isActive = 1";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
-            ps.executeQuery();
-            ResultSet rs = ps.getResultSet();
+            // ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
+
             List<Category> categories = new ArrayList<>();
             while (rs.next()) {
                 Category c = new Category(
                         rs.getInt("cId"),
                         rs.getString("name"),
-                        rs.getString("type")
+                        rs.getBoolean("isActive")
                 );
                 categories.add(c);
             }
@@ -625,7 +625,7 @@ public class DatabaseManager {
     }
 
     public boolean deleteCategory(int cId) {
-        String command = "UPDATE categories SET isActive = 0 WHERE cId = ?";
+        String command = "DELETE FROM categories WHERE cId = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
             ps.setInt(1, cId);
             ps.executeUpdate();
