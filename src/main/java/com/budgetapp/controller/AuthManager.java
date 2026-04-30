@@ -28,7 +28,7 @@ public class AuthManager {
         databaseManager=DatabaseManager.getInstance();
     }
     public boolean login(String e,String p){
-        Account a=databaseManager.fetchAccount(e);
+        Account a=databaseManager.fetchAccountByEmail(e);
         if(a!=null){
             String hashed=hashPassword(p);
             if(a.getPassword().equals(hashed)){
@@ -40,7 +40,7 @@ public class AuthManager {
     }
 
     public boolean register(String n,String e,String p,String c){
-        if(databaseManager.fetchAccount(e)!=null){
+        if(databaseManager.fetchAccountByEmail(e)!=null){
             return false;
         }
         String hashed=hashPassword(p);
