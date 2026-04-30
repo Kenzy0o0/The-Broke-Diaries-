@@ -1,29 +1,36 @@
 package com.budgetapp.model;
 
 public class Account {
-
-    // constructor 1
-    public Account(Integer userId, String password, Double balance) {
-
+    private String email;
+    private String password;
+    private int userId;
+    public Account(String e,String p,int i){
+        email=e;
+        password=p;
+        userId=i;
     }
 
-    public boolean setPassword(String passwordHash) {
-        return true;
+    public int getUserId() {
+        return userId;
     }
 
-    public boolean setBalance(Double balance) {
-        return true;
-    }
-
-    public Integer getUserId() {
-        return 221;
+    public String getEmail() {
+        return email;
     }
 
     public String getPassword() {
-        return "12345678";
+        return password;
     }
 
-    public Double getBalance() {
-        return 1000.0;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }
