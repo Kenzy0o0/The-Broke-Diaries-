@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*>
+<?import javafx.scene.layout.*>
+<?import javafx.scene.text.*>
+<?import javafx.geometry.*>
+
+
+<!-- we would either use this or vbox for simplicity -->
+<Vbox xmlns:fx="http://javafx.com/fxml"
+ fx:controller='com.budgetapp.UI.DashboardController'
+ spacing= '20' style="-fx=padding:30;">
+
+ <Label text="Home" style="-fx-font-size:24;">
+
+ <!-- all balance -->
+    <HBox spacing="40">
+       <VBox>
+            <Label text="Total Balance"/>
+            <Label fx:id="totalBalanceLabel" text="0.00"
+                   style="-fx-font-size: 28; -fx-font-weight: bold;"/>
+        </VBox>
+        <VBox>
+            <Label text="Income"/>
+            <Label fx:id="totalIncomeLabel" text="+0.00"
+                   style="-fx-text-fill: green;"/>
+        </VBox>
+        <VBox>
+            <Label text="Expenses"/>
+            <Label fx:id="totalExpenseLabel" text="-0.00"
+                   style="-fx-text-fill: red;"/>
+        </VBox>>
+    </HBox>
+ <!-- Budget Warning -->
+ <!-- recent transactions -->
+    <Label text="Recent Transactions"
+           style="-fx-font-weight: bold;"/>
+    <ListView fx:id="recentTransactionsList"
+              prefHeight="200"/>
+</Vbox>

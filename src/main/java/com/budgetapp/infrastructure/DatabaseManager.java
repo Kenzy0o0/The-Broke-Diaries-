@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 import com.budgetapp.model.Account;
 import com.budgetapp.model.Budget;
@@ -19,6 +20,7 @@ import com.budgetapp.model.Notification;
 import com.budgetapp.model.Transaction;
 import com.budgetapp.model.User;
 
+// dealing with sums and filtering is always better in the db
 public class DatabaseManager {
 
     // to be or not to be, this is the biggest question
@@ -38,6 +40,11 @@ public class DatabaseManager {
     //     }
     //     return instance;
     // }
+    // why use get instance
+    // we often use it to make sure only one instance is constant through the whole program
+    // that is why we only make a new databasemanager if there haven't been one
+    // we also can use it when making a new instance is very complicated
+    // so we hide all the comlixe logic behind one function call
     public static synchronized DatabaseManager getInstance() {
         if (instance == null) {
             instance = new DatabaseManager();
@@ -441,9 +448,36 @@ public class DatabaseManager {
             return transactions;
         } catch (SQLException e) {
             System.err.println("Transaction fetch failed: " + e.getMessage());
-
         }
         return null;
+    }
+
+    // returns the total income, expense, between a certain time interval
+    public List<Integer> fetchTotalIncomeExpenseBetween(java.util.Date startDate, java.util.Date endDate) {
+        String command = "SELECT type, SUM(amount) as total FROM transactions WHERE date BETWEEN ? AND ? GROUP BY type";
+
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
+            ps.setDate(1, new java.sql.Date(startDate.getTime()));
+            ps.setDate(2, new java.sql.Date(endDate.getTime()));
+
+            ResultSet rs = ps.executeQuery();
+
+            int totalIncome = 0;
+            int totalExpense = 0;
+
+            while (rs.next()) {
+                if (rs.getString("type").equals("income")) {
+                    totalIncome = rs.getInt("total");
+                } else if (rs.getString("type").equals("expense")) {
+                    totalExpense = rs.getInt("total");
+                }
+            }
+            return List.of(totalIncome, totalExpense);
+        } catch (SQLException e) {
+            System.err.println("Total income/expense fetch failed: " + e.getMessage());
+        }
+        return null;
+
     }
 
     public boolean deleteTransaction(int tId) {
