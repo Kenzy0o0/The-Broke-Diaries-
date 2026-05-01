@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
 
 import com.budgetapp.model.Account;
 import com.budgetapp.model.Budget;
@@ -57,6 +56,41 @@ public class DatabaseManager {
         return DriverManager.getConnection(URL);
     }
 
+    private void seedDatabase() {
+        // Check if we already have users to avoid duplicate seeding
+        String checkSql = "SELECT COUNT(*) FROM users";
+        try (Connection conn = getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(checkSql)) {
+
+            if (rs.next() && rs.getInt(1) > 0) {
+                return;
+            }
+
+            // 1. Insert a Default User
+            // Note: Password 'pass123' hashed with MD5
+            String userSql = "INSERT INTO users (fullName, currency, balance) VALUES ('John Doe', 'GBP', 1250.00)";
+            stmt.executeUpdate(userSql);
+
+            // 2. Insert Account for the User (linked to uId 1)
+            String accountSql = "INSERT INTO accounts (email, password, uId) VALUES ('test@broke.com', '32250170a0dca92d53ec9624f336ca24', 1)";
+            stmt.executeUpdate(accountSql);
+
+            // 3. Insert Categories
+            insertDefaultCategories();
+
+            // 4. Insert Initial Transactions
+            String transSql = "INSERT INTO transactions (uId, amount, type, category, description, date) VALUES "
+                    + "(1, 2000.00, 'income', 'Salary', 'Monthly Pay', '2023-10-01'), "
+                    + "(1, 800.00, 'expense', 'Rent', 'October Rent', '2023-10-02'), "
+                    + "(1, 50.00, 'expense', 'Dining Out', 'Pizza Night', '2023-10-05')";
+            stmt.executeUpdate(transSql);
+
+            System.out.println("Database successfully seeded with demo data.");
+
+        } catch (SQLException e) {
+            System.err.println("Error seeding database: " + e.getMessage());
+        }
+    }
+
     public void initializeDatabase() {
 
         String pragmaSql = "PRAGMA foreign_keys = ON;";
@@ -80,6 +114,8 @@ public class DatabaseManager {
         } catch (SQLException e) {
             System.err.println("Setup failed: " + e.getMessage());
         }
+
+        seedDatabase();
     }
 
     public void insertDefaultCategories() {

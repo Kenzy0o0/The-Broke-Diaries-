@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.*>
-<?import javafx.scene.layout.*>
-<?import javafx.scene.text.*>
-<?import javafx.geometry.*>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
 
+<!-- we can also use gridbox -->
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.budgetapp.UI.Dashboard"
+      spacing="20" 
+      style="-fx-padding: 30;">
 
-<!-- we would either use this or vbox for simplicity -->
-<Vbox xmlns:fx="http://javafx.com/fxml"
- fx:controller='com.budgetapp.UI.DashboardController'
- spacing= '20' style="-fx=padding:30;">
+    <Label text="Home" style="-fx-font-size: 24;"/>
 
- <Label text="Home" style="-fx-font-size:24;">
-
- <!-- all balance -->
+    <!-- all balance -->
     <HBox spacing="40">
-       <VBox>
+        <VBox>
             <Label text="Total Balance"/>
             <Label fx:id="totalBalanceLabel" text="0.00"
                    style="-fx-font-size: 28; -fx-font-weight: bold;"/>
@@ -29,12 +28,11 @@
             <Label text="Expenses"/>
             <Label fx:id="totalExpenseLabel" text="-0.00"
                    style="-fx-text-fill: red;"/>
-        </VBox>>
+        </VBox>
     </HBox>
- <!-- Budget Warning -->
- <!-- recent transactions -->
-    <Label text="Recent Transactions"
-           style="-fx-font-weight: bold;"/>
-    <ListView fx:id="recentTransactionsList"
-              prefHeight="200"/>
-</Vbox>
+
+    <Label text="Recent Transactions" style="-fx-font-weight: bold;"/>
+    
+    <ListView fx:id="recentTransactionsList" prefHeight="200"/>
+
+</VBox>

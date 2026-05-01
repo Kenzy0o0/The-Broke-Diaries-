@@ -1,17 +1,11 @@
 package com.budgetapp.UI;
 
-import javafx.fxml.FXML;
-import javafx.event.ActionEvent;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-
-import java.util.ArrayList;
-import java.util.List;
-import com.budgetapp.model.Transaction;
+import com.budgetapp.controller.TransactionManager;
+import com.budgetapp.infrastructure.DatabaseManager;
 import com.budgetapp.model.User;
 
-import com.budgetapp.infrastructure.DatabaseManager;
-import com.budgetapp.controller.TransactionManager;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 
 public class Dashboard {
 
@@ -46,7 +40,7 @@ public class Dashboard {
         int totalIncomeThisMonth = tm.getTotalIncomeThisMonth(currentUser);
         int totalExpenseThisMonth = tm.getTotalExpenseThisMonth(currentUser);
 
-        totalBalanceLabel.setText("Total Balance: " + currentBalance);
+        totalBalanceLabel.setText(String.valueOf(currentBalance));
         totalIncomeLabel.setText("Total Income This Month: " + totalIncomeThisMonth);
         totalExpenseLabel.setText("Total Expense This Month: " + totalExpenseThisMonth);
     }
