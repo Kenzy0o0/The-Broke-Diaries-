@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button ?>
+<?import javafx.scene.control.Hyperlink ?>
+<?import javafx.scene.control.Label ?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField ?>
+
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.budgetapp.UI.ProfileController">
+    <padding>
+        <Insets bottom="20" left="30" right="30" top="20" />
+    </padding>
+    <Label text="User Profile" style="-fx-font-weight: bold;-fx-font-size:24;"/>
+    <VBox spacing="5">
+        <Label text="Full Name"/>
+        <TextField fx:id="nameField" prefHeight="35" promptText="Update Your Name"/>
+    </VBox>
+    <VBox spacing="5">
+        <Label text="Email"/>
+        <TextField fx:id="emailField" editable="false"  prefHeight="35" />
+    </VBox>
+    <VBox spacing="5">
+        <Label text="Password"/>
+        <PasswordField fx:id="passwordField" editable="false"  prefHeight="35" />
+    </VBox>
+    <VBox spacing="5">
+        <Label text="Currency"/>
+        <TextField fx:id="currencyField" prefHeight="35" promptText="Update currency (e.g EGP,USD)"/>
+    </VBox>
+    <Label fx:id="label" text=""/>
+    <Button mnemonicParsing="false" onAction="#handleUpdateProfile" prefHeight="35.0" prefWidth="290.0" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px;" text="Save" />
+    <HBox alignment="CENTER" spacing="20" prefWidth="300">
+        <Button mnemonicParsing="false" onAction="#handleGoTODashboard" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 5px;" text="Dashboard" />
+
+        <Button mnemonicParsing="false" onAction="#handleSignOut" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px;" text="Sign Out" />
+    </HBox>
+</VBox>

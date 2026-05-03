@@ -14,7 +14,7 @@ public class Main extends Application {
         DatabaseManager.getInstance().initializeDatabase();
 
         Parent root = FXMLLoader.load(
-                getClass().getResource("/fxml/dashboard.fxml")
+                getClass().getResource("/fxml/login.fxml")
         );
         primaryStage.setTitle("The Broke Diaries");
         primaryStage.setScene(new Scene(root, 900, 650));

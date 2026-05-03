@@ -8,9 +8,10 @@ import com.budgetapp.model.Account;
 import com.budgetapp.model.User;
 
 public class AuthManager {
-
+private  static  AuthManager instance;
     private User currentUser;
     private DatabaseManager databaseManager;
+    private String currentEmail;
 
     private String hashPassword(String p) {
         try {
@@ -38,6 +39,7 @@ public class AuthManager {
             String hashed = hashPassword(p);
             if (a.getPassword().equals(hashed)) {
                 currentUser = databaseManager.fetchUser(a.getUserId());
+                currentEmail=e;
                 return true;
             }
         }
@@ -60,6 +62,7 @@ public class AuthManager {
 
     public void logout() {
         currentUser = null;
+        currentEmail=null;
     }
 
     public User getCurrentUser() {
@@ -70,10 +73,20 @@ public class AuthManager {
         if (currentUser != null) {
             currentUser.setName(n);
             currentUser.setCurrency(c);
-            databaseManager.saveUser(currentUser);
+            databaseManager.updateUser(currentUser);
             return true;
         }
         return false;
     }
+
+    public String getCurrentEmail() {
+        return currentEmail;
+    }
+
+    public static AuthManager getInstance() {
+        if(instance==null){
+          instance=new AuthManager();
+        }
+        return instance;}
 
 }
