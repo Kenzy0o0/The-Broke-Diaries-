@@ -361,20 +361,21 @@ public class DatabaseManager {
                     t = new Income(
                             rs.getInt("tId"),
                             rs.getInt("uId"),
+                             rs.getInt("cId"),
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
-                            rs.getString("source"),
-                            rs.getInt("cId")
+                            rs.getString("source")
+                           
                     );
                 } else {
                     t = new Expense(
                             rs.getInt("tId"),
                             rs.getInt("uId"),
+                             rs.getInt("cId"),
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
-                            rs.getInt("cId"),
                             rs.getString("paymentMethod")
                     );
                 }
@@ -417,20 +418,21 @@ public class DatabaseManager {
                     t = new Income(
                             rs.getInt("tId"),
                             rs.getInt("uId"),
+                             rs.getInt("cId"),
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
-                            rs.getString("source"),
-                            rs.getInt("cId")
+                            rs.getString("source")
+                           
                     );
                 } else {
                     t = new Expense(
                             rs.getInt("tId"),
                             rs.getInt("uId"),
+                            rs.getInt("cId"),
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
-                            rs.getInt("cId"),
                             rs.getString("paymentMethod")
                     );
                 }
@@ -462,20 +464,21 @@ public class DatabaseManager {
                     t = new Income(
                             rs.getInt("tId"),
                             rs.getInt("uId"),
+                             rs.getInt("cId"),
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
-                            rs.getString("source"),
-                            rs.getInt("cId")
+                            rs.getString("source")
+                           
                     );
                 } else {
                     t = new Expense(
                             rs.getInt("tId"),
                             rs.getInt("uId"),
+                            rs.getInt("cId"),
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
-                            rs.getInt("cId"),
                             rs.getString("paymentMethod")
                     );
                 }

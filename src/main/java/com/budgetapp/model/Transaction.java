@@ -6,13 +6,16 @@ public abstract class Transaction {
 
     private int id;
     private int userId;
+    private int categoryId;
     private double amount;
     private Date date;
     private String description;
+    
 
-    public Transaction(int id, int userId, double amount, Date date, String description) {
+    public Transaction(int id, int userId, int categoryId, double amount, Date date, String description) {
         this.id = id;
         this.userId = userId;
+        this.categoryId = categoryId;
         this.amount = amount;
         this.date = date;
         this.description = description;
@@ -45,6 +48,14 @@ public abstract class Transaction {
         } else {
             throw new IllegalArgumentException("Amount must be positive");
         }
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Date getDate() {

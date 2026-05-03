@@ -4,29 +4,20 @@ import java.util.Date;
 
 public class Income extends Transaction {
 
-    private int categoryId;
+
     private String source;
 
-    public Income(int id, int userId, double amount, Date date, String description, String source, int categoryId) {
-        super(id, userId, amount, date, description);
-        this.categoryId = categoryId;
+    public Income(int id, int userId,int categoryId, double amount, Date date, String description, String source) {
+        super(id, userId, categoryId, amount, date, description);
         this.source = source;
     }
 
     public Income(int userId, double amount, Date date, String description, String source, int categoryId) {
-        this(0, userId, amount, date, description, source, categoryId);
+        this(0, userId, categoryId, amount, date, description, source);
     }
 
-    public Income(int id, int userId, double amount, String dateStr, String description, String source, int categoryId) {
-        this(id, userId, amount, java.sql.Date.valueOf(dateStr), description, source, categoryId);
-    }
-
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public Income(int id, int userId, int categoryId, double amount, String dateStr, String description, String source) {
+            this(id, userId, categoryId, amount, java.sql.Date.valueOf(dateStr), description, source);
     }
 
     public String getSource() {
