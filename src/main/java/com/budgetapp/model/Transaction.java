@@ -10,7 +10,6 @@ public abstract class Transaction {
     private double amount;
     private Date date;
     private String description;
-    
 
     public Transaction(int id, int userId, int categoryId, double amount, Date date, String description) {
         this.id = id;
@@ -73,4 +72,7 @@ public abstract class Transaction {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public abstract String getType();
+
 }
