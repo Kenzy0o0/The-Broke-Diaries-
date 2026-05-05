@@ -1,6 +1,7 @@
 package com.budgetapp;
 
 import com.budgetapp.infrastructure.DatabaseManager;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

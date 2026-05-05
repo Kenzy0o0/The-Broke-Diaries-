@@ -2,6 +2,13 @@ package com.budgetapp.model;
 
 import java.util.Date;
 
+/**
+ * Abstract base class for all financial transactions. Subclasses {@link Income}
+ * and {@link Expense} extend this class to represent the two types of
+ * transactions.
+ *
+ * @version 1.0
+ */
 public abstract class Transaction {
 
     private int id;

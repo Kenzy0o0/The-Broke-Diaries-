@@ -7,8 +7,19 @@ import com.budgetapp.infrastructure.DatabaseManager;
 import com.budgetapp.model.Account;
 import com.budgetapp.model.User;
 
+/**
+ * Manages all authentication operations including login, registration, and
+ * session management.
+ *
+ * <p>
+ * Implements the Singleton pattern to ensure only one AuthManager instance
+ * exists throughout the application.</p>
+ *
+ * @version 1.0
+ */
 public class AuthManager {
-private  static  AuthManager instance;
+
+    private static AuthManager instance;
     private User currentUser;
     private DatabaseManager databaseManager;
     private String currentEmail;
@@ -33,13 +44,21 @@ private  static  AuthManager instance;
         databaseManager = DatabaseManager.getInstance();
     }
 
+    /**
+     * Authenticates a user using their email and password. Password is hashed
+     * using MD5 before comparison.
+     *
+     * @param email the user's registered email address
+     * @param password the plain text password entered by the user
+     * @return true if credentials are valid, false otherwise
+     */
     public boolean login(String e, String p) {
         Account a = databaseManager.fetchAccountByEmail(e);
         if (a != null) {
             String hashed = hashPassword(p);
             if (a.getPassword().equals(hashed)) {
                 currentUser = databaseManager.fetchUser(a.getUserId());
-                currentEmail=e;
+                currentEmail = e;
                 return true;
             }
         }
@@ -62,7 +81,7 @@ private  static  AuthManager instance;
 
     public void logout() {
         currentUser = null;
-        currentEmail=null;
+        currentEmail = null;
     }
 
     public User getCurrentUser() {
@@ -84,9 +103,10 @@ private  static  AuthManager instance;
     }
 
     public static AuthManager getInstance() {
-        if(instance==null){
-          instance=new AuthManager();
+        if (instance == null) {
+            instance = new AuthManager();
         }
-        return instance;}
+        return instance;
+    }
 
 }

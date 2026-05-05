@@ -1,11 +1,21 @@
 package com.budgetapp.model;
 
-import com.budgetapp.observer.IBudgetObserver;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
+import com.budgetapp.observer.IBudgetObserver;
+
+/**
+ * Manages user budgets and spending limits per category. Implements the
+ * Observer pattern — notifies registered {@link IBudgetObserver} instances when
+ * spending exceeds the limit.
+ *
+ * @author Person 2 name
+ * @version 1.0
+ */
 public class Budget {
+
     private int budgetId;
     private int userId;
     private int categoryId;
@@ -15,8 +25,7 @@ public class Budget {
     private Date endDate;
     private final List<IBudgetObserver> observers = new ArrayList<>();
 
-    
-    public Budget( int budgetId, int userId, int categoryId,  double limit, double currentSpent, Date startDate, Date endDate) {
+    public Budget(int budgetId, int userId, int categoryId, double limit, double currentSpent, Date startDate, Date endDate) {
         this.budgetId = budgetId;
         this.userId = userId;
         this.categoryId = categoryId;
@@ -27,51 +36,91 @@ public class Budget {
     }
 
     // Getters and setters 
-    public int getBudgetId() { return budgetId; }
-    public void setBudgetId(int budgetId) { this.budgetId = budgetId; }
-
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
-
-    public int getCategoryId() { return categoryId; }
-    public void setCategoryId(int categoryId) { this.categoryId = categoryId; }
-
-    public double getLimit() { return limit; }
-    public void setLimit(double limit) {
-        if (limit >= 0) this.limit = limit;
-        else throw new IllegalArgumentException("Limit must be non negative");
+    public int getBudgetId() {
+        return budgetId;
     }
 
-    public double getCurrentSpent() { return currentSpent; }
+    public void setBudgetId(int budgetId) {
+        this.budgetId = budgetId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public double getLimit() {
+        return limit;
+    }
+
+    public void setLimit(double limit) {
+        if (limit >= 0) {
+            this.limit = limit; 
+        }else {
+            throw new IllegalArgumentException("Limit must be non negative");
+        }
+    }
+
+    public double getCurrentSpent() {
+        return currentSpent;
+    }
+
     public void setCurrentSpent(double currentSpent) {
         if (currentSpent >= 0) {
             this.currentSpent = currentSpent;
             checkLimit();
-        } else throw new IllegalArgumentException("Current spent must be non negative");
+        } else {
+            throw new IllegalArgumentException("Current spent must be non negative");
+        }
     }
 
-    public Date getStartDate() { return startDate; }
-    public void setStartDate(Date startDate) { this.startDate = startDate; }
+    public Date getStartDate() {
+        return startDate;
+    }
 
-    public Date getEndDate() { return endDate; }
-    public void setEndDate(Date endDate) { this.endDate = endDate; }
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
-    
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
     public void updateSpent(double amount) {
         if (amount > 0) {
             this.currentSpent += amount;
             checkLimit();
-        } else throw new IllegalArgumentException("Amount must be positive");
+        } else {
+            throw new IllegalArgumentException("Amount must be positive");
+        }
     }
 
     private void checkLimit() {
-        if (currentSpent > limit) notifyObservers();
+        if (currentSpent > limit) {
+            notifyObservers();
+        }
     }
 
     // Observer pattern
     public void addObserver(IBudgetObserver observer) {
-        if (observer != null && !observers.contains(observer))
+        if (observer != null && !observers.contains(observer)) {
             observers.add(observer);
+        }
     }
 
     public void removeObserver(IBudgetObserver observer) {
@@ -79,7 +128,8 @@ public class Budget {
     }
 
     public void notifyObservers() {
-        for (IBudgetObserver observer : observers)
+        for (IBudgetObserver observer : observers) {
             observer.updateAlert(this);
+        }
     }
 }

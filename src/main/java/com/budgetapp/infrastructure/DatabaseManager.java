@@ -361,18 +361,17 @@ public class DatabaseManager {
                     t = new Income(
                             rs.getInt("tId"),
                             rs.getInt("uId"),
-                             rs.getInt("cId"),
+                            rs.getInt("cId"),
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
                             rs.getString("source")
-                           
                     );
                 } else {
                     t = new Expense(
                             rs.getInt("tId"),
                             rs.getInt("uId"),
-                             rs.getInt("cId"),
+                            rs.getInt("cId"),
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
@@ -418,12 +417,11 @@ public class DatabaseManager {
                     t = new Income(
                             rs.getInt("tId"),
                             rs.getInt("uId"),
-                             rs.getInt("cId"),
+                            rs.getInt("cId"),
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
                             rs.getString("source")
-                           
                     );
                 } else {
                     t = new Expense(
@@ -464,12 +462,11 @@ public class DatabaseManager {
                     t = new Income(
                             rs.getInt("tId"),
                             rs.getInt("uId"),
-                             rs.getInt("cId"),
+                            rs.getInt("cId"),
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
                             rs.getString("source")
-                           
                     );
                 } else {
                     t = new Expense(
