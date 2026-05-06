@@ -11,6 +11,8 @@ import com.budgetapp.model.User;
 
 public class TransactionManager {
 
+    private final DatabaseManager db = DatabaseManager.getInstance();
+
     public void addTransaction(int userId, String type, double amount,
             Category cat, Date date,
             String description, String extra) {
@@ -26,14 +28,14 @@ public class TransactionManager {
             );
         }
 
-        boolean saved = DatabaseManager.getInstance().saveTransaction(t);
+        boolean saved = db.saveTransaction(t);
 
         if (saved) {
-            User user = DatabaseManager.getInstance().fetchUser(userId);
+            User user = db.fetchUser(userId);
             if (user != null) {
                 double change = type.equalsIgnoreCase("income") ? amount : -amount;
                 user.updateBalance(change);
-                DatabaseManager.getInstance().updateUser(user);
+                db.updateUser(user);
             }
 
             if (type.equalsIgnoreCase("expense")) {
@@ -48,7 +50,8 @@ public class TransactionManager {
     }
 
     public List<Transaction> getTransactions(int userId, int limit, int offset) {
-        List<Transaction> all = DatabaseManager.getInstance().fetchTransactions(userId);
+
+        List<Transaction> all = db.fetchTransactions(userId);
         if (all == null) {
             return null;
         }
@@ -67,7 +70,8 @@ public class TransactionManager {
     }
 
     public void deleteTransaction(int transactionId) {
-        boolean deleted = DatabaseManager.getInstance().deleteTransaction(transactionId);
+
+        boolean deleted = db.deleteTransaction(transactionId);
         if (deleted) {
             System.out.println("Transaction deleted");
         } else {
@@ -76,14 +80,14 @@ public class TransactionManager {
     }
 
     public void deactivateCategory(int categoryId) {
-        List<Category> categories = DatabaseManager.getInstance().fetchCategories(0);
+        List<Category> categories = db.fetchCategories(0);
         if (categories == null) {
             return;
         }
         for (Category c : categories) {
             if (c.getCategoryId() == categoryId) {
                 c.deactivate();
-                DatabaseManager.getInstance().updateCategory(c);
+                db.updateCategory(c);
                 System.out.println("Category deactivated: " + c.getName());
                 return;
             }
@@ -98,8 +102,7 @@ public class TransactionManager {
                 cal.getActualMaximum(java.util.Calendar.DAY_OF_MONTH));
         Date endDate = cal.getTime();
 
-        List<Double> totals = DatabaseManager.getInstance()
-                .fetchTotalIncomeExpenseBetween(currentUser.getId(), startDate, endDate);
+        List<Double> totals = db.fetchTotalIncomeExpenseBetween(currentUser.getId(), startDate, endDate);
 
         if (totals == null) {
             return 0;
@@ -115,8 +118,7 @@ public class TransactionManager {
                 cal.getActualMaximum(java.util.Calendar.DAY_OF_MONTH));
         Date endDate = cal.getTime();
 
-        List<Double> totals = DatabaseManager.getInstance()
-                .fetchTotalIncomeExpenseBetween(currentUser.getId(), startDate, endDate);
+        List< Double> totals = db.fetchTotalIncomeExpenseBetween(currentUser.getId(), startDate, endDate);
 
         if (totals == null) {
             return 0;
@@ -125,15 +127,15 @@ public class TransactionManager {
     }
 
     public double getCurrentBalance(User currentUser) {
-        User fresh = DatabaseManager.getInstance().fetchUser(currentUser.getId());
+        User fresh = db.fetchUser(currentUser.getId());
         return fresh != null ? fresh.getBalance() : 0;
     }
 
     public List<Transaction> getAllTransactions(int userId) {
-        return DatabaseManager.getInstance().fetchTransactions(userId);
+        return db.fetchTransactions(userId);
     }
 
     public List<Transaction> getTransactionsByCategory(int userId, int categoryId) {
-        return DatabaseManager.getInstance().fetchTransactionsByCategory(userId, categoryId);
+        return db.fetchTransactionsByCategory(userId, categoryId);
     }
 }
