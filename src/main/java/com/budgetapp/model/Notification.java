@@ -70,7 +70,7 @@ public class Notification {
 
     /**
      * <p>
-     *Constructor for Notification.</p>
+     * Constructor for Notification.</p>
      *
      * @param id a int
      * @param userId a int
@@ -100,7 +100,7 @@ public class Notification {
 
     /**
      * <p>
-     *   * Getter for the field <code>id</code>.</p>
+     * Getter for the field <code>id</code>.</p>
      *
      * @return a int
      */
@@ -111,7 +111,7 @@ public class Notification {
     /**
      * <p>
      * Setter for the field <code>id</code>.</p>
-     *    *
+     *
      * @param id a int
      */
     public void setId(int id) {
@@ -121,7 +121,8 @@ public class Notification {
     /**
      * <p>
      * Getter for the field <code>userId</code>.</p>
-    * @return a int
+     *
+     * @return a int
      */
     public int getUserId() {
         return userId;
@@ -129,7 +130,7 @@ public class Notification {
 
     /**
      * <p>
-                * Setter for the field <code>userId</code>.</p>
+     * Setter for the field <code>userId</code>.</p>
      *
      * @param userId a int
      */
@@ -139,8 +140,7 @@ public class Notification {
 
     /**
      * <p>
-
-    * Getter for the field <code>message</code>.</p>
+     * Getter for the field <code>message</code>.</p>
      *
      * @return a {@link java.lang.String} object
      */
@@ -150,7 +150,8 @@ public class Notification {
 
     /**
      * <p>
-    *
+     * Setter for the field <code>message</code>.</p>
+     *
      * @param message a {@link java.lang.String} object
      */
     public void setMessage(String message) {
@@ -158,7 +159,8 @@ public class Notification {
     }
 
     /**
-     * <p> isRead.</p>
+     * <p>
+     * isRead.</p>
      *
      * @return a boolean
      */
@@ -168,7 +170,7 @@ public class Notification {
 
     /**
      * <p>
-     *  * setRead.</p>
+     * setRead.</p>
      *
      * @param read a boolean
      */
@@ -186,7 +188,7 @@ public class Notification {
 
     /**
      * <p>
-     *   * Getter for the field <code>date</code>.</p>
+     * Getter for the field <code>date</code>.</p>
      *
      * @return a {@link java.util.Date} object
      */
@@ -196,7 +198,7 @@ public class Notification {
 
     /**
      * <p>
-     *Setter for the field <code>date</code>.</p>
+     * Setter for the field <code>date</code>.</p>
      *
      * @param date a {@link java.util.Date} object
      */
