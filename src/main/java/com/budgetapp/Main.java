@@ -1,6 +1,7 @@
 package com.budgetapp;
 
 import com.budgetapp.infrastructure.DatabaseManager;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,6 +10,14 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    /**
+     * The main entry point for all JavaFX applications. It handles the initial
+     * setup of the database and the first UI scene.
+     *
+     * @param primaryStage the primary stage (window) for this application.
+     * @throws Exception if the FXML file cannot be found or database fails to
+     * initialize.
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         DatabaseManager.getInstance().initializeDatabase();

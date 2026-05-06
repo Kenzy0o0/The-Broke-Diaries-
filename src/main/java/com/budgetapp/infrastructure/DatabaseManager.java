@@ -20,6 +20,13 @@ import com.budgetapp.model.Transaction;
 import com.budgetapp.model.User;
 
 // dealing with sums and filtering is always better in the db
+/**
+ * Singleton class responsible for all SQLite database operations. Handles
+ * initialization of tables and all CRUD operations for users, transactions,
+ * budgets, and notifications.
+ *
+ * @version 1.0
+ */
 public class DatabaseManager {
 
     // to be or not to be, this is the biggest question
@@ -51,11 +58,21 @@ public class DatabaseManager {
         return instance;
     }
 
+    /**
+     * Establishes a connection to the SQLite database file.
+     *
+     * @return a {@link Connection} object to the local database
+     * @throws SQLException if the connection cannot be established
+     */
     private static Connection getConnection() throws SQLException {
         // the driver manager is the java sql part that handles connecting to an existing database
         return DriverManager.getConnection(URL);
     }
 
+    /**
+     * populates the database with initial demo data (users, accounts, and
+     * transactions) if the users table is currently empty.
+     */
     private void seedDatabase() {
         // Check if we already have users to avoid duplicate seeding
         String checkSql = "SELECT COUNT(*) FROM users";
@@ -91,6 +108,10 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Creates all necessary database tables if they do not already exist.
+     * Enables foreign key constraints and triggers the initial data seeding.
+     */
     public void initializeDatabase() {
 
         String pragmaSql = "PRAGMA foreign_keys = ON;";
@@ -156,6 +177,13 @@ public class DatabaseManager {
     // saving a user in register
     //** user
     // returns the generated user id, or -1 if failed
+    /**
+     * Persists a new User profile to the database.
+     *
+     * @param u the {@link User} object to save
+     * @return the auto-generated uId from the database, or -1 if the operation
+     * fails
+     */
     public int saveUser(User u) {
         String command = "Insert into users (fullName, currency, balance) values( ?,  ?,  ?);";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command, Statement.RETURN_GENERATED_KEYS)) {
@@ -256,6 +284,13 @@ public class DatabaseManager {
         return null;
     }
 
+    /**
+     * Retrieves a user's account credentials based on their unique email
+     * address.
+     *
+     * @param email the email to search for
+     * @return the {@link Account} object if found, otherwise null
+     */
     public Account fetchAccountByEmail(String email) {
         String command = "SELECT * FROM accounts WHERE email = ?";
 
@@ -308,6 +343,14 @@ public class DatabaseManager {
 
     //** transaction
     // you can save an income or an expense using the same method, because they are both transactions, and they have the same attributes, except for the source and paymentMethod, which can be null for one of them
+    /**
+     * Saves a transaction (either Income or Expense) to the database. Uses
+     * 'instanceof' to determine which specific fields (source vs paymentMethod)
+     * to populate.
+     *
+     * @param t the {@link Transaction} object (Income or Expense) to persist
+     * @return true if saved successfully, false otherwise
+     */
     public boolean saveTransaction(Transaction t) {
         String command = "Insert into transactions (uId, type ,amount, cId, description ,date, source ,  paymentMethod) values( ?,  ?,  ?,  ?, ?, ?, ?, ?);";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
@@ -361,18 +404,17 @@ public class DatabaseManager {
                     t = new Income(
                             rs.getInt("tId"),
                             rs.getInt("uId"),
-                             rs.getInt("cId"),
+                            rs.getInt("cId"),
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
                             rs.getString("source")
-                           
                     );
                 } else {
                     t = new Expense(
                             rs.getInt("tId"),
                             rs.getInt("uId"),
-                             rs.getInt("cId"),
+                            rs.getInt("cId"),
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
@@ -388,6 +430,13 @@ public class DatabaseManager {
         return null;
     }
 
+    /**
+     * Retrieves all transactions for a specific user, ordered by date
+     * descending.
+     *
+     * @param userId the ID of the user whose transactions are being fetched
+     * @return a List of {@link Transaction} objects
+     */
     public List<Transaction> fetchTransactions(int userId) {
 
         String command = "SELECT * FROM transactions WHERE uId = ? ORDER BY date DESC";
@@ -418,12 +467,11 @@ public class DatabaseManager {
                     t = new Income(
                             rs.getInt("tId"),
                             rs.getInt("uId"),
-                             rs.getInt("cId"),
+                            rs.getInt("cId"),
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
                             rs.getString("source")
-                           
                     );
                 } else {
                     t = new Expense(
@@ -445,6 +493,14 @@ public class DatabaseManager {
         return null;
     }
 
+    /**
+     * Calculates the sum of all income and expenses within a specific date
+     * range.
+     *
+     * @param startDate the beginning of the interval
+     * @param endDate the end of the interval
+     * @return a List where index 0 is Total Income and index 1 is Total Expense
+     */
     public List<Transaction> fetchTransactionsByCategory(int uId, int category) {
         String command = "Select * from transactions where uId = ? AND cId= ?";
 
@@ -464,12 +520,11 @@ public class DatabaseManager {
                     t = new Income(
                             rs.getInt("tId"),
                             rs.getInt("uId"),
-                             rs.getInt("cId"),
+                            rs.getInt("cId"),
                             rs.getDouble("amount"),
                             rs.getDate("date"),
                             rs.getString("description"),
                             rs.getString("source")
-                           
                     );
                 } else {
                     t = new Expense(

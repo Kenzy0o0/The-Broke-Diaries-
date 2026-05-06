@@ -38,16 +38,30 @@ public class Dashboard {
     @FXML
     private ListView<String> recentTransactionsList;
 
+    /**
+     * Manager for session handling and user authentication.
+     */
     private AuthManager authManager = AuthManager.getInstance();
 
+    /**
+     * Direct database access for fetching raw records.
+     */
     private DatabaseManager db = DatabaseManager.getInstance();
-    private TransactionManager tm = TransactionManager.getInstance();
-    // private TransactionManager tm = 
 
+    /**
+     * High-level business logic for calculating totals and balances.
+     */
+    private TransactionManager tm = TransactionManager.getInstance();
+
+    // private TransactionManager tm = 
     // the function runs automatically when the screen loads
+    /**
+     * Automatically invoked by JavaFX after the FXML file is loaded. Sets up
+     * the initial state of the dashboard for the current user.
+     */
     @FXML
     public void initialize() {
-        User currentUser = new User(1, "Cinder", 0.0, "Pound");
+        User currentUser = authManager.getCurrentUser();
         if (currentUser == null) {
             return;
         }
@@ -57,6 +71,11 @@ public class Dashboard {
         loadRecentTransactions(currentUser);
     }
 
+    /**
+     * Calculates and displays the high-level financial overview.
+     *
+     * @param currentUser the user whose data is being summarized
+     */
     public void loadSummary(User currentUser) {
         double currentBalance = tm.getCurrentBalance(currentUser);
         double totalIncomeThisMonth = tm.getTotalIncomeThisMonth(currentUser);
@@ -67,6 +86,12 @@ public class Dashboard {
         totalExpenseLabel.setText("Total Expense This Month: " + totalExpenseThisMonth);
     }
 
+    /**
+     * Fetches the full history but filters and formats the last 5 transactions
+     * for a clean, scannable dashboard feed.
+     *
+     * @param currentUser the user whose history is being displayed
+     */
     public void loadRecentTransactions(User currentUser) {
         List<Transaction> all = db.fetchTransactions(currentUser.getId());
         List<String> display = new ArrayList<>();
@@ -87,6 +112,13 @@ public class Dashboard {
         recentTransactionsList.setItems(FXCollections.observableArrayList(display));
     }
 
+    /**
+     * Utility method to transition the application to a different view.
+     *
+     * @param e The ActionEvent triggered by the button click
+     * @param path The relative path to the target .fxml file
+     * @throws IOException if the FXML file cannot be found or loaded
+     */
     private void switchScene(ActionEvent e, String path) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(path));
         Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -94,11 +126,17 @@ public class Dashboard {
         stage.show();
     }
 
+    /**
+     * Handles navigation to the transaction management screen.
+     */
     @FXML
     public void handleGoToTransactions(ActionEvent e) throws IOException {
         switchScene(e, "/fxml/transaction.fxml");
     }
 
+    /**
+     * Handles navigation to the budget planning screen.
+     */
     @FXML
     public void handleGoToBudget(ActionEvent e) throws IOException {
         switchScene(e, "/fxml/budget.fxml");
@@ -114,6 +152,10 @@ public class Dashboard {
         switchScene(e, "/fxml/profile.fxml");
     }
 
+    /**
+     * Logs the user out via {@link AuthManager} and returns to the login
+     * screen.
+     */
     @FXML
     public void handleSignOut(ActionEvent e) throws IOException {
         authManager.logout();

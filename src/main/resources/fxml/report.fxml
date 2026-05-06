@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.budgetapp.UI.ReportScreen"
+      spacing="15"
+      style="-fx-padding: 25; -fx-background-color: #f5f5f5;">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Button text="← Back" onAction="#handleGoToDashboard"
+                style="-fx-background-color: #6c757d; -fx-text-fill: white;"/>
+        <Label text="Reports and Analytics"
+               style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <!-- Totals -->
+    <HBox spacing="40" alignment="CENTER">
+        <Label fx:id="totalIncomeLabel"
+               style="-fx-font-size: 16; -fx-text-fill: green; -fx-font-weight: bold;"/>
+        <Label fx:id="totalExpenseLabel"
+               style="-fx-font-size: 16; -fx-text-fill: red; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <!-- No data message -->
+    <Label fx:id="noDataLabel" visible="false"
+           style="-fx-text-fill: grey; -fx-font-style: italic;"/>
+
+    <!-- Pie Chart -->
+    <PieChart fx:id="expensePieChart"
+              prefHeight="280"
+              legendVisible="true"/>
+
+    <!-- Bar Chart -->
+    <BarChart fx:id="incomeVsExpenseChart" prefHeight="280">
+        <xAxis>
+            <CategoryAxis fx:id="xAxis" label="Month"/>
+        </xAxis>
+        <yAxis>
+            <NumberAxis fx:id="yAxis" label="Amount"/>
+        </yAxis>
+    </BarChart>
+
+    <!-- Insight -->
+    <Label fx:id="insightLabel"
+           style="-fx-font-style: italic; -fx-text-fill: #333;"/>
+
+</VBox>
