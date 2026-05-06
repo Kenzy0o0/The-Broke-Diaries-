@@ -9,68 +9,92 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane  stylesheets="/css/style.css" prefHeight="650.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
+<ScrollPane fitToWidth="true" 
+fitToHeight="true"
+
+            prefHeight="650.0" 
+            prefWidth="900.0" 
+            stylesheets="/css/style.css" 
+            styleClass="scroll-pane"
+            xmlns="http://javafx.com/javafx/17" 
+            xmlns:fx="http://javafx.com/fxml/1" 
             fx:controller="com.budgetapp.UI.BudgetScreen">
 
-    <VBox spacing="15" layoutX="50" layoutY="30" prefWidth="500">
+    <content>
+        <VBox styleClass="main-container" spacing="30">
 
         <Label text="Manage Budgets" styleClass="title-label"/>
 
 
+        <VBox styleClass="form-card" alignment="center" maxWidth="500" spacing="10">
+
         <Label text="Create New Budget" styleClass="section-label"/>
 
-        
-        <Label text="Category" styleClass="section-label"/>
+            <VBox spacing="5">
+
+
+        <Label text="Category" styleClass="field-label"/>
         <ComboBox fx:id="categoryComboBox"
-                  promptText="Select category"
-                  prefWidth="500"/>
+                  promptText="Select category" maxWidth="Infinity"
+                  />
+    </VBox>
 
     
-        <Label text="Budget Limit" styleClass="section-label"/>
+        <VBox spacing="5">
+  
+        <Label text="Budget Limit" styleClass="field-label"/>
         <TextField fx:id="limitField"
-                   promptText="Enter limit amount"
-                   prefWidth="500"/>
-
-       
-        <Label text="Start Date" styleClass="section-label"/>
-        <DatePicker fx:id="startDatePicker" prefWidth="500"/>
+                   promptText="Enter limit amount" maxWidth="Infinity"
+                   />
+       </VBox>
 
 
-        <Label text="End Date" styleClass="section-label"/>
-        <DatePicker fx:id="endDatePicker" prefWidth="500"/>
+           <VBox spacing="5">
 
+ 
+        <Label text="Start Date" styleClass="field-label"/>
+        <DatePicker fx:id="startDatePicker" maxWidth="Infinity"/>
+</VBox>
+
+    <VBox spacing="5">
+
+        <Label text="End Date" styleClass="field-label"/>
+        <DatePicker fx:id="endDatePicker"  maxWidth="Infinity"/>
+</VBox>
 
         <Label fx:id="messageLabel"  styleClass="msg-error" text=""/>
 
 
-        <Button text="Create Budget" styleClass="btn-primary"
-                prefWidth="500"
+        <Button text="Create Budget" styleClass="btn-primary" alignment="center"
                 onAction="#handleCreate"/>
+       </VBox>
 
         
         <Label text="Your Budgets" styleClass="section-label"/>
 
 
-        <TableView fx:id="budgetTable" prefHeight="200" prefWidth="500">
+        <TableView fx:id="budgetTable" VBox.vgrow="ALWAYS">
+        <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
             <columns>
                 <TableColumn fx:id="categoryCol"
                              text="Category"
-                             prefWidth="150"/>
+   />
                 <TableColumn fx:id="limitCol"
                              text="Limit"
-                             prefWidth="100"/>
+                         />
                 <TableColumn fx:id="spentCol"
                              text="Spent"
-                             prefWidth="100"/>
+                          />
                 <TableColumn fx:id="remainingCol"
                              text="Remaining"
-                             prefWidth="100"/>
+                        />
                 <TableColumn fx:id="deleteCol"
-                             text="Delete"
-                             prefWidth="50"/>
+                             text="Delete"/>
             </columns>
         </TableView>
 
@@ -80,4 +104,5 @@
                 onAction="#handleBack"/>
 
     </VBox>
-</AnchorPane>
+</content>
+</ScrollPane>

@@ -9,75 +9,92 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane stylesheets="/css/style.css" prefHeight="600.0" prefWidth="500.0"
-            xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
+<ScrollPane fitToWidth="true" 
+            fitToHeight="true"
+            prefHeight="650.0" 
+            prefWidth="900.0" 
+            stylesheets="/css/style.css" 
+            styleClass="scroll-pane"
+            xmlns="http://javafx.com/javafx/17" 
+            xmlns:fx="http://javafx.com/fxml/1" 
             fx:controller="com.budgetapp.UI.TransactionScreen">
 
-    <VBox spacing="15" layoutX="50" layoutY="30" prefWidth="400" >
+    <content>
+        <VBox styleClass="main-container" alignment="TOP_CENTER" spacing="20">
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
 
-        <Label text="Add Transaction" styleClass="title-label"/>
+            <VBox styleClass="form-card" maxWidth="500" spacing="15" alignment="CENTER_LEFT">
+                <Label text="Add Transaction" styleClass="title-label"/>
 
-        <!-- Type -->
-        <Label text="Type" styleClass="section-label"/>        
-        <fx:define>
-            <ToggleGroup fx:id="typeGroup"/>
-        </fx:define>
-        <HBox spacing="30">
-            <RadioButton fx:id="incomeRadio"
-                         text="Income"
-                         toggleGroup="$typeGroup"
-                         selected="true"
-                         onAction="#handleTypeChange"/>
-            <RadioButton fx:id="expenseRadio"
-                         text="Expense"
-                         toggleGroup="$typeGroup"
-                         onAction="#handleTypeChange"/>
-        </HBox>
+                <Label text="Type" styleClass="field-label"/>        
+                <fx:define>
+                    <ToggleGroup fx:id="typeGroup"/>
+                </fx:define>
+                <HBox spacing="30">
+                    <RadioButton fx:id="incomeRadio"
+                                 text="Income"
+                                 toggleGroup="$typeGroup"
+                                 selected="true"
+                                 onAction="#handleTypeChange"/>
+                    <RadioButton fx:id="expenseRadio"
+                                 text="Expense"
+                                 toggleGroup="$typeGroup"
+                                 onAction="#handleTypeChange"/>
+                </HBox>
 
-    
-        <Label text="Amount" styleClass="section-label"/>
-        <TextField fx:id="amountField"
-                   promptText="Enter amount"
-                   prefWidth="400"/>
+                <VBox spacing="5">
+                    <Label text="Amount" styleClass="field-label"/>
+                    <TextField fx:id="amountField"
+                               promptText="Enter amount"
+                               maxWidth="Infinity"/>
+                </VBox>
 
-    
-        <Label text="Category" styleClass="section-label"/>
-        <ComboBox fx:id="categoryComboBox"
-                  promptText="Select category"
-                  prefWidth="400"/>
+                <VBox spacing="5">
+                    <Label text="Category" styleClass="field-label"/>
+                    <ComboBox fx:id="categoryComboBox"
+                              promptText="Select category"
+                              maxWidth="Infinity"/>
+                </VBox>
 
-    
-        <Label text="Date" styleClass="section-label"/>
-        <DatePicker fx:id="datePicker" prefWidth="400"/>
+                <VBox spacing="5">
+                    <Label text="Date" styleClass="field-label"/>
+                    <DatePicker fx:id="datePicker" maxWidth="Infinity"/>
+                </VBox>
 
-    
-        <Label text="Description" styleClass="section-label"/>
-        <TextField fx:id="descriptionField"
-                   promptText="Enter description"
-                   prefWidth="400"/>
+                <VBox spacing="5">
+                    <Label text="Description" styleClass="field-label"/>
+                    <TextField fx:id="descriptionField"
+                               promptText="Enter description"
+                               maxWidth="Infinity"/>
+                </VBox>
 
-    
-        <Label fx:id="extraLabel" text="Source" styleClass="section-label"/>
-        <TextField fx:id="extraField"
-                   promptText="Enter source"
-                   prefWidth="400"/>
+                <VBox spacing="5">
+                    <Label fx:id="extraLabel" text="Source" styleClass="field-label"/>
+                    <TextField fx:id="extraField"
+                               promptText="Enter source"
+                               maxWidth="Infinity"/>
+                </VBox>
 
-    
-        <Label fx:id="messageLabel" text="" styleClass="msg-error"/>
+                <Label fx:id="messageLabel" text="" styleClass="msg-error"/>
 
-    
-        <HBox spacing="20">
-            <Button text="Save Transaction"
-                    styleClass="btn-success"
-                    prefWidth="190"
-                    onAction="#handleSave"/>
-            <Button text="Back"
-            styleClass="btn-outline"
-                    prefWidth="190"
-                    onAction="#handleBack"/>
-        </HBox>
-
-    </VBox>
-</AnchorPane>
+                <HBox spacing="20">
+                    <Button text="Save Transaction"
+                            styleClass="btn-success"
+                            HBox.hgrow="ALWAYS"
+                            maxWidth="Infinity"
+                            onAction="#handleSave"/>
+                    <Button text="Back"
+                            styleClass="btn-outline"
+                            HBox.hgrow="ALWAYS"
+                            maxWidth="Infinity"
+                            onAction="#handleBack"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>

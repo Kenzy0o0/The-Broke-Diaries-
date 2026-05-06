@@ -4,15 +4,20 @@
 <?import javafx.scene.chart.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox stylesheets="/css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="com.budgetapp.UI.ReportScreen"
-      spacing="15" 
-      styleClass="root"
-     >
+<ScrollPane fitToWidth="true" 
+fitToHeight="true"
 
-    <padding>
-        <Insets bottom="20" left="30" right="30" top="20"/>
-    </padding>
+            prefHeight="650.0" 
+            prefWidth="900.0" 
+            stylesheets="/css/style.css" 
+            styleClass="scroll-pane"
+            xmlns="http://javafx.com/javafx/17" 
+            xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="com.budgetapp.UI.ReportScreen">
+
+    <!-- The VBox now acts as the main content area -->
+    <content>
+        <VBox styleClass="main-container">
 
     <!-- Header -->
     <HBox alignment="CENTER_LEFT" spacing="10">
@@ -29,7 +34,7 @@
     </HBox>
 
     <!-- No data message -->
-    <Label fx:id="noDataLabel" styleClass="msg-error" visible="false" styleClass="section-label"/>
+    <Label fx:id="noDataLabel" styleClass="msg-error" visible="false"/>
 
     <!-- Pie Chart -->
     <PieChart fx:id="expensePieChart"
@@ -47,6 +52,9 @@
     </BarChart>
 
     <!-- Insight -->
-    <Label fx:id="insightLabel"styleClass="section-label"/>
+    <Label fx:id="insightLabel" styleClass="section-label"/>
 
 </VBox>
+
+</content>
+</ScrollPane>

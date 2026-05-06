@@ -36,10 +36,21 @@ public class UIManager {
             // 2. Get the current Stage from the button/event that was clicked
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            Scene scene = new Scene(root, WIDTH, HEIGHT);
+            double currentWidth = stage.getWidth();
+            double currentHeight = stage.getHeight();
+            boolean isMaximized = stage.isMaximized();
+
+            Scene scene = new Scene(root);
 
             // 4. Apply to stage
-            stage.centerOnScreen(); // Optional: keeps the window centered
+            if (isMaximized) {
+                stage.setMaximized(true);
+            } else {
+                stage.setWidth(currentWidth);
+                stage.setHeight(currentHeight);
+            }
+
+            stage.setScene(scene);
             stage.show();
 
         } catch (IOException e) {

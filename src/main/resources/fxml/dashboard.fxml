@@ -7,17 +7,44 @@
 
 <!-- we can also use gridbox -->
 <!-- think about btns, alot of btns -->
-<AnchorPane stylesheets="/css/style.css" prefHeight="650.0" prefWidth="900.0"
-            xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
+<ScrollPane fitToWidth="true" 
+fitToHeight="true"
+
+            prefHeight="650.0" 
+            prefWidth="900.0" 
+            stylesheets="/css/style.css" 
+            styleClass="scroll-pane"
+            xmlns="http://javafx.com/javafx/17" 
+            xmlns:fx="http://javafx.com/fxml/1" 
             fx:controller="com.budgetapp.UI.Dashboard">
-<padding>
-    <Insets bottom="20" left="30" right="30" top="20" />
-</padding>
-<VBox spacing="20" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+    <!-- The VBox now acts as the main content area -->
+    <content>
+        <VBox styleClass="main-container">
+
+
+    <!-- Header Buttons -->
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="+ Transactions"
+                onAction="#handleGoToTransactions" styleClass="btn-primary"
+                prefWidth="130"/>
+        <Button text="Budget"
+                onAction="#handleGoToBudget" styleClass="btn-outline"
+                prefWidth="130"/>
+        <Button text="Reports"
+                onAction="#handleGoToReports" styleClass="btn-outline"
+                prefWidth="130"/>
+        <Button text="Profile"
+                onAction="#handleGoToProfile" styleClass="btn-outline"
+                prefWidth="130"/>
+
+       <Button text="Sign Out"
+              onAction="#handleSignOut" styleClass="btn-danger"
+              prefWidth="100"/>
+    </HBox>
 
     <!-- Welcome -->
-    <Label fx:id="welcomeLabel" styleClass="title-label"/>
+    <Label fx:id="welcomeLabel" styleClass="title-label" text="Welcome Back!"/>
 
     <!-- Balance Summary -->
     <HBox spacing="30" alignment="CENTER" styleClass="summary-card">
@@ -44,27 +71,7 @@
     <Label text="Recent Transactions" styleClass="section-label"/>
     <ListView fx:id="recentTransactionsList" prefHeight="180"/>
 
-    <!-- Navigation Buttons -->
-    <Label text="Navigate" styleClass="section-label"/>
-
-    <HBox spacing="10" alignment="CENTER">
-        <Button text="+ Transactions"
-                onAction="#handleGoToTransactions" styleClass="btn-primary"
-                prefWidth="130"/>
-        <Button text="Budget"
-                onAction="#handleGoToBudget" styleClass="btn-outline"
-                prefWidth="130"/>
-        <Button text="Reports"
-                onAction="#handleGoToReports" styleClass="btn-outline"
-                prefWidth="130"/>
-        <Button text="Profile"
-                onAction="#handleGoToProfile" styleClass="btn-outline"
-                prefWidth="130"/>
-    </HBox>
-
-    <Button text="Sign Out"
-            onAction="#handleSignOut" styleClass="btn-danger"
-            prefWidth="100"/>
 
 </VBox>
-</AnchorPane>
+</content>
+</ScrollPane>
