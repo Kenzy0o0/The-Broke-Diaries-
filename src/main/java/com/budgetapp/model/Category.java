@@ -4,6 +4,9 @@ package com.budgetapp.model;
  * Defines a classification for financial transactions. Categories can be
  * toggled as active or inactive to manage user options without deleting
  * historical transaction data.
+ *
+ * @author WeDon'tHave
+ * @version $Id: $Id
  */
 public class Category {
 
@@ -39,24 +42,41 @@ public class Category {
     // public Category(int CategoryId, String name, boolean isActive) {
     //     this(CategoryId, name, true);
     // }
+    /**
+     * <p>
+     * getCategoryId.</p>
+     *
+     * @return a int
+     */
     public int getCategoryId() {
         return CategoryId;
     }
 
     /**
-     * @return the unique ID of this category.
+     * <p>
+     *   * setCategoryId.</p>
+     *
+     * @param CategoryId a int
      */
     public void setCategoryId(int CategoryId) {
         this.CategoryId = CategoryId;
     }
 
     /**
-     * @return the display name of this category.
+     * <p>
+     * Getter for the field <code>name</code>.</p> * @return the display name of
+     * this category.
      */
     public String getName() {
         return name;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>name</code>.</p>
+     *
+     * @param name a {@link java.lang.String} object
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -64,12 +84,26 @@ public class Category {
     // public String getType() { return type; }
     // public void setType(String type) { this.type = type; }
     /**
+     * <p>
+     * isActive.</p>
+     *
+     *
+     *
+     *
+     *
      * @return true if the category is active, false otherwise.
      */
     public boolean isActive() {
         return isActive;
     }
 
+    /**
+     * <p>
+     *
+     * setActive.</p>
+     *
+     * @param active a boolean
+     */
     public void setActive(boolean active) {
         isActive = active;
     }

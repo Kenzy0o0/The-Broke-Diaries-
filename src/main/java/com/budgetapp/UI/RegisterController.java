@@ -1,19 +1,27 @@
 package com.budgetapp.UI;
 
+import java.io.IOException;
+
 import com.budgetapp.controller.AuthManager;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.PasswordField;
-import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
+/**
+ * <p>
+ * RegisterController class.</p>
+ *
+ * @author WeDon'tHave
+ * @version $Id: $Id
+ */
 public class RegisterController {
 
     /**
@@ -49,8 +57,8 @@ public class RegisterController {
     private AuthManager authManager;
 
     /**
-     * Initializes the RegisterController and links the {@link AuthManager}
-     * instance.
+     * Initializes the RegisterController and links the
+     * {@link com.budgetapp.controller.AuthManager} instance.
      */
     public RegisterController() {
         authManager = AuthManager.getInstance();
@@ -76,8 +84,7 @@ public class RegisterController {
      * General utility to swap the current stage's scene.
      *
      * @param e the action event triggering the switch
-     * @param s the FXML file path
-     * @throws IOException if the FXML resource is missing
+     * @throws java.io.IOException if the FXML resource is missing
      */
     @FXML
     public void handleRegisterAction(ActionEvent e) throws IOException {
@@ -105,6 +112,9 @@ public class RegisterController {
 
     /**
      * Redirects the user to the login screen without processing any data.
+     *
+     * @param e a {@link javafx.event.ActionEvent} object
+     * @throws java.io.IOException if any.
      */
     @FXML
     public void handleGoTologin(ActionEvent e) throws IOException {

@@ -8,6 +8,9 @@ import java.util.Date;
  * Represents a system alert or message intended for the user. Notifications
  * track their own read status and timestamp, allowing for a persistent "inbox"
  * or alert feed within the application.
+ *
+ * @author WeDon'tHave
+ * @version $Id: $Id
  */
 public class Notification {
 
@@ -41,6 +44,10 @@ public class Notification {
      * reconstruction.
      *
      * @param dateStr the timestamp in "yyyy-MM-dd HH:mm:ss" format.
+     * @param id a int
+     * @param userId a int
+     * @param message a {@link java.lang.String} object
+     * @param isRead a boolean
      */
     public Notification(int id, int userId, String message, boolean isRead, String dateStr) {
         this.id = id;
@@ -53,11 +60,24 @@ public class Notification {
     /**
      * Convenience constructor for creating a brand-new notification in
      * real-time. Defaults to ID 0, unread status, and current system time.
+     *
+     * @param userId a int
+     * @param message a {@link java.lang.String} object
      */
     public Notification(int userId, String message) {
         this(0, userId, message, false, new Date());
     }
 
+    /**
+     * <p>
+     *Constructor for Notification.</p>
+     *
+     * @param id a int
+     * @param userId a int
+     * @param message a {@link java.lang.String} object
+     * @param isRead a boolean
+     * @param date a {@link java.util.Date} object
+     */
     public Notification(int id, int userId, String message, boolean isRead, Date date) {
         this.id = id;
         this.userId = userId;
@@ -78,34 +98,80 @@ public class Notification {
         }
     }
 
+    /**
+     * <p>
+     *   * Getter for the field <code>id</code>.</p>
+     *
+     * @return a int
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>id</code>.</p>
+     *    *
+     * @param id a int
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * <p>
+     * Getter for the field <code>userId</code>.</p>
+    * @return a int
+     */
     public int getUserId() {
         return userId;
     }
 
+    /**
+     * <p>
+                * Setter for the field <code>userId</code>.</p>
+     *
+     * @param userId a int
+     */
     public void setUserId(int userId) {
         this.userId = userId;
     }
 
+    /**
+     * <p>
+
+    * Getter for the field <code>message</code>.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     * <p>
+    *
+     * @param message a {@link java.lang.String} object
+     */
     public void setMessage(String message) {
         this.message = message;
     }
 
+    /**
+     * <p> isRead.</p>
+     *
+     * @return a boolean
+     */
     public boolean isRead() {
         return isRead;
     }
 
+    /**
+     * <p>
+     *  * setRead.</p>
+     *
+     * @param read a boolean
+     */
     public void setRead(boolean read) {
         isRead = read;
     }
@@ -118,10 +184,22 @@ public class Notification {
         isRead = true;
     }
 
+    /**
+     * <p>
+     *   * Getter for the field <code>date</code>.</p>
+     *
+     * @return a {@link java.util.Date} object
+     */
     public Date getDate() {
         return date;
     }
 
+    /**
+     * <p>
+     *Setter for the field <code>date</code>.</p>
+     *
+     * @param date a {@link java.util.Date} object
+     */
     public void setDate(Date date) {
         this.date = date;
     }

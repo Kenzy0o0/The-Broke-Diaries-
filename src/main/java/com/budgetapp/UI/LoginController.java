@@ -13,6 +13,13 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+/**
+ * <p>
+ * LoginController class.</p>
+ *
+ * @author WeDon'tHave
+ * @version $Id: $Id
+ */
 public class LoginController {
 
     /**
@@ -68,7 +75,7 @@ public class LoginController {
      * successful, redirects to the Dashboard; otherwise, displays an error.
      *
      * @param e The click event from the "Login" button.
-     * @throws IOException If the dashboard view fails to load.
+     * @throws java.io.IOException If the dashboard view fails to load.
      */
     @FXML
     public void handleLoginAction(ActionEvent e) throws IOException {
@@ -96,7 +103,7 @@ public class LoginController {
      * Redirects the user to the registration screen.
      *
      * @param e The click event from the "Register" or "Sign Up" link/button.
-     * @throws IOException If the registration view fails to load.
+     * @throws java.io.IOException If the registration view fails to load.
      */
     @FXML
     public void handleGoToRegister(ActionEvent e) throws IOException {

@@ -16,6 +16,7 @@ import com.budgetapp.model.Transaction;
  * charts (expenses by category) and bar charts (income vs expenses by month).
  *
  * @version 1.0
+ * @author WeDon'tHave
  */
 public class ReportGenerator {
 
@@ -35,6 +36,12 @@ public class ReportGenerator {
     private ReportGenerator() {
     }
 
+    /**
+     * <p>
+     * Getter for the field <code>instance</code>.</p>
+     *
+     * @return a {@link com.budgetapp.controller.ReportGenerator} object
+     */
     public static synchronized ReportGenerator getInstance() {
         if (instance == null) {
             instance = new ReportGenerator();

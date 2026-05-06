@@ -16,6 +16,7 @@ import com.budgetapp.model.User;
  * exists throughout the application.</p>
  *
  * @version 1.0
+ * @author WeDon'tHave
  */
 public class AuthManager {
 
@@ -125,7 +126,8 @@ public class AuthManager {
     /**
      * Returns the currently logged-in user.
      *
-     * @return the current {@link User} object, or null if not logged in
+     * @return the current {@link com.budgetapp.model.User} object, or null if
+     * not logged in
      */
     public User getCurrentUser() {
         return currentUser;

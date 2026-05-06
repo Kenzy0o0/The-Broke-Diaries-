@@ -8,10 +8,12 @@ import com.budgetapp.observer.IBudgetObserver;
 
 /**
  * Manages user budgets and spending limits per category. Implements the
- * Observer pattern — notifies registered {@link IBudgetObserver} instances when
- * spending exceeds the limit.
+ * Observer pattern — notifies registered
+ * {@link com.budgetapp.observer.IBudgetObserver} instances when spending
+ * exceeds the limit.
  *
  * @version 1.0
+ * @author WeDon'tHave
  */
 public class Budget {
 
@@ -55,6 +57,18 @@ public class Budget {
      */
     private final List<IBudgetObserver> observers = new ArrayList<>();
 
+    /**
+     * <p>
+     * Constructor for Budget.</p>
+     *
+     * @param budgetId a int
+     * @param userId a int
+     * @param categoryId a int
+     * @param limit a double
+     * @param currentSpent a double
+     * @param startDate a {@link java.util.Date} object
+     * @param endDate a {@link java.util.Date} object
+     */
     public Budget(int budgetId, int userId, int categoryId, double limit, double currentSpent, Date startDate, Date endDate) {
         this.budgetId = budgetId;
         this.userId = userId;
@@ -66,34 +80,82 @@ public class Budget {
     }
 
     // Getters and setters 
+    /**
+     * <p>
+     * Getter for the field <code>budgetId</code>.</p>
+     *
+     * @return a int
+     */
     public int getBudgetId() {
         return budgetId;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>budgetId</code>.</p>
+     *
+     * @param budgetId a int
+     */
     public void setBudgetId(int budgetId) {
         this.budgetId = budgetId;
     }
 
+    /**
+     * <p>
+     * Getter for the field <code>userId</code>.</p>
+     *
+     * @return a int
+     */
     public int getUserId() {
         return userId;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>userId</code>.</p>
+     *
+     * @param userId a int
+     */
     public void setUserId(int userId) {
         this.userId = userId;
     }
 
+    /**
+     * <p>
+     * Getter for the field <code>categoryId</code>.</p>
+     *
+     * @return a int
+     */
     public int getCategoryId() {
         return categoryId;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>categoryId</code>.</p>
+     *
+     * @param categoryId a int
+     */
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
 
+    /**
+     * <p>
+     * Getter for the field <code>limit</code>.</p>
+     *
+     * @return a double
+     */
     public double getLimit() {
         return limit;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>limit</code>.</p>
+     *
+     * @param limit a double
+     */
     public void setLimit(double limit) {
         if (limit >= 0) {
             this.limit = limit;
@@ -102,10 +164,22 @@ public class Budget {
         }
     }
 
+    /**
+     * <p>
+     * Getter for the field <code>currentSpent</code>.</p>
+     *
+     * @return a double
+     */
     public double getCurrentSpent() {
         return currentSpent;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>currentSpent</code>.</p>
+     *
+     * @param currentSpent a double
+     */
     public void setCurrentSpent(double currentSpent) {
         if (currentSpent >= 0) {
             this.currentSpent = currentSpent;
@@ -115,18 +189,42 @@ public class Budget {
         }
     }
 
+    /**
+     * <p>
+     * Getter for the field <code>startDate</code>.</p>
+     *
+     * @return a {@link java.util.Date} object
+     */
     public Date getStartDate() {
         return startDate;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>startDate</code>.</p>
+     *
+     * @param startDate a {@link java.util.Date} object
+     */
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
+    /**
+     * <p>
+     * Getter for the field <code>endDate</code>.</p>
+     *
+     * @return a {@link java.util.Date} object
+     */
     public Date getEndDate() {
         return endDate;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>endDate</code>.</p>
+     *
+     * @param endDate a {@link java.util.Date} object
+     */
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
@@ -135,7 +233,7 @@ public class Budget {
      * Increments the current spending amount and triggers a limit check.
      *
      * @param amount the value of the new expense to add
-     * @throws IllegalArgumentException if amount is negative
+     * @throws java.lang.IllegalArgumentException if amount is negative
      */
     public void updateSpent(double amount) {
         if (amount > 0) {

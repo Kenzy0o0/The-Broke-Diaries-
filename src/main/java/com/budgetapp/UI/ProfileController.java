@@ -1,7 +1,12 @@
 package com.budgetapp.UI;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import com.budgetapp.controller.AuthManager;
 import com.budgetapp.model.User;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,15 +14,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.PasswordField;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
+/**
+ * <p>
+ * ProfileController class.</p>
+ *
+ * @author WeDon'tHave
+ * @version $Id: $Id
+ */
 public class ProfileController implements Initializable {
 
     /**
@@ -55,11 +63,17 @@ public class ProfileController implements Initializable {
      */
     private AuthManager authManager;
 
+    /**
+     * <p>
+     * Constructor for ProfileController.</p>
+     */
     public ProfileController() {
         authManager = AuthManager.getInstance();
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Called by the FXMLLoader after the FXML is processed. Triggers the
      * initial data fetch to populate the profile form.
      */
@@ -106,6 +120,9 @@ public class ProfileController implements Initializable {
 
     /**
      * Redirects the user back to the main dashboard.
+     *
+     * @param e a {@link javafx.event.ActionEvent} object
+     * @throws java.io.IOException if any.
      */
     @FXML
     public void handleGoTODashboard(ActionEvent e) throws IOException {
@@ -117,6 +134,9 @@ public class ProfileController implements Initializable {
     /**
      * Clears the current session through AuthManager and returns to the login
      * screen.
+     *
+     * @param e a {@link javafx.event.ActionEvent} object
+     * @throws java.io.IOException if any.
      */
     @FXML
     public void handleSignOut(ActionEvent e) throws IOException {
@@ -126,8 +146,9 @@ public class ProfileController implements Initializable {
     }
 
     /**
-     * Retrieves the logged-in user's information from {@link AuthManager} and
-     * populates the text fields.
+     * Retrieves the logged-in user's information from
+     * {@link com.budgetapp.controller.AuthManager} and populates the text
+     * fields.
      */
     @FXML
     public void loadCurrentUserData() {

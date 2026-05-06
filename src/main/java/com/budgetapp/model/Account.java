@@ -3,6 +3,9 @@ package com.budgetapp.model;
 /**
  * Represents the security credentials and link to a user's profile. This class
  * handles sensitive data used during the authentication process.
+ *
+ * @author WeDon'tHave
+ * @version $Id: $Id
  */
 public class Account {
 
@@ -36,6 +39,9 @@ public class Account {
     }
 
     /**
+     * <p>
+     * Getter for the field <code>userId</code>.</p>
+     *
      * @return the unique ID of the associated user profile.
      */
     public int getUserId() {
@@ -43,6 +49,9 @@ public class Account {
     }
 
     /**
+     * <p>
+     *   * Getter for the field <code>email</code>.</p>
+     *
      * @return the email address associated with this account.
      */
     public String getEmail() {
@@ -50,13 +59,18 @@ public class Account {
     }
 
     /**
-     * @return the hashed password string.
+     * <p>
+     * Getter for the field <code>password</code>.</p> * @return the hashed
+     * password string.
      */
     public String getPassword() {
         return password;
     }
 
     /**
+     * <p>
+     * Setter for the field <code>email</code>.</p>
+     *
      * @param email the new email address for this account.
      */
     public void setEmail(String email) {
@@ -64,6 +78,9 @@ public class Account {
     }
 
     /**
+     * <p>
+     * Setter for the field <code>password</code>.</p>
+     *
      * @param password the new hashed password.
      */
     public void setPassword(String password) {
@@ -71,6 +88,10 @@ public class Account {
     }
 
     /**
+     * <p>
+     *
+    * Setter for the field <code>userId</code>.</p>
+     *
      * @param userId the ID to link this account to a specific user.
      */
     public void setUserId(int userId) {

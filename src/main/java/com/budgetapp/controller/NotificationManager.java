@@ -11,14 +11,18 @@ import com.budgetapp.observer.IBudgetObserver;
 
 /**
  * Observer that listens for budget limit violations. When a budget is exceeded,
- * creates and saves a {@link Notification} to the database.
+ * creates and saves a {@link com.budgetapp.model.Notification} to the database.
  *
- * Implements {@link IBudgetObserver}.
+ * Implements {@link com.budgetapp.observer.IBudgetObserver}.
  *
  * @version 1.0
+ * @author WeDon'tHave
  */
 public class NotificationManager implements IBudgetObserver {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateAlert(Budget budget) {
         String message = "Budget limit of " + budget.getLimit() + " exceeded! Current spent: " + budget.getCurrentSpent();
@@ -45,12 +49,14 @@ public class NotificationManager implements IBudgetObserver {
      * as read.
      *
      * @param userId the unique ID of the user
-     * @return a list of unread {@link Notification} objects; returns an empty
-     * list if none found
+     * @return a list of unread {@link com.budgetapp.model.Notification}
+     * objects; returns an empty list if none found
      */
     public List<Notification> getUnreadNotifications(int userId) {
         List<Notification> all = DatabaseManager.getInstance().fetchNotifications(userId);
-        if (all == null) return new ArrayList<>();
+        if (all == null) {
+            return new ArrayList<>();
+        }
         return all.stream().filter(n -> !n.isRead()).collect(Collectors.toList());
     }
 

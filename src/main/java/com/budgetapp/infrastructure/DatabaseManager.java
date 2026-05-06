@@ -26,6 +26,7 @@ import com.budgetapp.model.User;
  * budgets, and notifications.
  *
  * @version 1.0
+ * @author WeDon'tHave
  */
 public class DatabaseManager {
 
@@ -51,6 +52,12 @@ public class DatabaseManager {
     // that is why we only make a new databasemanager if there haven't been one
     // we also can use it when making a new instance is very complicated
     // so we hide all the comlixe logic behind one function call
+    /**
+     * <p>
+     * Getter for the field <code>instance</code>.</p>
+     *
+     * @return a {@link com.budgetapp.infrastructure.DatabaseManager} object
+     */
     public static synchronized DatabaseManager getInstance() {
         if (instance == null) {
             instance = new DatabaseManager();
@@ -95,9 +102,9 @@ public class DatabaseManager {
             insertDefaultCategories();
 
             // 4. Insert Initial Transactions
-          String transSql = "INSERT INTO transactions (uId, amount, type, cId, description, date) VALUES "
-                    + "(1, 2000.00, 'income', 8, 'Monthly Pay', '2023-10-01'), "    
-                    + "(1, 800.00, 'expense', 3, 'October Rent', '2023-10-02'), "  
+            String transSql = "INSERT INTO transactions (uId, amount, type, cId, description, date) VALUES "
+                    + "(1, 2000.00, 'income', 8, 'Monthly Pay', '2023-10-01'), "
+                    + "(1, 800.00, 'expense', 3, 'October Rent', '2023-10-02'), "
                     + "(1, 50.00, 'expense', 1, 'Pizza Night', '2023-10-05')";
             stmt.executeUpdate(transSql);
 
@@ -139,6 +146,10 @@ public class DatabaseManager {
         seedDatabase();
     }
 
+    /**
+     * <p>
+     * insertDefaultCategories.</p>
+     */
     public void insertDefaultCategories() {
         String sql = "INSERT OR IGNORE INTO categories (name) VALUES (?)";
 
@@ -180,7 +191,7 @@ public class DatabaseManager {
     /**
      * Persists a new User profile to the database.
      *
-     * @param u the {@link User} object to save
+     * @param u the {@link com.budgetapp.model.User} object to save
      * @return the auto-generated uId from the database, or -1 if the operation
      * fails
      */
@@ -207,6 +218,13 @@ public class DatabaseManager {
         return -1;
     }
 
+    /**
+     * <p>
+     * updateUser.</p>
+     *
+     * @param u a {@link com.budgetapp.model.User} object
+     * @return a boolean
+     */
     public boolean updateUser(User u) {
         String command = "UPDATE users SET fullName = ?, balance = ?, currency = ? WHERE uId = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
@@ -223,6 +241,13 @@ public class DatabaseManager {
         return false;
     }
 
+    /**
+     * <p>
+     * fetchUser.</p>
+     *
+     * @param userId a int
+     * @return a {@link com.budgetapp.model.User} object
+     */
     public User fetchUser(int userId) {
 
         String command = "SELECT * FROM users WHERE uId = ?";
@@ -255,6 +280,13 @@ public class DatabaseManager {
     }
 
     //** account
+    /**
+     * <p>
+     * fetchAccountByUserId.</p>
+     *
+     * @param userId a int
+     * @return a {@link com.budgetapp.model.Account} object
+     */
     public Account fetchAccountByUserId(int userId) {
 
         String command = "SELECT * FROM accounts WHERE uId = ?";
@@ -289,7 +321,8 @@ public class DatabaseManager {
      * address.
      *
      * @param email the email to search for
-     * @return the {@link Account} object if found, otherwise null
+     * @return the {@link com.budgetapp.model.Account} object if found,
+     * otherwise null
      */
     public Account fetchAccountByEmail(String email) {
         String command = "SELECT * FROM accounts WHERE email = ?";
@@ -313,6 +346,13 @@ public class DatabaseManager {
         return null;
     }
 
+    /**
+     * <p>
+     * saveAccount.</p>
+     *
+     * @param a a {@link com.budgetapp.model.Account} object
+     * @return a boolean
+     */
     public boolean saveAccount(Account a) {
         String command = "Insert into accounts (password, uId, email) values(?,?,?);";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
@@ -327,6 +367,13 @@ public class DatabaseManager {
         return false;
     }
 
+    /**
+     * <p>
+     * updateAccount.</p>
+     *
+     * @param a a {@link com.budgetapp.model.Account} object
+     * @return a boolean
+     */
     public boolean updateAccount(Account a) {
         String command = "UPDATE accounts SET email = ?, password = ? WHERE uId = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
@@ -348,7 +395,8 @@ public class DatabaseManager {
      * 'instanceof' to determine which specific fields (source vs paymentMethod)
      * to populate.
      *
-     * @param t the {@link Transaction} object (Income or Expense) to persist
+     * @param t the {@link com.budgetapp.model.Transaction} object (Income or
+     * Expense) to persist
      * @return true if saved successfully, false otherwise
      */
     public boolean saveTransaction(Transaction t) {
@@ -372,6 +420,13 @@ public class DatabaseManager {
         return false;
     }
 
+    /**
+     * <p>
+     * updateTransaction.</p>
+     *
+     * @param t a {@link com.budgetapp.model.Transaction} object
+     * @return a boolean
+     */
     public boolean updateTransaction(Transaction t) {
         String command = "UPDATE transactions SET amount = ?, cId = ?, description = ?, date = ?, source = ?, paymentMethod = ? WHERE tId = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
@@ -390,6 +445,13 @@ public class DatabaseManager {
         return false;
     }
 
+    /**
+     * <p>
+     * fetchTransaction.</p>
+     *
+     * @param tId a int
+     * @return a {@link com.budgetapp.model.Transaction} object
+     */
     public Transaction fetchTransaction(int tId) {
         String command = "SELECT * FROM transactions WHERE tId = ?";
 
@@ -435,7 +497,7 @@ public class DatabaseManager {
      * descending.
      *
      * @param userId the ID of the user whose transactions are being fetched
-     * @return a List of {@link Transaction} objects
+     * @return a List of {@link com.budgetapp.model.Transaction} objects
      */
     public List<Transaction> fetchTransactions(int userId) {
 
@@ -497,9 +559,9 @@ public class DatabaseManager {
      * Calculates the sum of all income and expenses within a specific date
      * range.
      *
-     * @param startDate the beginning of the interval
-     * @param endDate the end of the interval
      * @return a List where index 0 is Total Income and index 1 is Total Expense
+     * @param uId a int
+     * @param category a int
      */
     public List<Transaction> fetchTransactionsByCategory(int uId, int category) {
         String command = "Select * from transactions where uId = ? AND cId= ?";
@@ -547,6 +609,15 @@ public class DatabaseManager {
     }
 
     // returns the total income, expense, between a certain time interval
+    /**
+     * <p>
+     * fetchTotalIncomeExpenseBetween.</p>
+     *
+     * @param userId a int
+     * @param startDate a {@link java.util.Date} object
+     * @param endDate a {@link java.util.Date} object
+     * @return a {@link java.util.List} object
+     */
     public List<Double> fetchTotalIncomeExpenseBetween(int userId, java.util.Date startDate, java.util.Date endDate) {
         String command = "SELECT type, SUM(amount) as total FROM transactions WHERE uId=? AND date BETWEEN ? AND ? GROUP BY type";
 
@@ -574,6 +645,13 @@ public class DatabaseManager {
 
     }
 
+    /**
+     * <p>
+     * deleteTransaction.</p>
+     *
+     * @param tId a int
+     * @return a boolean
+     */
     public boolean deleteTransaction(int tId) {
         String command = "DELETE from transactions where tId = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
@@ -587,6 +665,13 @@ public class DatabaseManager {
     }
 
     //budget
+    /**
+     * <p>
+     * saveBudget.</p>
+     *
+     * @param b a {@link com.budgetapp.model.Budget} object
+     * @return a boolean
+     */
     public boolean saveBudget(Budget b) {
         // budgets uId INTEGER, category TEXT,  limitAmount REAL, currentSpent REAL, startDate TEXT, endDate TEXT
         String command = "Insert into budgets (uId, cId, limitAmount, currentSpent, startDate, endDate) values( ?,  ?,  ?,  ?, ?, ?);";
@@ -605,6 +690,13 @@ public class DatabaseManager {
         return false;
     }
 
+    /**
+     * <p>
+     * deleteBudgetsByUserId.</p>
+     *
+     * @param userId a int
+     * @return a boolean
+     */
     public boolean deleteBudgetsByUserId(int userId) {
         String command = "DELETE from budgets where uId = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
@@ -617,6 +709,13 @@ public class DatabaseManager {
         return false;
     }
 
+    /**
+     * <p>
+     * deleteBudget.</p>
+     *
+     * @param bId a int
+     * @return a boolean
+     */
     public boolean deleteBudget(int bId) {
         String command = "DELETE from budgets where bId = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
@@ -629,6 +728,13 @@ public class DatabaseManager {
         return false;
     }
 
+    /**
+     * <p>
+     * fetchBudget.</p>
+     *
+     * @param bId a int
+     * @return a {@link com.budgetapp.model.Budget} object
+     */
     public Budget fetchBudget(int bId) {
         String command = "SELECT * FROM budgets WHERE bId = ?";
 
@@ -658,6 +764,13 @@ public class DatabaseManager {
     }
 
     //! wrong, we should update by budget id, not by user id and category, because a user can have multiple budgets for the same category but different time periods
+    /**
+     * <p>
+     * updateBudget.</p>
+     *
+     * @param b a {@link com.budgetapp.model.Budget} object
+     * @return a boolean
+     */
     public boolean updateBudget(Budget b) {
         String command = "UPDATE budgets SET limitAmount = ?, currentSpent = ?, startDate = ?, endDate = ? WHERE bId = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
@@ -674,6 +787,13 @@ public class DatabaseManager {
         return false;
     }
 
+    /**
+     * <p>
+     * fetchBudgets.</p>
+     *
+     * @param userId a int
+     * @return a {@link java.util.List} object
+     */
     public List<Budget> fetchBudgets(int userId) {
 
         String command = "Select * from budgets where uId = ?";
@@ -704,6 +824,13 @@ public class DatabaseManager {
     }
 
     //** category
+    /**
+     * <p>
+     * saveCategory.</p>
+     *
+     * @param c a {@link com.budgetapp.model.Category} object
+     * @return a boolean
+     */
     public boolean saveCategory(Category c) {
         String command = "Insert into categories (name) values(?);";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
@@ -716,6 +843,13 @@ public class DatabaseManager {
         return false;
     }
 
+    /**
+     * <p>
+     * updateCategory.</p>
+     *
+     * @param c a {@link com.budgetapp.model.Category} object
+     * @return a boolean
+     */
     public boolean updateCategory(Category c) {
         String command = "UPDATE categories SET name = ?, isActive = ? WHERE cId = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
@@ -730,6 +864,13 @@ public class DatabaseManager {
         return false;
     }
 
+    /**
+     * <p>
+     * fetchCategories.</p>
+     *
+     * @param userId a int
+     * @return a {@link java.util.List} object
+     */
     public List<Category> fetchCategories(int userId) {
         String command = "Select * from categories where isActive = 1";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
@@ -752,6 +893,13 @@ public class DatabaseManager {
         return null;
     }
 
+    /**
+     * <p>
+     * deleteCategory.</p>
+     *
+     * @param cId a int
+     * @return a boolean
+     */
     public boolean deleteCategory(int cId) {
         String command = "DELETE FROM categories WHERE cId = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
@@ -765,6 +913,13 @@ public class DatabaseManager {
     }
 
     //** */ notification
+    /**
+     * <p>
+     * saveNotification.</p>
+     *
+     * @param n a {@link com.budgetapp.model.Notification} object
+     * @return a boolean
+     */
     public boolean saveNotification(Notification n) {
         String command = "Insert into notifications (uId, message) values( ?, ?);";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
@@ -779,6 +934,13 @@ public class DatabaseManager {
 
     }
 
+    /**
+     * <p>
+     * markNotificationRead.</p>
+     *
+     * @param notificationId a int
+     * @return a boolean
+     */
     public boolean markNotificationRead(int notificationId) {
         String command = "UPDATE notifications SET isRead = 1 WHERE nId = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
@@ -791,6 +953,13 @@ public class DatabaseManager {
         return false;
     }
 
+    /**
+     * <p>
+     * fetchNotifications.</p>
+     *
+     * @param userId a int
+     * @return a {@link java.util.List} object
+     */
     public List<Notification> fetchNotifications(int userId) {
         String command = "SELECT * FROM notifications WHERE uId = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {

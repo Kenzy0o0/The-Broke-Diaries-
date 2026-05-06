@@ -22,6 +22,13 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+/**
+ * <p>
+ * TransactionScreen class.</p>
+ *
+ * @author WeDon'tHave
+ * @version $Id: $Id
+ */
 public class TransactionScreen {
 
     /**

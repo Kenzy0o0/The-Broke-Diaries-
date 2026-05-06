@@ -30,6 +30,13 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+/**
+ * <p>
+ * ReportScreen class.</p>
+ *
+ * @author WeDon'tHave
+ * @version $Id: $Id
+ */
 public class ReportScreen implements Initializable {
 
     /**
@@ -77,6 +84,9 @@ public class ReportScreen implements Initializable {
     private ReportGenerator reportGenerator = ReportGenerator.getInstance();
     private AuthManager authManager = AuthManager.getInstance();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         User currentUser = authManager.getCurrentUser();
@@ -109,34 +119,34 @@ public class ReportScreen implements Initializable {
      * @param userId the user ID to filter data
      */
     private void loadPieChart(int userId) {
-    Map<Integer, Double> byCategory = reportGenerator.getExpensesByCategory(userId);
+        Map<Integer, Double> byCategory = reportGenerator.getExpensesByCategory(userId);
 
-    if (byCategory.isEmpty()) {
-        noDataLabel.setText("No expense data available.");
-        noDataLabel.setVisible(true);
-        expensePieChart.setVisible(false);
-        return;
-    }
-
-    // Fetch all categories (for all users, or filter by user if needed)
-    List<Category> cats = DatabaseManager.getInstance().fetchCategories(0); // 0 might mean "all"? Check your method
-    Map<Integer, String> catNames = new HashMap<>();
-    if (cats != null) {
-        for (Category c : cats) {
-            catNames.put(c.getCategoryId(), c.getName());
+        if (byCategory.isEmpty()) {
+            noDataLabel.setText("No expense data available.");
+            noDataLabel.setVisible(true);
+            expensePieChart.setVisible(false);
+            return;
         }
-    }
 
-    ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList();
-    for (Map.Entry<Integer, Double> entry : byCategory.entrySet()) {
-        String label = catNames.getOrDefault(entry.getKey(), "Category " + entry.getKey());
-        pieData.add(new PieChart.Data(label, entry.getValue()));
-    }
+        // Fetch all categories (for all users, or filter by user if needed)
+        List<Category> cats = DatabaseManager.getInstance().fetchCategories(0); // 0 might mean "all"? Check your method
+        Map<Integer, String> catNames = new HashMap<>();
+        if (cats != null) {
+            for (Category c : cats) {
+                catNames.put(c.getCategoryId(), c.getName());
+            }
+        }
 
-    expensePieChart.setData(pieData);
-    expensePieChart.setTitle("Expenses by Category");
-    expensePieChart.setVisible(true);
-}
+        ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList();
+        for (Map.Entry<Integer, Double> entry : byCategory.entrySet()) {
+            String label = catNames.getOrDefault(entry.getKey(), "Category " + entry.getKey());
+            pieData.add(new PieChart.Data(label, entry.getValue()));
+        }
+
+        expensePieChart.setData(pieData);
+        expensePieChart.setTitle("Expenses by Category");
+        expensePieChart.setVisible(true);
+    }
 
     /**
      * Populates the dual-series bar chart. Creates separate Series for 'Income'
@@ -191,6 +201,13 @@ public class ReportScreen implements Initializable {
         stage.show();
     }
 
+    /**
+     * <p>
+     * handleGoToDashboard.</p>
+     *
+     * @param e a {@link javafx.event.ActionEvent} object
+     * @throws java.io.IOException if any.
+     */
     @FXML
     public void handleGoToDashboard(ActionEvent e) throws IOException {
         switchScene(e, "/fxml/dashboard.fxml");

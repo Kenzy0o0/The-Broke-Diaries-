@@ -7,13 +7,15 @@ import com.budgetapp.infrastructure.DatabaseManager;
 import com.budgetapp.model.Budget;
 
 /**
- * Controller class that manages the lifecycle of {@link Budget} objects.
+ * Controller class that manages the lifecycle of
+ * {@link com.budgetapp.model.Budget} objects.
  *
  * This manager coordinates between the data layer (DatabaseManager) and the
  * notification system (NotificationManager). It ensures that budgets are
  * correctly observed for limit violations whenever they are created or updated.
  *
  * @version 1.0
+ * @author WeDon'tHave
  */
 public class BudgetManager {
 
@@ -67,10 +69,23 @@ public class BudgetManager {
         System.out.println("Budget updated");
     }
 
+    /**
+     * <p>
+     * getBudgets.</p>
+     *
+     * @param userId a int
+     * @return a {@link java.util.List} object
+     */
     public List<Budget> getBudgets(int userId) {
         return db.fetchBudgets(userId);
     }
 
+    /**
+     * <p>
+     * deleteBudget.</p>
+     *
+     * @param budgetId a int
+     */
     public void deleteBudget(int budgetId) {
         db.deleteBudget(budgetId);
     }

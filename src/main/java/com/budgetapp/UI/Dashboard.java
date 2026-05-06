@@ -21,6 +21,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
+/**
+ * <p>
+ * Dashboard class.</p>
+ *
+ * @author WeDon'tHave
+ * @version $Id: $Id
+ */
 public class Dashboard {
 
     // ! temp solution
@@ -128,6 +135,9 @@ public class Dashboard {
 
     /**
      * Handles navigation to the transaction management screen.
+     *
+     * @param e a {@link javafx.event.ActionEvent} object
+     * @throws java.io.IOException if any.
      */
     @FXML
     public void handleGoToTransactions(ActionEvent e) throws IOException {
@@ -136,25 +146,45 @@ public class Dashboard {
 
     /**
      * Handles navigation to the budget planning screen.
+     *
+     * @param e a {@link javafx.event.ActionEvent} object
+     * @throws java.io.IOException if any.
      */
     @FXML
     public void handleGoToBudget(ActionEvent e) throws IOException {
         switchScene(e, "/fxml/budget.fxml");
     }
 
+    /**
+     * <p>
+     * handleGoToReports.</p>
+     *
+     * @param e a {@link javafx.event.ActionEvent} object
+     * @throws java.io.IOException if any.
+     */
     @FXML
     public void handleGoToReports(ActionEvent e) throws IOException {
         switchScene(e, "/fxml/report.fxml");
     }
 
+    /**
+     * <p>
+     * handleGoToProfile.</p>
+     *
+     * @param e a {@link javafx.event.ActionEvent} object
+     * @throws java.io.IOException if any.
+     */
     @FXML
     public void handleGoToProfile(ActionEvent e) throws IOException {
         switchScene(e, "/fxml/profile.fxml");
     }
 
     /**
-     * Logs the user out via {@link AuthManager} and returns to the login
-     * screen.
+     * Logs the user out via {@link com.budgetapp.controller.AuthManager} and
+     * returns to the login screen.
+     *
+     * @param e a {@link javafx.event.ActionEvent} object
+     * @throws java.io.IOException if any.
      */
     @FXML
     public void handleSignOut(ActionEvent e) throws IOException {

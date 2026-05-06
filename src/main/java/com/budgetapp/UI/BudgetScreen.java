@@ -28,6 +28,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+/**
+ * <p>
+ * BudgetScreen class.</p>
+ *
+ * @author WeDon'tHave
+ * @version $Id: $Id
+ */
 public class BudgetScreen {
 
     /**
@@ -72,6 +79,10 @@ public class BudgetScreen {
     private List<Category> categoryList;
     private BudgetManager budgetManager = new BudgetManager();
 
+    /**
+     * <p>
+     * initialize.</p>
+     */
     @FXML
     public void initialize() {
         loadCategories();

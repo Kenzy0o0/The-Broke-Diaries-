@@ -5,6 +5,7 @@ package com.budgetapp.model;
  * information including name, currency preference, and current balance.
  *
  * @version 1.0
+ * @author WeDon'tHave
  */
 public class User {
 
@@ -72,34 +73,81 @@ public class User {
         return false;
     }
 
+    /**
+     * <p>
+     * Getter for the field <code>balance</code>.</p>
+     *
+     * @return a double
+     */
     public double getBalance() {
         return balance;
     }
 
+    /**
+     * <p>
+     *   * Getter for the field <code>currency</code>.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     public String getCurrency() {
         return currency;
     }
 
+    /**
+     * <p>
+     * Getter for the field <code>name</code>.</p> * @return a
+     * {@link java.lang.String} object
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>balance</code>.</p>
+     *
+     * @param balance a double
+     */
     public void setBalance(double balance) {
         this.balance = balance;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>currency</code>.</p>
+     *
+     * @param currency a {@link java.lang.String} object
+     */
     public void setCurrency(String currency) {
         this.currency = currency;
     }
 
+    /**
+     * <p>
+     *
+    * Getter for the field <code>id</code>.</p>
+     *
+     * @return a int
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * <p>
+     *
+     * @param id a int
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>name</code>.</p>
+     *
+     * @param name a {@link java.lang.String} object
+     */
     public void setName(String name) {
         this.name = name;
     }

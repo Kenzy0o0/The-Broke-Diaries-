@@ -3,10 +3,12 @@ package com.budgetapp.model;
 import java.util.Date;
 
 /**
- * Represents an expense transaction. Extends {@link Transaction} and adds a
- * payment method field (e.g., Cash, Credit Card).
+ * Represents an expense transaction. Extends
+ * {@link com.budgetapp.model.Transaction} and adds a payment method field
+ * (e.g., Cash, Credit Card).
  *
  * @version 1.0
+ * @author WeDon'tHave
  */
 public class Expense extends Transaction {
 
@@ -37,6 +39,14 @@ public class Expense extends Transaction {
     /**
      * Overloaded constructor for new expenses where the ID is not yet
      * generated.
+     *
+     * @param userId a int
+     * @param amount a double
+     * @param date a {@link java.util.Date} object
+     * @param description a {@link java.lang.String} object
+     * @param categoryId a int
+     * @param source a {@link java.lang.String} object
+     * @param paymentMethod a {@link java.lang.String} object
      */
     public Expense(int userId, double amount, Date date, String description,
             int categoryId, String source, String paymentMethod) {
@@ -48,27 +58,54 @@ public class Expense extends Transaction {
      * CSV inputs.
      *
      * @param dateStr the date in YYYY-MM-DD format
+     * @param id a int
+     * @param userId a int
+     * @param categoryId a int
+     * @param amount a double
+     * @param description a {@link java.lang.String} object
+     * @param paymentMethod a {@link java.lang.String} object
      */
     public Expense(int id, int userId, int categoryId, double amount, String dateStr, String description, String paymentMethod) {
         this(id, userId, categoryId, amount, java.sql.Date.valueOf(dateStr), description, paymentMethod);
     }
 
+    /**
+     * <p>
+     * Getter for the field <code>paymentMethod</code>.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     public String getPaymentMethod() {
         return paymentMethod;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>paymentMethod</code>.</p>
+     *
+     * @param paymentMethod a {@link java.lang.String} object
+     */
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
     /**
-     * Identifies the nature of this transaction for UI rendering and reporting.
+     * {@inheritDoc}
      *
-     * @return a constant string "expense"
+     * Identifies the nature of this transaction for UI rendering and reporting.
      */
     @Override
     public String getType() {
         return "expense";
     }
-    public String getExtra() { return paymentMethod; }
+
+    /**
+     * <p>
+     * getExtra.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
+    public String getExtra() {
+        return paymentMethod;
+    }
 }

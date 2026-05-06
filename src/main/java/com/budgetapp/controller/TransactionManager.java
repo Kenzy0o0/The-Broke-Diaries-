@@ -32,6 +32,7 @@ import com.budgetapp.model.User;
  * </ul>
  *
  * @version 1.0
+ * @author WeDon'tHave
  */
 public class TransactionManager {
 
@@ -42,6 +43,14 @@ public class TransactionManager {
      * TransactionFactory to create the correct object type. 2. Persists the
      * transaction to the database. 3. Updates the User's overall balance. 4. If
      * it's an expense, triggers a budget limit check via BudgetManager.
+     *
+     * @param userId a int
+     * @param type a {@link java.lang.String} object
+     * @param amount a double
+     * @param cat a {@link com.budgetapp.model.Category} object
+     * @param date a {@link java.util.Date} object
+     * @param description a {@link java.lang.String} object
+     * @param extra a {@link java.lang.String} object
      */
     public void addTransaction(int userId, String type, double amount,
             Category cat, Date date,
@@ -85,6 +94,7 @@ public class TransactionManager {
      * @param limit how many transactions to return.
      * @param offset where to start in the list.
      * @return a sublist of transactions for targeted display.
+     * @param userId a int
      */
     public List<Transaction> getTransactions(int userId, int limit, int offset) {
 
@@ -114,6 +124,12 @@ public class TransactionManager {
         return instance;
     }
 
+    /**
+     * <p>
+     * deleteTransaction.</p>
+     *
+     * @param transactionId a int
+     */
     public void deleteTransaction(int transactionId) {
 
         boolean deleted = db.deleteTransaction(transactionId);
@@ -124,6 +140,12 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * <p>
+     *   * deactivateCategory.</p>
+     *
+     * @param categoryId a int
+     */
     public void deactivateCategory(int categoryId) {
         List<Category> categories = db.fetchCategories(0);
         if (categories == null) {
@@ -142,6 +164,9 @@ public class TransactionManager {
     /**
      * Calculates the start and end of the current calendar month and fetches
      * the sum of all income transactions for the user within that range.
+     *
+     * @param currentUser a {@link com.budgetapp.model.User} object
+     * @return a double
      */
     public double getTotalIncomeThisMonth(User currentUser) {
         java.util.Calendar cal = java.util.Calendar.getInstance();
@@ -161,6 +186,9 @@ public class TransactionManager {
 
     /**
      * Calculates the current month's range and returns the total spent.
+     *
+     * @param currentUser a {@link com.budgetapp.model.User} object
+     * @return a double
      */
     public double getTotalExpenseThisMonth(User currentUser) {
         java.util.Calendar cal = java.util.Calendar.getInstance();
@@ -178,15 +206,37 @@ public class TransactionManager {
         return totals.get(1);
     }
 
+    /**
+     * <p>
+     * getCurrentBalance.</p> * @param currentUser a
+     * {@link com.budgetapp.model.User} object
+     *
+     * @return a double
+     */
     public double getCurrentBalance(User currentUser) {
         User fresh = db.fetchUser(currentUser.getId());
         return fresh != null ? fresh.getBalance() : 0;
     }
 
+    /**
+     * <p>
+     * getAllTransactions.</p>
+     *
+     * @param userId a int
+     * @return a {@link java.util.List} object
+     */
     public List<Transaction> getAllTransactions(int userId) {
         return db.fetchTransactions(userId);
     }
 
+    /**
+     * <p>
+     * getTransactionsByCategory.</p>
+     *
+     * @param userId a int
+     * @param categoryId a int
+     * @return a {@link java.util.List} object
+     */
     public List<Transaction> getTransactionsByCategory(int userId, int categoryId) {
         return db.fetchTransactionsByCategory(userId, categoryId);
     }

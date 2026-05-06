@@ -3,11 +3,12 @@ package com.budgetapp.model;
 import java.util.Date;
 
 /**
- * Abstract base class for all financial transactions. Subclasses {@link Income}
- * and {@link Expense} extend this class to represent the two types of
- * transactions.
+ * Abstract base class for all financial transactions. Subclasses
+ * {@link com.budgetapp.model.Income} and {@link com.budgetapp.model.Expense}
+ * extend this class to represent the two types of transactions.
  *
  * @version 1.0
+ * @author WeDon'tHave
  */
 public abstract class Transaction {
 
@@ -61,22 +62,52 @@ public abstract class Transaction {
     }
 
     // Getters and setters
+    /**
+     * <p>
+     * Getter for the field <code>id</code>.</p>
+     *
+     * @return a int
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>id</code>.</p>
+     *
+     * @param id a int
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * <p>
+     * Getter for the field <code>userId</code>.</p>
+     *
+     * @return a int
+     */
     public int getUserId() {
         return userId;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>userId</code>.</p>
+     *
+     * @param userId a int
+     */
     public void setUserId(int userId) {
         this.userId = userId;
     }
 
+    /**
+     * <p>
+     * Getter for the field <code>amount</code>.</p>
+     *
+     * @return a double
+     */
     public double getAmount() {
         return amount;
     }
@@ -85,7 +116,7 @@ public abstract class Transaction {
      * Updates the transaction amount with validation.
      *
      * @param amount the new value
-     * @throws IllegalArgumentException if amount is zero or negative
+     * @throws java.lang.IllegalArgumentException if amount is zero or negative
      */
     public void setAmount(double amount) {
         if (amount > 0) {
@@ -95,39 +126,82 @@ public abstract class Transaction {
         }
     }
 
+    /**
+     * <p>
+     * Getter for the field <code>categoryId</code>.</p>
+     *
+     * @return a int
+     */
     public int getCategoryId() {
         return categoryId;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>categoryId</code>.</p>
+     *
+     * @param categoryId a int
+     */
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
 
+    /**
+     * <p>
+     * Getter for the field <code>date</code>.</p>
+     *
+     * @return a {@link java.util.Date} object
+     */
     public Date getDate() {
         return date;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>date</code>.</p>
+     *
+     * @param date a {@link java.util.Date} object
+     */
     public void setDate(Date date) {
         this.date = date;
     }
 
+    /**
+     * <p>
+     * Getter for the field <code>description</code>.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * <p>
+     * Setter for the field <code>description</code>.</p>
+     *
+     * @param description a {@link java.lang.String} object
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
     /**
      * Polymorphic method to identify the subclass type. Must be implemented by
-     * {@link Income} and {@link Expense}.
+     * {@link com.budgetapp.model.Income} and
+     * {@link com.budgetapp.model.Expense}.
      *
      * @return a String representing the transaction type ("income" or
      * "expense")
      */
     public abstract String getType();
 
+    /**
+     * <p>
+     * getExtra.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     public abstract String getExtra();
 
 }
