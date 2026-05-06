@@ -24,25 +24,54 @@ import javafx.stage.Stage;
 
 public class TransactionScreen {
 
+    /**
+     * Toggle to determine if the transaction is an Income or Expense.
+     */
     @FXML
     private RadioButton incomeRadio;
+
+    /**
+     * Input for the transaction's monetary value.
+     */
     @FXML
     private TextField amountField;
+
+    /**
+     * Dropdown populated with available spending/earning categories.
+     */
     @FXML
     private ComboBox<String> categoryComboBox;
+
+    /**
+     * Graphical calendar for selecting the transaction date.
+     */
     @FXML
     private DatePicker datePicker;
+
+    /**
+     * Context-sensitive label that changes between "Source" and "Payment
+     * Method".
+     */
+    @FXML
+    private Label extraLabel;
+
+    /**
+     * Status label for providing real-time validation feedback.
+     */
+    @FXML
+    private Label messageLabel;
+
     @FXML
     private TextField descriptionField;
     @FXML
     private TextField extraField;
-    @FXML
-    private Label extraLabel;
-    @FXML
-    private Label messageLabel;
 
     private List<Category> categoryList;
 
+    /**
+     * Called automatically upon screen load. Populates the category dropdown
+     * with data from the database.
+     */
     @FXML
     public void initialize() {
         loadCategories();
@@ -61,6 +90,11 @@ public class TransactionScreen {
         categoryComboBox.setItems(names);
     }
 
+    /**
+     * Responds to the user toggling between Income and Expense. Updates field
+     * labels and prompt texts to reflect the relevant context (e.g., changing
+     * "Payment Method" to "Source" for income).
+     */
     @FXML
     private void handleTypeChange() {
         if (incomeRadio.isSelected()) {
@@ -72,6 +106,12 @@ public class TransactionScreen {
         }
     }
 
+    /**
+     * Primary action handler for the "Save" button. 1. Validates that no fields
+     * are empty. 2. Safely parses numerical input and handles formatting
+     * errors. 3. Converts LocalDate to java.util.Date. 4. Delegates the
+     * business logic and persistence to the TransactionManager.
+     */
     @FXML
     private void handleSave() {
         messageLabel.setStyle("-fx-text-fill: red;");
@@ -142,6 +182,9 @@ public class TransactionScreen {
         clearForm();
     }
 
+    /**
+     * Returns the user to the main Dashboard view.
+     */
     @FXML
     private void handleBack() {
         try {
@@ -155,6 +198,10 @@ public class TransactionScreen {
         }
     }
 
+    /**
+     * Returns the UI to a neutral state after a successful save. Ensures the
+     * form is ready for the next entry without manual deletion.
+     */
     private void clearForm() {
         amountField.clear();
         descriptionField.clear();

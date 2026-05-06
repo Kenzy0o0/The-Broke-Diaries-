@@ -30,18 +30,44 @@ import javafx.stage.Stage;
 
 public class BudgetScreen {
 
-    // ── FXML Links ──
-    @FXML private ComboBox<String> categoryComboBox;
-    @FXML private TextField limitField;
-    @FXML private DatePicker startDatePicker;
-    @FXML private DatePicker endDatePicker;
-    @FXML private Label messageLabel;
-    @FXML private TableView<Budget> budgetTable;
-    @FXML private TableColumn<Budget, String> categoryCol;
-    @FXML private TableColumn<Budget, Double> limitCol;
-    @FXML private TableColumn<Budget, Double> spentCol;
-    @FXML private TableColumn<Budget, Double> remainingCol;
-    @FXML private TableColumn<Budget, Void> deleteCol;    
+    /**
+     * ComboBox for selecting the spending category to budget for.
+     */
+    @FXML
+    private ComboBox<String> categoryComboBox;
+
+    /**
+     * Input for the maximum spending limit.
+     */
+    @FXML
+    private TextField limitField;
+
+    /**
+     * The main table displaying existing budget records.
+     */
+    @FXML
+    private TableView<Budget> budgetTable;
+
+    /**
+     * Specific columns for the budget table, including calculated fields.
+     */
+    @FXML
+    private TableColumn<Budget, Double> limitCol;
+    @FXML
+    private TableColumn<Budget, Double> remainingCol;
+
+    @FXML
+    private DatePicker startDatePicker;
+    @FXML
+    private DatePicker endDatePicker;
+    @FXML
+    private Label messageLabel;
+    @FXML
+    private TableColumn<Budget, String> categoryCol;
+    @FXML
+    private TableColumn<Budget, Double> spentCol;
+    @FXML
+    private TableColumn<Budget, Void> deleteCol;
 
     private List<Category> categoryList;
     private BudgetManager budgetManager = new BudgetManager();
@@ -55,7 +81,9 @@ public class BudgetScreen {
 
     private void loadCategories() {
         categoryList = DatabaseManager.getInstance().fetchCategories(0);
-        if (categoryList == null) return;
+        if (categoryList == null) {
+            return;
+        }
 
         ObservableList<String> names = FXCollections.observableArrayList();
         for (Category c : categoryList) {
@@ -64,6 +92,10 @@ public class BudgetScreen {
         categoryComboBox.setItems(names);
     }
 
+    /**
+     * Configures the TableView columns. Includes custom logic to map Category
+     * IDs back to their display nam * (Limit - Spent).
+     */
     private void setupTable() {
 
         categoryCol.setCellValueFactory(data -> {
@@ -81,31 +113,36 @@ public class BudgetScreen {
         });
 
         // Limit
-        limitCol.setCellValueFactory(data ->
-            new SimpleDoubleProperty(data.getValue().getLimit()).asObject()
+        limitCol.setCellValueFactory(data
+                -> new SimpleDoubleProperty(data.getValue().getLimit()).asObject()
         );
 
         // Spent
-        spentCol.setCellValueFactory(data ->
-            new SimpleDoubleProperty(data.getValue().getCurrentSpent()).asObject()
+        spentCol.setCellValueFactory(data
+                -> new SimpleDoubleProperty(data.getValue().getCurrentSpent()).asObject()
         );
 
         // Remaining
         remainingCol.setCellValueFactory(data -> {
             double remaining = data.getValue().getLimit()
-                             - data.getValue().getCurrentSpent();
+                    - data.getValue().getCurrentSpent();
             return new SimpleDoubleProperty(remaining).asObject();
         });
 
+        /**
+         * Creates a 'Delete' button for every row in the budget table. When
+         * clicked, it identifies the specific budget for that row, deletes it
+         * via the manager, and refreshes the view.
+         */
         deleteCol.setCellFactory(col -> new TableCell<Budget, Void>() {
             private final Button deleteBtn = new Button("Delete");
 
             {
                 deleteBtn.setStyle(
-                    "-fx-background-color: #f44336;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-size: 11;" +
-                    "-fx-cursor: hand;"
+                        "-fx-background-color: #f44336;"
+                        + "-fx-text-fill: white;"
+                        + "-fx-font-size: 11;"
+                        + "-fx-cursor: hand;"
                 );
                 deleteBtn.setOnAction(e -> {
                     Budget selected = getTableView().getItems().get(getIndex());
@@ -127,16 +164,25 @@ public class BudgetScreen {
     private void loadBudgets() {
         int userId = AuthManager.getInstance().getCurrentUser().getId();
         List<Budget> budgets = budgetManager.getBudgets(userId);
-        if (budgets == null) return;
+        if (budgets == null) {
+            return;
+        }
         budgetTable.setItems(FXCollections.observableArrayList(budgets));
     }
 
+    /**
+     * Extracts and validates user input from the form. Checks performed: - Are
+     * all fields filled? - Is the limit a positive number? - Is the end date
+     * chronologically after the start date?
+     *
+     * If valid, it passes the data to the {@link BudgetManager}.
+     */
     @FXML
     private void handleCreate() {
         messageLabel.setStyle("-fx-text-fill: red;");
         messageLabel.setText("");
 
-        String limitText  = limitField.getText().trim();
+        String limitText = limitField.getText().trim();
         int selectedIndex = categoryComboBox.getSelectionModel().getSelectedIndex();
 
         // Validate
@@ -172,14 +218,14 @@ public class BudgetScreen {
 
         // Convert dates
         Date startDate = Date.from(
-            startDatePicker.getValue()
-                           .atStartOfDay(ZoneId.systemDefault())
-                           .toInstant()
+                startDatePicker.getValue()
+                        .atStartOfDay(ZoneId.systemDefault())
+                        .toInstant()
         );
         Date endDate = Date.from(
-            endDatePicker.getValue()
-                         .atStartOfDay(ZoneId.systemDefault())
-                         .toInstant()
+                endDatePicker.getValue()
+                        .atStartOfDay(ZoneId.systemDefault())
+                        .toInstant()
         );
 
         // Validate end date is after start date
@@ -192,11 +238,11 @@ public class BudgetScreen {
         Category selectedCategory = categoryList.get(selectedIndex);
 
         budgetManager.createBudget(
-            userId,
-            limit,
-            selectedCategory.getCategoryId(),
-            startDate,
-            endDate
+                userId,
+                limit,
+                selectedCategory.getCategoryId(),
+                startDate,
+                endDate
         );
 
         messageLabel.setStyle("-fx-text-fill: green;");
@@ -209,7 +255,7 @@ public class BudgetScreen {
     private void handleBack() {
         try {
             Parent root = FXMLLoader.load(
-                getClass().getResource("/fxml/dashboard.fxml")
+                    getClass().getResource("/fxml/dashboard.fxml")
             );
             Stage stage = (Stage) limitField.getScene().getWindow();
             stage.setScene(new Scene(root, 900, 650));

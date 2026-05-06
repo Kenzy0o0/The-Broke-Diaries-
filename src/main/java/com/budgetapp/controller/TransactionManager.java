@@ -9,59 +9,104 @@ import com.budgetapp.model.Category;
 import com.budgetapp.model.Transaction;
 import com.budgetapp.model.User;
 
+/**
+ * The central controller responsible for managing the lifecycle of financial
+ * transactions.
+ *
+ * This class implements the Singleton pattern to provide a global point of
+ * access for transaction-related operations. It orchestrates complex business
+ * logic that spans multiple domain areas, including:
+ *
+ * <ul>
+ * <li><b>Factory Integration:</b> Utilizing
+ * {@link com.budgetapp.factory.TransactionFactory} to instantiate polymorphic
+ * Income and Expense objects.</li>
+ * <li><b>Balance Synchronization:</b> Automatically updating
+ * {@link com.budgetapp.model.User} balances whenever a transaction is
+ * successfully persisted.</li>
+ * <li><b>Budget Integration:</b> Communicating with
+ * {@link com.budgetapp.controller.BudgetManager} to track real-time spending
+ * against defined limits.</li>
+ * <li><b>Data Aggregation:</b> Calculating monthly financial summaries and
+ * handling paginated data retrieval for the UI.</li>
+ * </ul>
+ *
+ * @version 1.0
+ */
 public class TransactionManager {
 
     private final DatabaseManager db = DatabaseManager.getInstance();
 
-   public void addTransaction(int userId, String type, double amount,
-        Category cat, Date date,
-        String description, String extra) {
-    
-    // Fetch user first to check balance
-    User user = db.fetchUser(userId);
-    if (user == null) {
-        System.out.println("User not found. Transaction aborted.");
-        return;
-    }
-    
-    double change = type.equalsIgnoreCase("income") ? amount : -amount;
-    
-    // For expenses, verify sufficient balance BEFORE saving the transaction
-    if (type.equalsIgnoreCase("expense") && user.getBalance() + change < 0) {
-        System.out.println("Insufficient balance. Transaction rejected.");
-        return;
-    }
-    
-    Transaction t;
-    if (type.equalsIgnoreCase("income")) {
-        t = TransactionFactory.CreateIncome(
-                0, userId, cat.getCategoryId(), amount, date, description, extra
-        );
-    } else {
-        t = TransactionFactory.CreateExpense(
-                0, userId, cat.getCategoryId(), amount, date, description, extra
-        );
-    }
-    
-    boolean saved = db.saveTransaction(t);
-    
-    if (saved) {
-        // Balance update will now succeed because we pre-checked
-        user.updateBalance(change);
-        db.updateUser(user);
-        
-        if (type.equalsIgnoreCase("expense")) {
-            BudgetManager bm = new BudgetManager();
-            bm.updateBudgetSpent(userId, cat.getCategoryId(), amount);
+    /**
+     * Orchestrates the creation of a new transaction. 1. Uses
+     * TransactionFactory to create the correct object type. 2. Persists the
+     * transaction to the database. 3. Updates the User's overall balance. 4. If
+     * it's an expense, triggers a budget limit check via BudgetManager.
+     */
+    public void addTransaction(int userId, String type, double amount,
+            Category cat, Date date,
+            String description, String extra) {
+        Transaction t;
+
+        if (type.equalsIgnoreCase("income")) {
+            t = TransactionFactory.CreateIncome(
+                    0, userId, cat.getCategoryId(), amount, date, description, extra
+            );
+        } else {
+            t = TransactionFactory.CreateExpense(
+                    0, userId, cat.getCategoryId(), amount, date, description, extra
+            );
         }
-        
-        System.out.println("Transaction saved successfully");
-    } else {
-        System.out.println("Transaction save failed");
+
+        boolean saved = db.saveTransaction(t);
+
+        if (saved) {
+            User user = db.fetchUser(userId);
+            if (user != null) {
+                double change = type.equalsIgnoreCase("income") ? amount : -amount;
+                user.updateBalance(change);
+                db.updateUser(user);
+            }
+
+            if (type.equalsIgnoreCase("expense")) {
+                BudgetManager bm = new BudgetManager();
+                bm.updateBudgetSpent(userId, cat.getCategoryId(), amount);
+            }
+
+            System.out.println("Transaction saved successfully");
+        } else {
+            System.out.println("Transaction save failed");
+        }
     }
-}
+
+    /**
+     * Fetches a specific "page" of transactions.
+     *
+     * @param limit how many transactions to return.
+     * @param offset where to start in the list.
+     * @return a sublist of transactions for targeted display.
+     */
+    public List<Transaction> getTransactions(int userId, int limit, int offset) {
+
+        List<Transaction> all = db.fetchTransactions(userId);
+        if (all == null) {
+            return null;
+        }
+        int fromIndex = Math.min(offset, all.size());
+        int toIndex = Math.min(offset + limit, all.size());
+        return all.subList(fromIndex, toIndex);
+    }
+
+    /**
+     * The single shared instance of the manager.
+     */
     private static TransactionManager instance;
 
+    /**
+     * Thread-safe method to retrieve the manager instance.
+     *
+     * @return the singleton TransactionManager
+     */
     public static synchronized TransactionManager getInstance() {
         if (instance == null) {
             instance = new TransactionManager();
@@ -94,6 +139,10 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * Calculates the start and end of the current calendar month and fetches
+     * the sum of all income transactions for the user within that range.
+     */
     public double getTotalIncomeThisMonth(User currentUser) {
         java.util.Calendar cal = java.util.Calendar.getInstance();
         cal.set(java.util.Calendar.DAY_OF_MONTH, 1);
@@ -110,6 +159,9 @@ public class TransactionManager {
         return totals.get(0);
     }
 
+    /**
+     * Calculates the current month's range and returns the total spent.
+     */
     public double getTotalExpenseThisMonth(User currentUser) {
         java.util.Calendar cal = java.util.Calendar.getInstance();
         cal.set(java.util.Calendar.DAY_OF_MONTH, 1);
