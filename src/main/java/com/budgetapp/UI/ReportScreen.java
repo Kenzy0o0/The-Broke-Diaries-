@@ -28,16 +28,38 @@ import javafx.stage.Stage;
 
 public class ReportScreen implements Initializable {
 
+    /**
+     * Displays the proportional breakdown of spending across different
+     * categories.
+     */
     @FXML
     private PieChart expensePieChart;
+
+    /**
+     * Compares income vs. expenses side-by-side over a time series.
+     */
     @FXML
     private BarChart<String, Number> incomeVsExpenseChart;
+
+    /**
+     * The categorical axis (usually months) for the bar chart.
+     */
     @FXML
     private CategoryAxis xAxis;
+
+    /**
+     * The numerical axis (monetary value) for the bar chart.
+     */
     @FXML
     private NumberAxis yAxis;
+
+    /**
+     * Dynamic text area for providing personalized financial advice or
+     * summaries.
+     */
     @FXML
     private Label insightLabel;
+
     @FXML
     private Label totalIncomeLabel;
     @FXML
@@ -45,6 +67,9 @@ public class ReportScreen implements Initializable {
     @FXML
     private Label noDataLabel;
 
+    /**
+     * Reference to {@link ReportGenerator} for complex data aggregation.
+     */
     private ReportGenerator reportGenerator = ReportGenerator.getInstance();
     private AuthManager authManager = AuthManager.getInstance();
 
@@ -73,6 +98,12 @@ public class ReportScreen implements Initializable {
         totalExpenseLabel.setText(String.format("Total Expense: %.2f", expense));
     }
 
+    /**
+     * Converts a Map of category IDs and totals into a format the PieChart can
+     * render. Includes a safety check to hide the chart if no data exists.
+     *
+     * @param userId the user ID to filter data
+     */
     private void loadPieChart(int userId) {
         Map<Integer, Double> byCategory = reportGenerator.getExpensesByCategory(userId);
 
@@ -96,6 +127,12 @@ public class ReportScreen implements Initializable {
         expensePieChart.setVisible(true);
     }
 
+    /**
+     * Populates the dual-series bar chart. Creates separate Series for 'Income'
+     * and 'Expenses' to allow for side-by-side comparison.
+     *
+     * @param userId the user ID to filter data
+     */
     private void loadBarChart(int userId) {
         Map<String, double[]> byMonth = reportGenerator.getIncomeVsExpenseByMonth(userId);
 
@@ -122,6 +159,10 @@ public class ReportScreen implements Initializable {
         incomeVsExpenseChart.setVisible(true);
     }
 
+    /**
+     * Fetches analytical data (like top spending categories) and updates the UI
+     * insight text to help users understand their habits.
+     */
     private void loadInsight(int userId) {
         int topCat = reportGenerator.getTopSpendingCategory(userId);
         if (topCat == -1) {
@@ -131,7 +172,7 @@ public class ReportScreen implements Initializable {
         }
     }
 
-    // ── Navigation ──
+    // Navigation 
     private void switchScene(ActionEvent e, String path) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(path));
         Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();

@@ -11,18 +11,48 @@ import com.budgetapp.observer.IBudgetObserver;
  * Observer pattern — notifies registered {@link IBudgetObserver} instances when
  * spending exceeds the limit.
  *
- * @author Person 2 name
  * @version 1.0
  */
 public class Budget {
 
+    /**
+     * Unique identifier for the budget record in the database.
+     */
     private int budgetId;
+
+    /**
+     * The user ID to whom this budget belongs.
+     */
     private int userId;
+
+    /**
+     * The ID of the transaction category (e.g., Food, Rent) this budget tracks.
+     */
     private int categoryId;
+
+    /**
+     * The maximum spending limit allowed for this category.
+     */
     private double limit;
+
+    /**
+     * The current cumulative spending for this budget period.
+     */
     private double currentSpent;
+
+    /**
+     * The start date for the budget cycle.
+     */
     private Date startDate;
+
+    /**
+     * The expiration date for the budget cycle.
+     */
     private Date endDate;
+
+    /**
+     * Registry of listeners to be notified if the budget is exceeded.
+     */
     private final List<IBudgetObserver> observers = new ArrayList<>();
 
     public Budget(int budgetId, int userId, int categoryId, double limit, double currentSpent, Date startDate, Date endDate) {
@@ -66,8 +96,8 @@ public class Budget {
 
     public void setLimit(double limit) {
         if (limit >= 0) {
-            this.limit = limit; 
-        }else {
+            this.limit = limit;
+        } else {
             throw new IllegalArgumentException("Limit must be non negative");
         }
     }
@@ -101,6 +131,12 @@ public class Budget {
         this.endDate = endDate;
     }
 
+    /**
+     * Increments the current spending amount and triggers a limit check.
+     *
+     * @param amount the value of the new expense to add
+     * @throws IllegalArgumentException if amount is negative
+     */
     public void updateSpent(double amount) {
         if (amount > 0) {
             this.currentSpent += amount;
@@ -110,6 +146,10 @@ public class Budget {
         }
     }
 
+    /**
+     * Checks if the total spending has surpassed the defined limit. If
+     * exceeded, all registered observers are notified immediately.
+     */
     private void checkLimit() {
         if (currentSpent > limit) {
             notifyObservers();
@@ -117,16 +157,31 @@ public class Budget {
     }
 
     // Observer pattern
+    /**
+     * Registers a new observer (e.g., a notification service) to watch this
+     * budget.
+     *
+     * @param observer the listener to add
+     */
     public void addObserver(IBudgetObserver observer) {
         if (observer != null && !observers.contains(observer)) {
             observers.add(observer);
         }
     }
 
+    /**
+     * Removes a registered observer so it no longer receives alerts.
+     *
+     * @param observer the listener to remove
+     */
     public void removeObserver(IBudgetObserver observer) {
         observers.remove(observer);
     }
 
+    /**
+     * Iterates through all observers and triggers their update method. This is
+     * called automatically by {@link #checkLimit()}.
+     */
     public void notifyObservers() {
         for (IBudgetObserver observer : observers) {
             observer.updateAlert(this);

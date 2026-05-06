@@ -11,11 +11,27 @@ import java.util.TreeMap;
 import com.budgetapp.infrastructure.DatabaseManager;
 import com.budgetapp.model.Transaction;
 
+/**
+ * Generates financial reports and analytics for the user. Provides data for pie
+ * charts (expenses by category) and bar charts (income vs expenses by month).
+ *
+ * @version 1.0
+ */
 public class ReportGenerator {
 
+    /**
+     * The single instance of ReportGenerator for the application.
+     */
     private static ReportGenerator instance;
+
+    /**
+     * Reference to the database manager for retrieving transaction records.
+     */
     private DatabaseManager db = DatabaseManager.getInstance();
 
+    /**
+     * Private constructor to prevent external instantiation.
+     */
     private ReportGenerator() {
     }
 
@@ -27,6 +43,14 @@ public class ReportGenerator {
     }
 
     // returns map of categoryId → total spent (expenses only)
+    /**
+     * Calculates total expenses grouped by category for a specific user. This
+     * data is typically used for generating pie chart visualizations.
+     *
+     * @param userId the unique ID of the user
+     * @return a map where the key is the Category ID and the value is the sum
+     * of expenses
+     */
     public Map<Integer, Double> getExpensesByCategory(int userId) {
         List<Transaction> all = db.fetchTransactions(userId);
         Map<Integer, Double> result = new HashMap<>();
@@ -45,6 +69,14 @@ public class ReportGenerator {
     }
 
     // returns map of "yyyy-MM" → [totalIncome, totalExpense]
+    /**
+     * Aggregates monthly totals for both income and expenses. The results are
+     * sorted chronologically by the "yyyy-MM" key.
+     *
+     * @param userId the unique ID of the user
+     * @return a TreeMap where the key is "yyyy-MM" and the value is an array:
+     * [totalIncome, totalExpense]
+     */
     public Map<String, double[]> getIncomeVsExpenseByMonth(int userId) {
         List<Transaction> all = db.fetchTransactions(userId);
         Map<String, double[]> result = new TreeMap<>();
@@ -72,6 +104,12 @@ public class ReportGenerator {
     }
 
     // returns total income for user
+    /**
+     * Calculates the grand total of all income transactions for a user.
+     *
+     * @param userId the unique ID of the user
+     * @return total income amount
+     */
     public double getTotalIncome(int userId) {
         List<Transaction> all = db.fetchTransactions(userId);
         if (all == null) {
@@ -84,6 +122,12 @@ public class ReportGenerator {
     }
 
     // returns total expense for user
+    /**
+     * Calculates the grand total of all expense transactions for a user.
+     *
+     * @param userId the unique ID of the user
+     * @return total expense amount
+     */
     public double getTotalExpense(int userId) {
         List<Transaction> all = db.fetchTransactions(userId);
         if (all == null) {
@@ -96,6 +140,13 @@ public class ReportGenerator {
     }
 
     // returns categoryId with highest spending
+    /**
+     * Identifies the category where the user has spent the most money.
+     *
+     * @param userId the unique ID of the user
+     * @return the categoryId with the highest total expenses, or -1 if no
+     * expenses exist
+     */
     public int getTopSpendingCategory(int userId) {
         Map<Integer, Double> byCategory = getExpensesByCategory(userId);
         if (byCategory.isEmpty()) {
