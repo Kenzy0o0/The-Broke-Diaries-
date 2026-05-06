@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+
+<AnchorPane prefHeight="600.0" prefWidth="500.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.budgetapp.UI.TransactionScreen">
+
+    <VBox spacing="15" layoutX="50" layoutY="30" prefWidth="400">
+
+        <Label text="Add Transaction"
+               style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+
+        <!-- Type -->
+        <Label text="Type"/>
+        <fx:define>
+            <ToggleGroup fx:id="typeGroup"/>
+        </fx:define>
+        <HBox spacing="30">
+            <RadioButton fx:id="incomeRadio"
+                         text="Income"
+                         toggleGroup="$typeGroup"
+                         selected="true"
+                         onAction="#handleTypeChange"/>
+            <RadioButton fx:id="expenseRadio"
+                         text="Expense"
+                         toggleGroup="$typeGroup"
+                         onAction="#handleTypeChange"/>
+        </HBox>
+
+    
+        <Label text="Amount"/>
+        <TextField fx:id="amountField"
+                   promptText="Enter amount"
+                   prefWidth="400"/>
+
+    
+        <Label text="Category"/>
+        <ComboBox fx:id="categoryComboBox"
+                  promptText="Select category"
+                  prefWidth="400"/>
+
+    
+        <Label text="Date"/>
+        <DatePicker fx:id="datePicker" prefWidth="400"/>
+
+    
+        <Label text="Description"/>
+        <TextField fx:id="descriptionField"
+                   promptText="Enter description"
+                   prefWidth="400"/>
+
+    
+        <Label fx:id="extraLabel" text="Source"/>
+        <TextField fx:id="extraField"
+                   promptText="Enter source"
+                   prefWidth="400"/>
+
+    
+        <Label fx:id="messageLabel" text=""/>
+
+    
+        <HBox spacing="20">
+            <Button text="Save Transaction"
+                    prefWidth="190"
+                    onAction="#handleSave"/>
+            <Button text="Back"
+                    prefWidth="190"
+                    onAction="#handleBack"/>
+        </HBox>
+
+    </VBox>
+</AnchorPane>

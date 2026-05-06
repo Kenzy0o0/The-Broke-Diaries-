@@ -73,4 +73,5 @@ public abstract class Transaction {
     public void setDescription(String description) {
         this.description = description;
     }
+    public abstract String getType();
 }
