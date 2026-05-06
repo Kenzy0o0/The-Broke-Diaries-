@@ -10,70 +10,56 @@
             xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.budgetapp.UI.Dashboard">
-<VBox spacing="20"
-      style="-fx-padding: 30; -fx-background-color: #f5f5f5;">
+<VBox spacing="20">
 
     <!-- Welcome -->
-    <Label fx:id="welcomeLabel"
-           style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+    <Label fx:id="welcomeLabel"/>
 
     <!-- Balance Summary -->
-    <HBox spacing="30" alignment="CENTER"
-          style="-fx-background-color: #4a90d9; -fx-padding: 20; -fx-background-radius: 10;">
+    <HBox spacing="30" alignment="CENTER">
         <VBox alignment="CENTER">
-            <Label text="Total Balance"
-                   style="-fx-text-fill: white;"/>
-            <Label fx:id="totalBalanceLabel" text="0.00"
-                   style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <Label text="Total Balance"/>
+            <Label fx:id="totalBalanceLabel" text="0.00"/>
         </VBox>
         <VBox alignment="CENTER">
-            <Label text="Income" style="-fx-text-fill: white;"/>
+            <Label text="Income"/>
             <Label fx:id="totalIncomeLabel" text="+0.00"
-                   style="-fx-text-fill: #90ee90; -fx-font-weight: bold;"/>
+                  />
         </VBox>
         <VBox alignment="CENTER">
-            <Label text="Expenses" style="-fx-text-fill: white;"/>
-            <Label fx:id="totalExpenseLabel" text="-0.00"
-                   style="-fx-text-fill: #ffcccb; -fx-font-weight: bold;"/>
+            <Label text="Expenses"/>
+            <Label fx:id="totalExpenseLabel" text="-0.00"/>
         </VBox>
     </HBox>
 
     <!-- Budget Warning -->
     <Label fx:id="budgetWarningLabel"
-           style="-fx-text-fill: red; -fx-font-weight: bold;"
            visible="false"/>
 
     <!-- Recent Transactions -->
-    <Label text="Recent Transactions"
-           style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+    <Label text="Recent Transactions"/>
     <ListView fx:id="recentTransactionsList" prefHeight="180"/>
 
     <!-- Navigation Buttons -->
-    <Label text="Navigate"
-           style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+    <Label text="Navigate"/>
 
     <HBox spacing="10" alignment="CENTER">
         <Button text="+ Transactions"
                 onAction="#handleGoToTransactions"
-                prefWidth="130"
-                style="-fx-background-color: #4a90d9; -fx-text-fill: white;"/>
+                prefWidth="130"/>
         <Button text="Budget"
                 onAction="#handleGoToBudget"
-                prefWidth="130"
-                style="-fx-background-color: #5cb85c; -fx-text-fill: white;"/>
+                prefWidth="130"/>
         <Button text="Reports"
                 onAction="#handleGoToReports"
-                prefWidth="130"
-                style="-fx-background-color: #f0ad4e; -fx-text-fill: white;"/>
+                prefWidth="130"/>
         <Button text="Profile"
                 onAction="#handleGoToProfile"
-                prefWidth="130"
-                style="-fx-background-color: #9b59b6; -fx-text-fill: white;"/>
+                prefWidth="130"/>
     </HBox>
 
     <Button text="Sign Out"
             onAction="#handleSignOut"
-            style="-fx-background-color: #d9534f; -fx-text-fill: white;"
             prefWidth="100"/>
 
 </VBox>

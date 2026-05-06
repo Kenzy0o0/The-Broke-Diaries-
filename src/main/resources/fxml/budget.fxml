@@ -17,12 +17,10 @@
 
     <VBox spacing="15" layoutX="50" layoutY="30" prefWidth="500">
 
-        <Label text="Manage Budgets"
-               style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+        <Label text="Manage Budgets"/>
 
 
-        <Label text="Create New Budget"
-               style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+        <Label text="Create New Budget"/>
 
         
         <Label text="Category"/>
@@ -53,8 +51,7 @@
                 onAction="#handleCreate"/>
 
         
-        <Label text="Your Budgets"
-               style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+        <Label text="Your Budgets" />
 
 
         <TableView fx:id="budgetTable" prefHeight="200" prefWidth="500">

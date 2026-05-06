@@ -17,8 +17,7 @@
 
     <VBox spacing="15" layoutX="50" layoutY="30" prefWidth="400">
 
-        <Label text="Add Transaction"
-               style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+        <Label text="Add Transaction"/>
 
         <!-- Type -->
         <Label text="Type"/>
