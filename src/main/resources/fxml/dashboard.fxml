@@ -4,62 +4,66 @@
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 
+
 <!-- we can also use gridbox -->
 <!-- think about btns, alot of btns -->
 <AnchorPane stylesheets="/css/style.css" prefHeight="650.0" prefWidth="900.0"
             xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.budgetapp.UI.Dashboard">
-<VBox spacing="20">
+<padding>
+    <Insets bottom="20" left="30" right="30" top="20" />
+</padding>
+<VBox spacing="20" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
 
     <!-- Welcome -->
-    <Label fx:id="welcomeLabel"/>
+    <Label fx:id="welcomeLabel" styleClass="title-label"/>
 
     <!-- Balance Summary -->
-    <HBox spacing="30" alignment="CENTER">
+    <HBox spacing="30" alignment="CENTER" styleClass="summary-card">
         <VBox alignment="CENTER">
-            <Label text="Total Balance"/>
-            <Label fx:id="totalBalanceLabel" text="0.00"/>
+            <Label text="Total Balance" styleClass="section-label"/>
+            <Label fx:id="totalBalanceLabel" text="0.00" styleClass="balance-amount"/>
         </VBox>
         <VBox alignment="CENTER">
-            <Label text="Income"/>
-            <Label fx:id="totalIncomeLabel" text="+0.00"
+            <Label text="Income" styleClass="section-label"/>
+            <Label fx:id="totalIncomeLabel" text="+0.00" styleClass="income-amount"
                   />
         </VBox>
         <VBox alignment="CENTER">
-            <Label text="Expenses"/>
-            <Label fx:id="totalExpenseLabel" text="-0.00"/>
+            <Label text="Expenses" styleClass="section-label"/>
+            <Label fx:id="totalExpenseLabel" text="-0.00" styleClass="expense-amount"/>
         </VBox>
     </HBox>
 
     <!-- Budget Warning -->
-    <Label fx:id="budgetWarningLabel"
+    <Label fx:id="budgetWarningLabel" styleClass="msg-error"
            visible="false"/>
 
     <!-- Recent Transactions -->
-    <Label text="Recent Transactions"/>
+    <Label text="Recent Transactions" styleClass="section-label"/>
     <ListView fx:id="recentTransactionsList" prefHeight="180"/>
 
     <!-- Navigation Buttons -->
-    <Label text="Navigate"/>
+    <Label text="Navigate" styleClass="section-label"/>
 
     <HBox spacing="10" alignment="CENTER">
         <Button text="+ Transactions"
-                onAction="#handleGoToTransactions"
+                onAction="#handleGoToTransactions" styleClass="btn-primary"
                 prefWidth="130"/>
         <Button text="Budget"
-                onAction="#handleGoToBudget"
+                onAction="#handleGoToBudget" styleClass="btn-outline"
                 prefWidth="130"/>
         <Button text="Reports"
-                onAction="#handleGoToReports"
+                onAction="#handleGoToReports" styleClass="btn-outline"
                 prefWidth="130"/>
         <Button text="Profile"
-                onAction="#handleGoToProfile"
+                onAction="#handleGoToProfile" styleClass="btn-outline"
                 prefWidth="130"/>
     </HBox>
 
     <Button text="Sign Out"
-            onAction="#handleSignOut"
+            onAction="#handleSignOut" styleClass="btn-danger"
             prefWidth="100"/>
 
 </VBox>

@@ -2,28 +2,34 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.chart.*?>
+<?import javafx.geometry.Insets?>
 
-<VBox stylesheets="/css/style.css" xmlns:fx="http://javafx.com/fxml"
+<VBox stylesheets="/css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
       fx:controller="com.budgetapp.UI.ReportScreen"
-      spacing="15"
+      spacing="15" 
+      styleClass="root"
      >
+
+    <padding>
+        <Insets bottom="20" left="30" right="30" top="20"/>
+    </padding>
 
     <!-- Header -->
     <HBox alignment="CENTER_LEFT" spacing="10">
-        <Button text="← Back" onAction="#handleGoToDashboard"
+        <Button text="← Back" onAction="#handleGoToDashboard" styleClass="btn-outline"
                 />
-        <Label text="Reports and Analytics"
+        <Label text="Reports and Analytics" styleClass="title-label"
                />
     </HBox>
 
     <!-- Totals -->
     <HBox spacing="40" alignment="CENTER">
-        <Label fx:id="totalIncomeLabel"/>
-        <Label fx:id="totalExpenseLabel"/>
+        <Label fx:id="totalIncomeLabel" styleClass="income-amount"/>
+        <Label fx:id="totalExpenseLabel" styleClass="expense-amount"/>
     </HBox>
 
     <!-- No data message -->
-    <Label fx:id="noDataLabel" visible="false"/>
+    <Label fx:id="noDataLabel" styleClass="msg-error" visible="false" styleClass="section-label"/>
 
     <!-- Pie Chart -->
     <PieChart fx:id="expensePieChart"
@@ -41,6 +47,6 @@
     </BarChart>
 
     <!-- Insight -->
-    <Label fx:id="insightLabel"/>
+    <Label fx:id="insightLabel"styleClass="section-label"/>
 
 </VBox>

@@ -212,6 +212,7 @@ public class TransactionManager {
      * {@link com.budgetapp.model.User} object
      *
      * @return a double
+     * @param currentUser a {@link com.budgetapp.model.User} object
      */
     public double getCurrentBalance(User currentUser) {
         User fresh = db.fetchUser(currentUser.getId());

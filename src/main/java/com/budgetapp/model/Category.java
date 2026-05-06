@@ -66,6 +66,8 @@ public class Category {
      * <p>
      * Getter for the field <code>name</code>.</p> * @return the display name of
      * this category.
+     *
+     * @return a {@link java.lang.String} object
      */
     public String getName() {
         return name;
@@ -86,10 +88,6 @@ public class Category {
     /**
      * <p>
      * isActive.</p>
-     *
-     *
-     *
-     *
      *
      * @return true if the category is active, false otherwise.
      */

@@ -234,6 +234,7 @@ public class Budget {
      *
      * @param amount the value of the new expense to add
      * @throws java.lang.IllegalArgumentException if amount is negative
+     * @param balance a double
      */
     public void updateSpent(double amount,double balance) {
         if (amount > 0) {
@@ -281,6 +282,9 @@ public class Budget {
 //     * Iterates through all observers and triggers their update method. This is
 //     * called automatically by {@link #checkLimit()}.
 //     */
+    /**
+     * <p>notifyObservers.</p>
+     */
     public void notifyObservers() {
         for (IBudgetObserver observer : observers) {
             observer.updateAlert(this);

@@ -64,28 +64,6 @@ public class RegisterController {
         authManager = AuthManager.getInstance();
     }
 
-    /**
-     * General utility to swap the current stage's scene.
-     *
-     * @param e the action event triggering the switch
-     * @param s the FXML file path
-     * @throws IOException if the FXML resource is missing
-     */
-    private void switchScene(ActionEvent e, String s) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(s));
-        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-
-    }
-
-    /**
-     * General utility to swap the current stage's scene.
-     *
-     * @param e the action event triggering the switch
-     * @throws java.io.IOException if the FXML resource is missing
-     */
     @FXML
     public void handleRegisterAction(ActionEvent e) throws IOException {
         String name = nameField.getText();
@@ -102,7 +80,7 @@ public class RegisterController {
             label.setText("Account created Successfully! please login.");
             label.setStyle("-fx-text-fill:green;");
             //open login
-            switchScene(e, "/fxml/login.fxml");
+            UIManager.switchScene(e, "/fxml/login.fxml");
         } else {
             label.setText("Email already exists!");
             label.setStyle("-fx-text-fill:red;");
@@ -119,7 +97,7 @@ public class RegisterController {
     @FXML
     public void handleGoTologin(ActionEvent e) throws IOException {
         label.setText("Redirecting to Login form....");
-        switchScene(e, "/fxml/login.fxml");
+        UIManager.switchScene(e, "/fxml/login.fxml");
 
     }
 

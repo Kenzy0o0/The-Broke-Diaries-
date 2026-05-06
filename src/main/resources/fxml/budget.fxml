@@ -17,41 +17,41 @@
 
     <VBox spacing="15" layoutX="50" layoutY="30" prefWidth="500">
 
-        <Label text="Manage Budgets"/>
+        <Label text="Manage Budgets" styleClass="title-label"/>
 
 
-        <Label text="Create New Budget"/>
+        <Label text="Create New Budget" styleClass="section-label"/>
 
         
-        <Label text="Category"/>
+        <Label text="Category" styleClass="section-label"/>
         <ComboBox fx:id="categoryComboBox"
                   promptText="Select category"
                   prefWidth="500"/>
 
     
-        <Label text="Budget Limit"/>
+        <Label text="Budget Limit" styleClass="section-label"/>
         <TextField fx:id="limitField"
                    promptText="Enter limit amount"
                    prefWidth="500"/>
 
        
-        <Label text="Start Date"/>
+        <Label text="Start Date" styleClass="section-label"/>
         <DatePicker fx:id="startDatePicker" prefWidth="500"/>
 
 
-        <Label text="End Date"/>
+        <Label text="End Date" styleClass="section-label"/>
         <DatePicker fx:id="endDatePicker" prefWidth="500"/>
 
 
-        <Label fx:id="messageLabel" text=""/>
+        <Label fx:id="messageLabel"  styleClass="msg-error" text=""/>
 
 
-        <Button text="Create Budget"
+        <Button text="Create Budget" styleClass="btn-primary"
                 prefWidth="500"
                 onAction="#handleCreate"/>
 
         
-        <Label text="Your Budgets" />
+        <Label text="Your Budgets" styleClass="section-label"/>
 
 
         <TableView fx:id="budgetTable" prefHeight="200" prefWidth="500">
@@ -75,7 +75,7 @@
         </TableView>
 
         
-        <Button text="Back to Dashboard"
+        <Button  text="Back to Dashboard" styleClass="btn-outline"
                 prefWidth="500"
                 onAction="#handleBack"/>
 

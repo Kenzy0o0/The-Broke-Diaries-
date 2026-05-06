@@ -15,12 +15,12 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.budgetapp.UI.TransactionScreen">
 
-    <VBox spacing="15" layoutX="50" layoutY="30" prefWidth="400">
+    <VBox spacing="15" layoutX="50" layoutY="30" prefWidth="400" >
 
-        <Label text="Add Transaction"/>
+        <Label text="Add Transaction" styleClass="title-label"/>
 
         <!-- Type -->
-        <Label text="Type"/>
+        <Label text="Type" styleClass="section-label"/>        
         <fx:define>
             <ToggleGroup fx:id="typeGroup"/>
         </fx:define>
@@ -37,42 +37,44 @@
         </HBox>
 
     
-        <Label text="Amount"/>
+        <Label text="Amount" styleClass="section-label"/>
         <TextField fx:id="amountField"
                    promptText="Enter amount"
                    prefWidth="400"/>
 
     
-        <Label text="Category"/>
+        <Label text="Category" styleClass="section-label"/>
         <ComboBox fx:id="categoryComboBox"
                   promptText="Select category"
                   prefWidth="400"/>
 
     
-        <Label text="Date"/>
+        <Label text="Date" styleClass="section-label"/>
         <DatePicker fx:id="datePicker" prefWidth="400"/>
 
     
-        <Label text="Description"/>
+        <Label text="Description" styleClass="section-label"/>
         <TextField fx:id="descriptionField"
                    promptText="Enter description"
                    prefWidth="400"/>
 
     
-        <Label fx:id="extraLabel" text="Source"/>
+        <Label fx:id="extraLabel" text="Source" styleClass="section-label"/>
         <TextField fx:id="extraField"
                    promptText="Enter source"
                    prefWidth="400"/>
 
     
-        <Label fx:id="messageLabel" text=""/>
+        <Label fx:id="messageLabel" text="" styleClass="msg-error"/>
 
     
         <HBox spacing="20">
             <Button text="Save Transaction"
+                    styleClass="btn-success"
                     prefWidth="190"
                     onAction="#handleSave"/>
             <Button text="Back"
+            styleClass="btn-outline"
                     prefWidth="190"
                     onAction="#handleBack"/>
         </HBox>

@@ -55,22 +55,6 @@ public class LoginController {
     }
 
     /**
-     * Helper method to change the current view.
-     *
-     * @param e The event triggered by a user action.
-     * @param s The resource path to the target FXML file.
-     * @throws IOException If the FXML file cannot be loaded.
-     */
-    private void switchScene(ActionEvent e, String s) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(s));
-        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-
-    }
-
-    /**
      * Validates input fields and attempts to authenticate the user. If
      * successful, redirects to the Dashboard; otherwise, displays an error.
      *
@@ -91,7 +75,7 @@ public class LoginController {
             label.setText("Login Successful! Redirecting.... ");
             label.setStyle("-fx-text-fill:green;");
             //open Dashbord
-            switchScene(e, "/fxml/dashboard.fxml");
+            UIManager.switchScene(e, "/fxml/dashboard.fxml");
         } else {
             label.setText("Invalid Email or Password ");
             label.setStyle("-fx-text-fill:red;");
@@ -109,7 +93,7 @@ public class LoginController {
     public void handleGoToRegister(ActionEvent e) throws IOException {
         label.setText("Redirecting to Registration form....");
         //open Register
-        switchScene(e, "/fxml/register.fxml");
+        UIManager.switchScene(e, "/fxml/register.fxml");
     }
 
 }

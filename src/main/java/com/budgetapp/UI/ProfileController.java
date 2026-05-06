@@ -82,15 +82,6 @@ public class ProfileController implements Initializable {
         loadCurrentUserData();
     }
 
-    private void switchScene(ActionEvent e, String s) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(s));
-        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-
-    }
-
     /**
      * Collects updated info from the text fields and requests an update via the
      * AuthManager. Validates that fields are not empty before proceeding.
@@ -127,7 +118,7 @@ public class ProfileController implements Initializable {
     @FXML
     public void handleGoTODashboard(ActionEvent e) throws IOException {
         label.setText("Returning to DashBoard");
-        switchScene(e, "/fxml/dashboard.fxml");
+        UIManager.switchScene(e, "/fxml/dashboard.fxml");
         //???
     }
 
@@ -142,7 +133,7 @@ public class ProfileController implements Initializable {
     public void handleSignOut(ActionEvent e) throws IOException {
         authManager.logout();
         label.setText("Signing out....");
-        switchScene(e, "/fxml/login.fxml");
+        UIManager.switchScene(e, "/fxml/login.fxml");
     }
 
     /**

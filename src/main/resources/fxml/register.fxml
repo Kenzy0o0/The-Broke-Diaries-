@@ -7,28 +7,30 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField ?>
 
-<VBox stylesheets="/css/style.css" alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.budgetapp.UI.RegisterController">
+<VBox stylesheets="/css/style.css" alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.budgetapp.UI.RegisterController" styleClass="root">
     <padding>
         <Insets bottom="20" left="30" right="30" top="20" />
     </padding>
-    <Label text="Budget App Sign up" />
+
+    <Label text="Budget App Sign up" styleClass="login-title" />
+
     <VBox spacing="5">
-        <Label text="Full Name"/>
+        <Label text="Full Name" styleClass="section-label"/>
         <TextField fx:id="nameField" prefHeight="35" promptText="Enter Your Name"/>
     </VBox>
     <VBox spacing="5">
-    <Label text="Email"/>
+    <Label text="Email" styleClass="section-label"/>
     <TextField fx:id="emailField" prefHeight="35" promptText="Enter Your Email"/>
     </VBox>
     <VBox spacing="5">
-        <Label text="Password"/>
+        <Label text="Password" styleClass="section-label"/>
         <PasswordField fx:id="passwordField" prefHeight="35" promptText="Enter Your Password"/>
     </VBox>
     <VBox spacing="5">
-        <Label text="Currency"/>
+        <Label text="Currency" styleClass="section-label"/>
         <TextField fx:id="currencyField" prefHeight="35" promptText="e.g EGP,USD"/>
     </VBox>
     <Label fx:id="label" text=""/>
-    <Button mnemonicParsing="false" onAction="#handleRegisterAction" prefHeight="35.0" prefWidth="290.0"  text="Sign up" />
-    <Hyperlink onAction="#handleGoTologin" text="Already have an account?" />
+    <Button mnemonicParsing="false" styleClass="btn-primary" onAction="#handleRegisterAction" prefHeight="35.0" prefWidth="290.0"  text="Sign up" />
+    <Hyperlink onAction="#handleGoTologin" styleClass="link-label" text="Already have an account?" />
 </VBox>
