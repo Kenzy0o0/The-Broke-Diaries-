@@ -8,10 +8,12 @@ import com.budgetapp.model.Budget;
 
 public class BudgetManager {
 
-    public void createBudget(int userId, double limit, int categoryId, Date startDate, Date endDate) {
-        Budget b = new Budget( 0,userId,categoryId,limit,0,startDate,endDate);
+    private final NotificationManager notificationManager = new NotificationManager();
 
-        b.addObserver(new NotificationManager());
+    public void createBudget(int userId, double limit, int categoryId, Date startDate, Date endDate) {
+        Budget b = new Budget(0, userId, categoryId, limit, 0, startDate, endDate);
+
+        b.addObserver(notificationManager);
 
         boolean saved = DatabaseManager.getInstance().saveBudget(b);
         if (saved) {
@@ -42,10 +44,12 @@ public class BudgetManager {
 
     public void updateBudgetSpent(int userId, int categoryId, double amount) {
         List<Budget> budgets = DatabaseManager.getInstance().fetchBudgets(userId);
-        if (budgets == null) return;
+        if (budgets == null) {
+            return;
+        }
         for (Budget b : budgets) {
             if (b.getCategoryId() == categoryId) {
-                b.addObserver(new NotificationManager());
+                b.addObserver(notificationManager);
                 b.updateSpent(amount);
                 DatabaseManager.getInstance().updateBudget(b);
                 return;

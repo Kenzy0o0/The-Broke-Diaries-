@@ -547,23 +547,23 @@ public class DatabaseManager {
     }
 
     // returns the total income, expense, between a certain time interval
-    public List<Integer> fetchTotalIncomeExpenseBetween(java.util.Date startDate, java.util.Date endDate) {
-        String command = "SELECT type, SUM(amount) as total FROM transactions WHERE date BETWEEN ? AND ? GROUP BY type";
+    public List<Double> fetchTotalIncomeExpenseBetween(int userId, java.util.Date startDate, java.util.Date endDate) {
+        String command = "SELECT type, SUM(amount) as total FROM transactions WHERE uId=? AND date BETWEEN ? AND ? GROUP BY type";
 
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
-            ps.setDate(1, new java.sql.Date(startDate.getTime()));
-            ps.setDate(2, new java.sql.Date(endDate.getTime()));
+            ps.setInt(1, userId);
+            ps.setDate(2, new java.sql.Date(startDate.getTime()));
+            ps.setDate(3, new java.sql.Date(endDate.getTime()));
 
             ResultSet rs = ps.executeQuery();
 
-            int totalIncome = 0;
-            int totalExpense = 0;
+            double totalIncome = 0, totalExpense = 0;
 
             while (rs.next()) {
                 if (rs.getString("type").equals("income")) {
-                    totalIncome = rs.getInt("total");
-                } else if (rs.getString("type").equals("expense")) {
-                    totalExpense = rs.getInt("total");
+                    totalIncome = rs.getDouble("total");
+                } else {
+                    totalExpense = rs.getDouble("total");
                 }
             }
             return List.of(totalIncome, totalExpense);

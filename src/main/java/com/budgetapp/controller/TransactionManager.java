@@ -12,17 +12,17 @@ import com.budgetapp.model.User;
 public class TransactionManager {
 
     public void addTransaction(int userId, String type, double amount,
-                               Category cat, Date date,
-                               String description, String extra) {
+            Category cat, Date date,
+            String description, String extra) {
         Transaction t;
 
         if (type.equalsIgnoreCase("income")) {
             t = TransactionFactory.CreateIncome(
-                0, userId, cat.getCategoryId(), amount, date, description, extra
+                    0, userId, cat.getCategoryId(), amount, date, description, extra
             );
         } else {
             t = TransactionFactory.CreateExpense(
-                0, userId, cat.getCategoryId(), amount, date, description, extra
+                    0, userId, cat.getCategoryId(), amount, date, description, extra
             );
         }
 
@@ -49,25 +49,37 @@ public class TransactionManager {
 
     public List<Transaction> getTransactions(int userId, int limit, int offset) {
         List<Transaction> all = DatabaseManager.getInstance().fetchTransactions(userId);
-        if (all == null) return null;
+        if (all == null) {
+            return null;
+        }
         int fromIndex = Math.min(offset, all.size());
-        int toIndex   = Math.min(offset + limit, all.size());
+        int toIndex = Math.min(offset + limit, all.size());
         return all.subList(fromIndex, toIndex);
     }
 
-    public static TransactionManager getInstance() {
-        return new TransactionManager();
+    private static TransactionManager instance;
+
+    public static synchronized TransactionManager getInstance() {
+        if (instance == null) {
+            instance = new TransactionManager();
+        }
+        return instance;
     }
 
     public void deleteTransaction(int transactionId) {
         boolean deleted = DatabaseManager.getInstance().deleteTransaction(transactionId);
-        if (deleted) System.out.println("Transaction deleted");
-        else         System.out.println("Transaction delete failed");
+        if (deleted) {
+            System.out.println("Transaction deleted");
+        } else {
+            System.out.println("Transaction delete failed");
+        }
     }
 
     public void deactivateCategory(int categoryId) {
         List<Category> categories = DatabaseManager.getInstance().fetchCategories(0);
-        if (categories == null) return;
+        if (categories == null) {
+            return;
+        }
         for (Category c : categories) {
             if (c.getCategoryId() == categoryId) {
                 c.deactivate();
@@ -87,12 +99,13 @@ public class TransactionManager {
         Date endDate = cal.getTime();
 
         List<Double> totals = DatabaseManager.getInstance()
-            .fetchTotalIncomeExpenseBetween(currentUser.getId(), startDate, endDate); 
+                .fetchTotalIncomeExpenseBetween(currentUser.getId(), startDate, endDate);
 
-        if (totals == null) return 0;
+        if (totals == null) {
+            return 0;
+        }
         return totals.get(0);
     }
-
 
     public double getTotalExpenseThisMonth(User currentUser) {
         java.util.Calendar cal = java.util.Calendar.getInstance();
@@ -103,9 +116,11 @@ public class TransactionManager {
         Date endDate = cal.getTime();
 
         List<Double> totals = DatabaseManager.getInstance()
-            .fetchTotalIncomeExpenseBetween(currentUser.getId(), startDate, endDate); 
+                .fetchTotalIncomeExpenseBetween(currentUser.getId(), startDate, endDate);
 
-        if (totals == null) return 0;
+        if (totals == null) {
+            return 0;
+        }
         return totals.get(1);
     }
 

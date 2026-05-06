@@ -4,6 +4,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
+import com.budgetapp.controller.AuthManager;
 import com.budgetapp.controller.TransactionManager;
 import com.budgetapp.infrastructure.DatabaseManager;
 import com.budgetapp.model.Category;
@@ -23,14 +24,22 @@ import javafx.stage.Stage;
 
 public class TransactionScreen {
 
-    @FXML private RadioButton incomeRadio;
-    @FXML private TextField amountField;
-    @FXML private ComboBox<String> categoryComboBox;
-    @FXML private DatePicker datePicker;
-    @FXML private TextField descriptionField;
-    @FXML private TextField extraField;
-    @FXML private Label extraLabel;
-    @FXML private Label messageLabel;
+    @FXML
+    private RadioButton incomeRadio;
+    @FXML
+    private TextField amountField;
+    @FXML
+    private ComboBox<String> categoryComboBox;
+    @FXML
+    private DatePicker datePicker;
+    @FXML
+    private TextField descriptionField;
+    @FXML
+    private TextField extraField;
+    @FXML
+    private Label extraLabel;
+    @FXML
+    private Label messageLabel;
 
     private List<Category> categoryList;
 
@@ -41,7 +50,9 @@ public class TransactionScreen {
 
     private void loadCategories() {
         categoryList = DatabaseManager.getInstance().fetchCategories(0);
-        if (categoryList == null) return;
+        if (categoryList == null) {
+            return;
+        }
 
         ObservableList<String> names = FXCollections.observableArrayList();
         for (Category c : categoryList) {
@@ -66,11 +77,11 @@ public class TransactionScreen {
         messageLabel.setStyle("-fx-text-fill: red;");
         messageLabel.setText("");
 
-        String type        = incomeRadio.isSelected() ? "income" : "expense";
-        String amountText  = amountField.getText().trim();
+        String type = incomeRadio.isSelected() ? "income" : "expense";
+        String amountText = amountField.getText().trim();
         String description = descriptionField.getText().trim();
-        String extra       = extraField.getText().trim();
-        int selectedIndex  = categoryComboBox.getSelectionModel().getSelectedIndex();
+        String extra = extraField.getText().trim();
+        int selectedIndex = categoryComboBox.getSelectionModel().getSelectedIndex();
 
         // validate
         if (amountText.isEmpty()) {
@@ -91,8 +102,8 @@ public class TransactionScreen {
         }
         if (extra.isEmpty()) {
             messageLabel.setText(type.equals("income")
-                ? "Please enter a source"
-                : "Please enter a payment method");
+                    ? "Please enter a source"
+                    : "Please enter a payment method");
             return;
         }
 
@@ -111,20 +122,20 @@ public class TransactionScreen {
 
         // convert date
         Date date = Date.from(
-            datePicker.getValue()
-                      .atStartOfDay(ZoneId.systemDefault())
-                      .toInstant()
+                datePicker.getValue()
+                        .atStartOfDay(ZoneId.systemDefault())
+                        .toInstant()
         );
 
         Category selectedCategory = categoryList.get(selectedIndex);
 
         // // TODO: replace with real session userId
-        int userId = 1;
+        int userId = AuthManager.getInstance().getCurrentUser().getId();
 
         TransactionManager tm = new TransactionManager();
         tm.addTransaction(userId, type, amount,
-                          selectedCategory, date,
-                          description, extra);
+                selectedCategory, date,
+                description, extra);
 
         messageLabel.setStyle("-fx-text-fill: green;");
         messageLabel.setText("Transaction saved successfully!");
@@ -135,7 +146,7 @@ public class TransactionScreen {
     private void handleBack() {
         try {
             Parent root = FXMLLoader.load(
-                getClass().getResource("/fxml/dashboard.fxml")
+                    getClass().getResource("/fxml/dashboard.fxml")
             );
             Stage stage = (Stage) amountField.getScene().getWindow();
             stage.setScene(new Scene(root, 900, 650));

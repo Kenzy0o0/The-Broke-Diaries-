@@ -35,7 +35,7 @@ public class ReportGenerator {
     private ReportGenerator() {
     }
 
-    public static ReportGenerator getInstance() {
+    public static synchronized ReportGenerator getInstance() {
         if (instance == null) {
             instance = new ReportGenerator();
         }

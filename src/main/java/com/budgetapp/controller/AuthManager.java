@@ -65,7 +65,7 @@ public class AuthManager {
      * Private constructor to prevent external instantiation. Initializes the c
      * nnection to the DatabaseManager.
      */
-    public AuthManager() {
+    private AuthManager() {   // was: public
         databaseManager = DatabaseManager.getInstance();
     }
 
