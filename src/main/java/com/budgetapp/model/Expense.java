@@ -70,4 +70,5 @@ public class Expense extends Transaction {
     public String getType() {
         return "expense";
     }
+    public String getExtra() { return paymentMethod; }
 }

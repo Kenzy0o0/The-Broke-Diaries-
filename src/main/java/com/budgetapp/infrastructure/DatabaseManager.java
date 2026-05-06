@@ -95,10 +95,10 @@ public class DatabaseManager {
             insertDefaultCategories();
 
             // 4. Insert Initial Transactions
-            String transSql = "INSERT INTO transactions (uId, amount, type, category, description, date) VALUES "
-                    + "(1, 2000.00, 'income', 'Salary', 'Monthly Pay', '2023-10-01'), "
-                    + "(1, 800.00, 'expense', 'Rent', 'October Rent', '2023-10-02'), "
-                    + "(1, 50.00, 'expense', 'Dining Out', 'Pizza Night', '2023-10-05')";
+          String transSql = "INSERT INTO transactions (uId, amount, type, cId, description, date) VALUES "
+                    + "(1, 2000.00, 'income', 8, 'Monthly Pay', '2023-10-01'), "    
+                    + "(1, 800.00, 'expense', 3, 'October Rent', '2023-10-02'), "  
+                    + "(1, 50.00, 'expense', 1, 'Pizza Night', '2023-10-05')";
             stmt.executeUpdate(transSql);
 
             System.out.println("Database successfully seeded with demo data.");
@@ -362,8 +362,8 @@ public class DatabaseManager {
             ps.setInt(4, t instanceof Income ? ((Income) t).getCategoryId() : ((Expense) t).getCategoryId());
             ps.setString(5, t.getDescription());
             ps.setDate(6, new java.sql.Date(t.getDate().getTime()));
-            ps.setString(7, t instanceof Income ? ((Income) t).getSource() : null);
-            ps.setString(8, t instanceof Income ? null : ((Expense) t).getPaymentMethod());
+            ps.setString(7, t.getType().equals("income") ? t.getExtra() : null);
+            ps.setString(8, t.getType().equals("expense") ? t.getExtra() : null);
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {

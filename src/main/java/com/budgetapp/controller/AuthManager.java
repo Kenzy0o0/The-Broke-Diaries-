@@ -45,10 +45,10 @@ public class AuthManager {
      * @param password the plain text password
      * @return the string of the Hashed password
      */
-    private String hashPassword(String p) {
+    private String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(p.getBytes());
+            md.update(password.getBytes());
             byte[] bytes = md.digest();
             StringBuilder sb = new StringBuilder();
             for (byte a : bytes) {
@@ -57,7 +57,7 @@ public class AuthManager {
             return sb.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            return p;
+            return password;
         }
     }
 
@@ -65,7 +65,7 @@ public class AuthManager {
      * Private constructor to prevent external instantiation. Initializes the c
      * nnection to the DatabaseManager.
      */
-    public AuthManager() {
+    private  AuthManager() {
         databaseManager = DatabaseManager.getInstance();
     }
 
@@ -77,13 +77,13 @@ public class AuthManager {
      * @param password the plain text password entered by the user
      * @return true if credentials are valid, false otherwise
      */
-    public boolean login(String e, String p) {
-        Account a = databaseManager.fetchAccountByEmail(e);
+    public boolean login(String email, String password) {
+        Account a = databaseManager.fetchAccountByEmail(email);
         if (a != null) {
-            String hashed = hashPassword(p);
+            String hashed = hashPassword(password);
             if (a.getPassword().equals(hashed)) {
                 currentUser = databaseManager.fetchUser(a.getUserId());
-                currentEmail = e;
+                currentEmail = email;
                 return true;
             }
         }
@@ -100,15 +100,15 @@ public class AuthManager {
      * @param currency the preferred display currency
      * @return true if registration succeeded, false if email exists
      */
-    public boolean register(String n, String e, String p, String c) {
-        if (databaseManager.fetchAccountByEmail(e) != null) {
+    public boolean register(String name, String email, String password, String currency) {
+        if (databaseManager.fetchAccountByEmail(email) != null) {
             return false;
         }
-        String hashed = hashPassword(p);
-        User newUser = new User(0, n, 0.0, c);
+        String hashed = hashPassword(password);
+        User newUser = new User(0, name, 0.0, currency);
         int id = databaseManager.saveUser(newUser);
         newUser.setId(id);
-        Account newAccount = new Account(e, hashed, newUser.getId());
+        Account newAccount = new Account(email, hashed, newUser.getId());
         databaseManager.saveAccount(newAccount);
         return true;
 
@@ -134,15 +134,15 @@ public class AuthManager {
     /**
      * Updates the current user's name and preferred currency.
      *
-     * @param n the new name for the user
-     * @param c the new currency code
+     * @param name the new name for the user
+     * @param currency the new currency code
      * @return true if the profile was successfully updated, false if no user is
      * logged in
      */
-    public boolean updateProfile(String n, String c) {
+    public boolean updateProfile(String name, String currency) {
         if (currentUser != null) {
-            currentUser.setName(n);
-            currentUser.setCurrency(c);
+            currentUser.setName(name);
+            currentUser.setCurrency(currency);
             databaseManager.updateUser(currentUser);
             return true;
         }

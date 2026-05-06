@@ -128,4 +128,6 @@ public abstract class Transaction {
      */
     public abstract String getType();
 
+    public abstract String getExtra();
+
 }

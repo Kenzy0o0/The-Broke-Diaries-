@@ -72,4 +72,5 @@ public class Income extends Transaction {
     public String getType() {
         return "income";
     }
+    public String getExtra() { return source; }
 }
