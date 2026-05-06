@@ -93,7 +93,7 @@ public class TransactionManager {
         return totals.get(0);
     }
 
-    // ✅ FIXED: same fix
+
     public double getTotalExpenseThisMonth(User currentUser) {
         java.util.Calendar cal = java.util.Calendar.getInstance();
         cal.set(java.util.Calendar.DAY_OF_MONTH, 1);
