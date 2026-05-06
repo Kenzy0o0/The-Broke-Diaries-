@@ -180,14 +180,14 @@ public class Budget {
      *
      * @param currentSpent a double
      */
-    public void setCurrentSpent(double currentSpent) {
-        if (currentSpent >= 0) {
-            this.currentSpent = currentSpent;
-            checkLimit();
-        } else {
-            throw new IllegalArgumentException("Current spent must be non negative");
-        }
-    }
+//    public void setCurrentSpent(double currentSpent) {
+//        if (currentSpent >= 0) {
+//            this.currentSpent = currentSpent;
+//            checkLimit();
+//        } else {
+//            throw new IllegalArgumentException("Current spent must be non negative");
+//        }
+//    }
 
     /**
      * <p>
@@ -235,10 +235,12 @@ public class Budget {
      * @param amount the value of the new expense to add
      * @throws java.lang.IllegalArgumentException if amount is negative
      */
-    public void updateSpent(double amount) {
+    public void updateSpent(double amount,double balance) {
         if (amount > 0) {
-            this.currentSpent += amount;
-            checkLimit();
+            if(this.currentSpent+amount >=limit || amount>balance){
+                notifyObservers();
+            }
+            if(this.currentSpent+amount <=limit && amount<=balance)this.currentSpent+=amount;
         } else {
             throw new IllegalArgumentException("Amount must be positive");
         }
@@ -248,11 +250,10 @@ public class Budget {
      * Checks if the total spending has surpassed the defined limit. If
      * exceeded, all registered observers are notified immediately.
      */
-    private void checkLimit() {
-        if (currentSpent > limit) {
-            notifyObservers();
-        }
-    }
+
+
+
+
 
     // Observer pattern
     /**
@@ -276,10 +277,10 @@ public class Budget {
         observers.remove(observer);
     }
 
-    /**
-     * Iterates through all observers and triggers their update method. This is
-     * called automatically by {@link #checkLimit()}.
-     */
+//    /**
+//     * Iterates through all observers and triggers their update method. This is
+//     * called automatically by {@link #checkLimit()}.
+//     */
     public void notifyObservers() {
         for (IBudgetObserver observer : observers) {
             observer.updateAlert(this);

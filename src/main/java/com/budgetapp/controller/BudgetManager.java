@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.budgetapp.infrastructure.DatabaseManager;
 import com.budgetapp.model.Budget;
+import com.budgetapp.model.User;
 
 /**
  * Controller class that manages the lifecycle of
@@ -101,6 +102,8 @@ public class BudgetManager {
      */
     public void updateBudgetSpent(int userId, int categoryId, double amount) {
         List< Budget> budgets = db.fetchBudgets(userId);
+        User user=db.fetchUser(userId);
+        double balance=user.getBalance();
         if (budgets == null) {
             return;
 
@@ -108,7 +111,7 @@ public class BudgetManager {
         for (Budget b : budgets) {
             if (b.getCategoryId() == categoryId) {
                 b.addObserver(notificationManager);
-                b.updateSpent(amount);
+                b.updateSpent(amount,balance);
                 db.updateBudget(b);
                 return;
             }
