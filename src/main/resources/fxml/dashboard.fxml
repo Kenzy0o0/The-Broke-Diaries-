@@ -6,9 +6,11 @@
 
 <!-- we can also use gridbox -->
 <!-- think about btns, alot of btns -->
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.budgetapp.UI.Dashboard"
-      spacing="20"
+<AnchorPane stylesheets="/css/style.css" prefHeight="650.0" prefWidth="900.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.budgetapp.UI.Dashboard">
+<VBox spacing="20"
       style="-fx-padding: 30; -fx-background-color: #f5f5f5;">
 
     <!-- Welcome -->
@@ -75,3 +77,4 @@
             prefWidth="100"/>
 
 </VBox>
+</AnchorPane>

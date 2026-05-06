@@ -2,11 +2,15 @@ package com.budgetapp.UI;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.budgetapp.controller.AuthManager;
 import com.budgetapp.controller.ReportGenerator;
+import com.budgetapp.infrastructure.DatabaseManager;
+import com.budgetapp.model.Category;
 import com.budgetapp.model.User;
 
 import javafx.collections.FXCollections;
@@ -105,27 +109,34 @@ public class ReportScreen implements Initializable {
      * @param userId the user ID to filter data
      */
     private void loadPieChart(int userId) {
-        Map<Integer, Double> byCategory = reportGenerator.getExpensesByCategory(userId);
+    Map<Integer, Double> byCategory = reportGenerator.getExpensesByCategory(userId);
 
-        if (byCategory.isEmpty()) {
-            noDataLabel.setText("No expense data available.");
-            noDataLabel.setVisible(true);
-            expensePieChart.setVisible(false);
-            return;
-        }
-
-        ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList();
-        for (Map.Entry<Integer, Double> entry : byCategory.entrySet()) {
-            // using categoryId as label for now
-            // Person 2 can replace with category name when Category lookup is ready
-            pieData.add(new PieChart.Data("Category " + entry.getKey(),
-                    entry.getValue()));
-        }
-
-        expensePieChart.setData(pieData);
-        expensePieChart.setTitle("Expenses by Category");
-        expensePieChart.setVisible(true);
+    if (byCategory.isEmpty()) {
+        noDataLabel.setText("No expense data available.");
+        noDataLabel.setVisible(true);
+        expensePieChart.setVisible(false);
+        return;
     }
+
+    // Fetch all categories (for all users, or filter by user if needed)
+    List<Category> cats = DatabaseManager.getInstance().fetchCategories(0); // 0 might mean "all"? Check your method
+    Map<Integer, String> catNames = new HashMap<>();
+    if (cats != null) {
+        for (Category c : cats) {
+            catNames.put(c.getCategoryId(), c.getName());
+        }
+    }
+
+    ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList();
+    for (Map.Entry<Integer, Double> entry : byCategory.entrySet()) {
+        String label = catNames.getOrDefault(entry.getKey(), "Category " + entry.getKey());
+        pieData.add(new PieChart.Data(label, entry.getValue()));
+    }
+
+    expensePieChart.setData(pieData);
+    expensePieChart.setTitle("Expenses by Category");
+    expensePieChart.setVisible(true);
+}
 
     /**
      * Populates the dual-series bar chart. Creates separate Series for 'Income'

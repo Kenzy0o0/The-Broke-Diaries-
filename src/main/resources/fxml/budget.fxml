@@ -10,13 +10,13 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
 
-<AnchorPane prefHeight="650.0" prefWidth="600.0"
+<AnchorPane  stylesheets="/css/style.css" prefHeight="650.0" prefWidth="600.0"
             xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.budgetapp.UI.BudgetScreen">
 
     <VBox spacing="15" layoutX="50" layoutY="30" prefWidth="500">
-    
+
         <Label text="Manage Budgets"
                style="-fx-font-size: 24; -fx-font-weight: bold;"/>
 

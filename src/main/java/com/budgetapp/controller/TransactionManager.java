@@ -13,53 +13,53 @@ public class TransactionManager {
 
     private final DatabaseManager db = DatabaseManager.getInstance();
 
-    public void addTransaction(int userId, String type, double amount,
-            Category cat, Date date,
-            String description, String extra) {
-        Transaction t;
-
-        if (type.equalsIgnoreCase("income")) {
-            t = TransactionFactory.CreateIncome(
-                    0, userId, cat.getCategoryId(), amount, date, description, extra
-            );
-        } else {
-            t = TransactionFactory.CreateExpense(
-                    0, userId, cat.getCategoryId(), amount, date, description, extra
-            );
-        }
-
-        boolean saved = db.saveTransaction(t);
-
-        if (saved) {
-            User user = db.fetchUser(userId);
-            if (user != null) {
-                double change = type.equalsIgnoreCase("income") ? amount : -amount;
-                user.updateBalance(change);
-                db.updateUser(user);
-            }
-
-            if (type.equalsIgnoreCase("expense")) {
-                BudgetManager bm = new BudgetManager();
-                bm.updateBudgetSpent(userId, cat.getCategoryId(), amount);
-            }
-
-            System.out.println("Transaction saved successfully");
-        } else {
-            System.out.println("Transaction save failed");
-        }
+   public void addTransaction(int userId, String type, double amount,
+        Category cat, Date date,
+        String description, String extra) {
+    
+    // Fetch user first to check balance
+    User user = db.fetchUser(userId);
+    if (user == null) {
+        System.out.println("User not found. Transaction aborted.");
+        return;
     }
-
-    public List<Transaction> getTransactions(int userId, int limit, int offset) {
-
-        List<Transaction> all = db.fetchTransactions(userId);
-        if (all == null) {
-            return null;
-        }
-        int fromIndex = Math.min(offset, all.size());
-        int toIndex = Math.min(offset + limit, all.size());
-        return all.subList(fromIndex, toIndex);
+    
+    double change = type.equalsIgnoreCase("income") ? amount : -amount;
+    
+    // For expenses, verify sufficient balance BEFORE saving the transaction
+    if (type.equalsIgnoreCase("expense") && user.getBalance() + change < 0) {
+        System.out.println("Insufficient balance. Transaction rejected.");
+        return;
     }
-
+    
+    Transaction t;
+    if (type.equalsIgnoreCase("income")) {
+        t = TransactionFactory.CreateIncome(
+                0, userId, cat.getCategoryId(), amount, date, description, extra
+        );
+    } else {
+        t = TransactionFactory.CreateExpense(
+                0, userId, cat.getCategoryId(), amount, date, description, extra
+        );
+    }
+    
+    boolean saved = db.saveTransaction(t);
+    
+    if (saved) {
+        // Balance update will now succeed because we pre-checked
+        user.updateBalance(change);
+        db.updateUser(user);
+        
+        if (type.equalsIgnoreCase("expense")) {
+            BudgetManager bm = new BudgetManager();
+            bm.updateBudgetSpent(userId, cat.getCategoryId(), amount);
+        }
+        
+        System.out.println("Transaction saved successfully");
+    } else {
+        System.out.println("Transaction save failed");
+    }
+}
     private static TransactionManager instance;
 
     public static synchronized TransactionManager getInstance() {
