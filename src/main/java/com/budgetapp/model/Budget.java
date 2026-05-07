@@ -229,24 +229,24 @@ public class Budget {
         this.endDate = endDate;
     }
 
-    /**
+   /**
      * Increments the current spending amount and triggers a limit check.
      *
      * @param amount the value of the new expense to add
-     * @throws java.lang.IllegalArgumentException if amount is negative
-     * @param balance a double
      */
-    
-    public void updateSpent(double amount,double balance) {
+    public void updateSpent(double amount) {
         if (amount > 0) {
-            if(this.currentSpent+amount >=limit || amount>balance){
+            this.currentSpent += amount;
+            
+            // Trigger notification if the limit is exceeded
+            if (this.currentSpent > this.limit) {
                 notifyObservers();
             }
-            if(this.currentSpent+amount <=limit && amount<=balance)this.currentSpent+=amount;
         } else {
             throw new IllegalArgumentException("Amount must be positive");
         }
     }
+
 
     /**
      * Checks if the total spending has surpassed the defined limit. If

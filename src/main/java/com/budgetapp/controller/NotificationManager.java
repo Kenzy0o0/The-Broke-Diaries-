@@ -66,7 +66,7 @@ public class NotificationManager implements IBudgetObserver {
         popup.setResizable(false);
 
         Label icon = new Label("⚠");
-        icon.setStyle("-fx-font-size: 28px; -fx-text-fill: #f59e0b;");
+        icon.setStyle("-fx-font-size: 28px; -fx-text-fill: #00c2a8;");
 
         Label header = new Label("Budget Limit Exceeded!");
         header.setStyle(
@@ -87,7 +87,7 @@ public class NotificationManager implements IBudgetObserver {
         // ── Dismiss button ─────────────────────────────────────────────────
         Button okBtn = new Button("OK");
         okBtn.setStyle(
-            "-fx-background-color: #f59e0b;" +
+            "-fx-background-color: #00c2a8;;" +
             "-fx-text-fill: #0f1923;" +
             "-fx-font-weight: bold;" +
             "-fx-background-radius: 6;" +
@@ -103,7 +103,7 @@ public class NotificationManager implements IBudgetObserver {
         root.setPadding(new Insets(20));
         root.setStyle(
             "-fx-background-color: #1a2535;" +
-            "-fx-border-color: #f59e0b;" +
+            "-fx-border-color: #00c2a8;" +
             "-fx-border-width: 1.5px;" +
             "-fx-border-radius: 8;" +
             "-fx-background-radius: 8;"

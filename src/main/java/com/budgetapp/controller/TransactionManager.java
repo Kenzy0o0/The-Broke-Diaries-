@@ -55,80 +55,61 @@ public class TransactionManager {
   /**
  * @return A success flag (true if added, false if input/DB errors)
  */
-public boolean addTransaction(int userId, String type, double amount,Category cat, Date date,String description, String extra) {
-    Transaction t;
+public boolean addTransaction(int userId, String type, double amount, Category cat, Date date, String description, String extra) {
+    // Input validation...
+    if (amount <= 0) return false;
+    if (cat == null) return false;
+    if (type == null || (!type.equalsIgnoreCase("income") && !type.equalsIgnoreCase("expense"))) return false;
+    if (description == null || description.trim().isEmpty()) return false;
+    if (date == null || date.after(new Date())) return false;
 
-    // Input validation
-    if (amount <= 0) {
-        System.out.println("Amount must be positive");
-        return false;
-    }
-    if (cat == null) {
-        System.out.println("Category is required");
-        return false;
-    }
-    if (type == null || (!type.equalsIgnoreCase("income") && !type.equalsIgnoreCase("expense"))) {
-        System.out.println("Transaction type must be 'income' or 'expense'");
-        return false;
-    }
-    if (description == null || description.trim().isEmpty()) {
-        System.out.println("Description is required");
-        return false;
-    }
-    if (date == null) {
-        System.out.println("Date is required");
-        return false;
-    }
-    Date now = new Date();
-    if (date.after(now)) {
-        System.out.println("Date cannot be in the future");
-        return false;
-    }
     User user = db.fetchUser(userId);
-    if (user == null) {
-        System.out.println("User not found");
-        return false;
-    }
-    if (type.equalsIgnoreCase("expense") && user.getBalance() < amount) {
-        System.out.println("Insufficient funds");
-        return false;
+    if (user == null) return false;
+
+    // 1. Validate Balance and Budget limits FIRST
+    if (type.equalsIgnoreCase("expense")) {
+        if (user.getBalance() < amount) {
+            System.out.println("Insufficient funds");
+            return false;
+        }
+        
+        BudgetManager bm = new BudgetManager();
+        if (bm.wouldExceedBudget(userId, cat.getCategoryId(), amount, date)) {
+            System.out.println("Transaction rejected: would exceed budget limit for category " + cat.getName());
+            return false; // Transaction is blocked BEFORE saving to the DB
+        }
     }
 
-    // Create Transaction
+    // Create Transaction Object
+    Transaction t;
     if (type.equalsIgnoreCase("income")) {
         t = TransactionFactory.CreateIncome(0, userId, cat.getCategoryId(), amount, date, description, extra);
     } else {
         t = TransactionFactory.CreateExpense(0, userId, cat.getCategoryId(), amount, date, description, extra);
     }
 
+    // 2. Save Transaction to DB
     boolean saved = db.saveTransaction(t);
 
-   if (saved) {
-    double change = type.equalsIgnoreCase("income") ? amount : -amount;
+    if (saved) {
+        double change = type.equalsIgnoreCase("income") ? amount : -amount;
 
-    // BUDGET CHECK for expenses
-    if (type.equalsIgnoreCase("expense")) {
-        BudgetManager bm = new BudgetManager();
-        if (bm.wouldExceedBudget(userId, cat.getCategoryId(), amount, date)) {
-            System.out.println("Transaction rejected: would exceed budget limit for category " + cat.getName());
-            return false;
+        // 3. Update User Balance
+        user.updateBalance(change);
+        db.updateUser(user);
+
+        // 4. Update Budget Spent Amount (Observer inside will handle notifications)
+        if (type.equalsIgnoreCase("expense")) {
+            BudgetManager bm = new BudgetManager();
+            bm.updateBudgetSpent(userId, cat.getCategoryId(), amount, date);
         }
+
+        System.out.println("Transaction saved successfully");
+        return true;
+    } else {
+        System.out.println("Transaction save failed");
+        return false;
     }
-
-    user.updateBalance(change);
-    db.updateUser(user);
-
-    if (type.equalsIgnoreCase("expense")) {
-        BudgetManager bm = new BudgetManager();
-        bm.updateBudgetSpent(userId, cat.getCategoryId(), amount, date);
-    }
-
-    System.out.println("Transaction saved successfully");
-    return true;
-} else {
-    System.out.println("Transaction save failed");
-    return false;
-}
 }
 
     /**

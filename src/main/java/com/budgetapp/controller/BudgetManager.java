@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.budgetapp.infrastructure.DatabaseManager;
 import com.budgetapp.model.Budget;
-import com.budgetapp.model.User;
 
 /**
  * Controller class that manages the lifecycle of
@@ -55,12 +54,7 @@ public class BudgetManager {
 
         /**
      * Checks if adding an expense would exceed the active budget limit for a category.
-     *
-     * @param userId          the user
-     * @param categoryId      the expense category
-     * @param amount          the expense amount
-     * @param transactionDate the date of the expense
-     * @return true if the new spending would exceed the limit, false otherwise
+     * Triggers a notification popup if the limit is exceeded.
      */
     public boolean wouldExceedBudget(int userId, int categoryId, double amount, Date transactionDate) {
         List<Budget> budgets = db.fetchBudgets(userId);
@@ -69,7 +63,19 @@ public class BudgetManager {
         for (Budget b : budgets) {
             if(b.getCategoryId() == categoryId && !transactionDate.before(b.getStartDate()) && !transactionDate.after(b.getEndDate())) {
                 double newSpent = b.getCurrentSpent() + amount;
-                return newSpent > b.getLimit();
+                
+                if (newSpent > b.getLimit()) {
+                    // 1. Attach the NotificationManager to listen for the alert
+                    b.addObserver(notificationManager);
+                    
+                    // 2. Call updateSpent in memory ONLY. 
+                    // This increments the amount and triggers the popup notification.
+                    // Because we return true immediately after, the database is NEVER updated with this exceeded amount.
+                    b.updateSpent(amount); 
+                    
+                    // 3. Return true to signal TransactionManager to block the transaction
+                    return true; 
+                }
             }
         }
         return false; 
@@ -125,25 +131,20 @@ public class BudgetManager {
      */
 
     // only update budgets whose cycle includes the transaction date
-   public void updateBudgetSpent(int userId, int categoryId, double amount, Date transactionDate) {
-    List<Budget> budgets = db.fetchBudgets(userId);
-    User user = db.fetchUser(userId);
-    double balance = user.getBalance();
-    if (budgets == null) {
-        return;
-    }
-    
-    boolean updated = false;
-    for (Budget b : budgets) {
-        if (b.getCategoryId() == categoryId && !transactionDate.before(b.getStartDate()) && !transactionDate.after(b.getEndDate())) {
-            b.addObserver(notificationManager);
-            b.updateSpent(amount, balance);
-            db.updateBudget(b);
-            updated = true;
+  public void updateBudgetSpent(int userId, int categoryId, double amount, Date transactionDate) {
+        List<Budget> budgets = db.fetchBudgets(userId);
+        if (budgets == null) return;
+        
+        boolean updated = false;
+        for (Budget b : budgets) {
+            if (b.getCategoryId() == categoryId && !transactionDate.before(b.getStartDate()) && !transactionDate.after(b.getEndDate())) {
+                b.updateSpent(amount); // Removed the 'balance' argument here
+                db.updateBudget(b);
+                updated = true;
+            }
+        }
+        if (!updated) {
+            System.out.println("No active budget matched for this transaction's date and category.");
         }
     }
-    if (!updated) {
-        System.out.println("No active budget matched for this transaction's date and category.");
-    }
-}
 }
