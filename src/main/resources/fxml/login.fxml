@@ -6,23 +6,37 @@
 <?import javafx.scene.control.Label ?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField ?>
+<?import javafx.scene.control.ScrollPane?>
 
-<VBox stylesheets="/css/style.css" alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.budgetapp.UI.LoginController">
-<padding>
-    <Insets bottom="20" left="30" right="30" top="20" />
-</padding>
-    <Label text="Budget App Login" style="-fx-font-weight: bold;-fx-font-size:24;">
+<ScrollPane fitToWidth="true" 
+fitToHeight="true"
 
-    </Label>
+            prefHeight="650.0" 
+            prefWidth="900.0" 
+            stylesheets="/css/style.css" 
+            styleClass="scroll-pane"
+            xmlns="http://javafx.com/javafx/17" 
+            xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="com.budgetapp.UI.LoginController">
+
+    <!-- The VBox now acts as the main content area -->
+    <content>
+        <VBox styleClass="main-container" alignment="CENTER">
+
+    <Label text="Budget App Login" styleClass="login-title" />
+
     <VBox spacing="5">
-        <Label text="Email"/>
+        <Label text="Email " styleClass="field-label"/>
         <TextField fx:id="emailField" prefHeight="35" promptText="Enter Your Email"/>
     </VBox>
     <VBox spacing="5">
-        <Label text="Password"/>
+        <Label text="Password" styleClass="field-label"/>
         <PasswordField fx:id="passwordField" prefHeight="35" promptText="Enter Your Password"/>
     </VBox>
+
     <Label fx:id="label" text=""/>
-    <Button mnemonicParsing="false" onAction="#handleLoginAction" prefHeight="35.0" prefWidth="290.0" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px;" text="Log In" />
-    <Hyperlink onAction="#handleGoToRegister" text="Don't have an account?" />
+    <Button mnemonicParsing="false" text="Login" styleClass="btn-primary" onAction="#handleLoginAction" prefHeight="35.0" prefWidth="290.0"  />
+    <Hyperlink onAction="#handleGoToRegister" styleClass="link-label" text="Don't have an account?" />
 </VBox>
+
+</content></ScrollPane>

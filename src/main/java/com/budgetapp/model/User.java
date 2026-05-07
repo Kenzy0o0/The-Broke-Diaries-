@@ -97,6 +97,8 @@ public class User {
      * <p>
      * Getter for the field <code>name</code>.</p> * @return a
      * {@link java.lang.String} object
+     *
+     * @return a {@link java.lang.String} object
      */
     public String getName() {
         return name;
@@ -125,7 +127,7 @@ public class User {
     /**
      * <p>
      *
-    * Getter for the field <code>id</code>.</p>
+     * Getter for the field <code>id</code>.</p>
      *
      * @return a int
      */

@@ -9,7 +9,7 @@ import com.budgetapp.model.Transaction;
 /**
  * Factory class for creating Transaction objects. Implements the Factory design
  * pattern to centralize the creation of {@link com.budgetapp.model.Income} and
- * {@link Expense} objects.
+ * {@link com.budgetapp.model.Expense} objects.
  *
  * @version 1.0
  * @author WeDon'tHave

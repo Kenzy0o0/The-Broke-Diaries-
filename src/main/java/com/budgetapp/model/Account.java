@@ -62,6 +62,8 @@ public class Account {
      * <p>
      * Getter for the field <code>password</code>.</p> * @return the hashed
      * password string.
+     *
+     * @return a {@link java.lang.String} object
      */
     public String getPassword() {
         return password;
@@ -90,7 +92,7 @@ public class Account {
     /**
      * <p>
      *
-    * Setter for the field <code>userId</code>.</p>
+     * Setter for the field <code>userId</code>.</p>
      *
      * @param userId the ID to link this account to a specific user.
      */

@@ -193,14 +193,6 @@ public class ReportScreen implements Initializable {
         }
     }
 
-    // Navigation 
-    private void switchScene(ActionEvent e, String path) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(path));
-        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
-
     /**
      * <p>
      * handleGoToDashboard.</p>
@@ -210,6 +202,6 @@ public class ReportScreen implements Initializable {
      */
     @FXML
     public void handleGoToDashboard(ActionEvent e) throws IOException {
-        switchScene(e, "/fxml/dashboard.fxml");
+        UIManager.switchScene(e, "/fxml/dashboard.fxml");
     }
 }

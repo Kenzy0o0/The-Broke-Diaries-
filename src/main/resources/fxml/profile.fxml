@@ -7,33 +7,64 @@
 <?import javafx.scene.control.Label ?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField ?>
+<?import javafx.scene.control.ScrollPane?>
 
-<VBox stylesheets="/css/style.css" alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.budgetapp.UI.ProfileController">
-    <padding>
-        <Insets bottom="20" left="30" right="30" top="20" />
-    </padding>
-    <Label text="User Profile" style="-fx-font-weight: bold;-fx-font-size:24;"/>
-    <VBox spacing="5">
-        <Label text="Full Name"/>
-        <TextField fx:id="nameField" prefHeight="35" promptText="Update Your Name"/>
-    </VBox>
-    <VBox spacing="5">
-        <Label text="Email"/>
-        <TextField fx:id="emailField" editable="false"  prefHeight="35" />
-    </VBox>
-    <VBox spacing="5">
-        <Label text="Password"/>
-        <PasswordField fx:id="passwordField" editable="false"  prefHeight="35" />
-    </VBox>
-    <VBox spacing="5">
-        <Label text="Currency"/>
-        <TextField fx:id="currencyField" prefHeight="35" promptText="Update currency (e.g EGP,USD)"/>
-    </VBox>
-    <Label fx:id="label" text=""/>
-    <Button mnemonicParsing="false" onAction="#handleUpdateProfile" prefHeight="35.0" prefWidth="290.0" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px;" text="Save" />
-    <HBox alignment="CENTER" spacing="20" prefWidth="300">
-        <Button mnemonicParsing="false" onAction="#handleGoTODashboard" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 5px;" text="Dashboard" />
+<ScrollPane fitToWidth="true" 
+            fitToHeight="true"
+            prefHeight="650.0" 
+            prefWidth="900.0" 
+            stylesheets="/css/style.css" 
+            styleClass="scroll-pane"
+            xmlns="http://javafx.com/javafx/17" 
+            xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="com.budgetapp.UI.ProfileController">
 
-        <Button mnemonicParsing="false" onAction="#handleSignOut" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px;" text="Sign Out" />
-    </HBox>
-</VBox>
+    <content>
+        <VBox styleClass="main-container" alignment="TOP_CENTER" spacing="20">
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
+
+            <Label text="User Profile" styleClass="title-label"/>
+
+            <VBox styleClass="form-card" maxWidth="500" spacing="15" alignment="CENTER_LEFT">
+                
+                <VBox spacing="5">
+                    <Label text="Full Name" styleClass="field-label"/>
+                    <TextField fx:id="nameField" prefHeight="35" promptText="Update Your Name" maxWidth="Infinity"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Email" styleClass="field-label"/>
+                    <TextField fx:id="emailField" editable="false" prefHeight="35" maxWidth="Infinity"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Password" styleClass="field-label"/>
+                    <PasswordField fx:id="passwordField" editable="false" prefHeight="35" maxWidth="Infinity"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Currency" styleClass="field-label"/>
+                    <TextField fx:id="currencyField" prefHeight="35" promptText="Update currency (e.g EGP, USD)" maxWidth="Infinity"/>
+                </VBox>
+
+                <Label fx:id="label" text=""/>
+
+                <Button mnemonicParsing="false" styleClass="btn-success" 
+                        onAction="#handleUpdateProfile" prefHeight="35.0" 
+                        text="Save" maxWidth="Infinity"/>
+
+                <HBox alignment="CENTER" spacing="20">
+                    <Button mnemonicParsing="false" styleClass="btn-outline" 
+                            onAction="#handleGoTODashboard" prefHeight="35.0" 
+                            text="Dashboard" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+
+                    <Button mnemonicParsing="false" styleClass="btn-danger" 
+                            onAction="#handleSignOut" prefHeight="35.0" 
+                            text="Sign Out" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+                </HBox>
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>

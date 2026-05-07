@@ -120,20 +120,6 @@ public class Dashboard {
     }
 
     /**
-     * Utility method to transition the application to a different view.
-     *
-     * @param e The ActionEvent triggered by the button click
-     * @param path The relative path to the target .fxml file
-     * @throws IOException if the FXML file cannot be found or loaded
-     */
-    private void switchScene(ActionEvent e, String path) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(path));
-        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
-
-    /**
      * Handles navigation to the transaction management screen.
      *
      * @param e a {@link javafx.event.ActionEvent} object
@@ -141,7 +127,7 @@ public class Dashboard {
      */
     @FXML
     public void handleGoToTransactions(ActionEvent e) throws IOException {
-        switchScene(e, "/fxml/transaction.fxml");
+        UIManager.switchScene(e, "/fxml/transaction.fxml");
     }
 
     /**
@@ -152,7 +138,7 @@ public class Dashboard {
      */
     @FXML
     public void handleGoToBudget(ActionEvent e) throws IOException {
-        switchScene(e, "/fxml/budget.fxml");
+        UIManager.switchScene(e, "/fxml/budget.fxml");
     }
 
     /**
@@ -164,7 +150,7 @@ public class Dashboard {
      */
     @FXML
     public void handleGoToReports(ActionEvent e) throws IOException {
-        switchScene(e, "/fxml/report.fxml");
+        UIManager.switchScene(e, "/fxml/report.fxml");
     }
 
     /**
@@ -176,7 +162,7 @@ public class Dashboard {
      */
     @FXML
     public void handleGoToProfile(ActionEvent e) throws IOException {
-        switchScene(e, "/fxml/profile.fxml");
+        UIManager.switchScene(e, "/fxml/profile.fxml");
     }
 
     /**
@@ -189,6 +175,6 @@ public class Dashboard {
     @FXML
     public void handleSignOut(ActionEvent e) throws IOException {
         authManager.logout();
-        switchScene(e, "/fxml/login.fxml");
+        UIManager.switchScene(e, "/fxml/login.fxml");
     }
 }
