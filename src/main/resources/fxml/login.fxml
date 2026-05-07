@@ -22,8 +22,8 @@ fitToHeight="true"
     <!-- The VBox now acts as the main content area -->
     <content>
         <VBox styleClass="main-container" alignment="CENTER">
-
-    <Label text="Budget App Login" styleClass="login-title" />
+    <Label text="The Broke Diaries" styleClass="title-label" />
+    <Label text="Login" styleClass="section-label" />
 
     <VBox spacing="5">
         <Label text="Email " styleClass="field-label"/>

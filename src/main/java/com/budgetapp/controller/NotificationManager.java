@@ -65,7 +65,7 @@ public class NotificationManager implements IBudgetObserver {
         popup.setTitle("Budget Alert");
         popup.setResizable(false);
 
-        Label icon = new Label("⚠");
+        Label icon = new Label("\u26A0");
         icon.setStyle("-fx-font-size: 28px; -fx-text-fill: #00c2a8;");
 
         Label header = new Label("Budget Limit Exceeded!");

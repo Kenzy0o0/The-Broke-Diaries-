@@ -23,7 +23,9 @@ fitToHeight="true"
     <content>
         <VBox styleClass="main-container">
 
-    <Label text="Budget App Sign up" styleClass="login-title" />
+   <Label text="The Broke Diaries" styleClass="title-label" />
+    <Label text="Sign Up" styleClass="section-label" />
+
 
     <VBox spacing="5">
         <Label text="Full Name" styleClass="field-label"/>
