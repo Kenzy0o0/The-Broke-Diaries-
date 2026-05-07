@@ -84,7 +84,7 @@ public class TransactionManager {
 
             if (type.equalsIgnoreCase("expense")) {
                 BudgetManager bm = new BudgetManager();
-                bm.updateBudgetSpent(userId, cat.getCategoryId(), amount);
+                bm.updateBudgetSpent(userId, cat.getCategoryId(), amount, date);
             }
 
             System.out.println("Transaction saved successfully");
