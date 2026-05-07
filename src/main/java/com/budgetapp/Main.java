@@ -32,6 +32,7 @@ public class Main extends Application {
         );
         primaryStage.setTitle("The Broke Diaries");
         primaryStage.setScene(new Scene(root, 900, 650));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

@@ -1,12 +1,13 @@
 package com.budgetapp.UI;
 
+import java.io.IOException;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.Node;
-import javafx.event.ActionEvent;
 import javafx.stage.Stage;
-import java.io.IOException;
 
 /**
  * <p>
@@ -40,8 +41,9 @@ public class UIManager {
             double currentHeight = stage.getHeight();
             boolean isMaximized = stage.isMaximized();
 
-            Scene scene = new Scene(root);
-
+            Scene scene = new Scene(root, 900, 650);
+            stage.setScene(scene);
+            stage.setResizable(false);
             // 4. Apply to stage
             if (isMaximized) {
                 stage.setMaximized(true);

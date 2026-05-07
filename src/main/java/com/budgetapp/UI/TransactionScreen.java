@@ -176,17 +176,18 @@ public class TransactionScreen {
 
         Category selectedCategory = categoryList.get(selectedIndex);
 
-        // // TODO: replace with real session userId
         int userId = AuthManager.getInstance().getCurrentUser().getId();
 
         TransactionManager tm = new TransactionManager();
-        tm.addTransaction(userId, type, amount,
-                selectedCategory, date,
-                description, extra);
-
-        messageLabel.setStyle("-fx-text-fill: green;");
-        messageLabel.setText("Transaction saved successfully!");
-        clearForm();
+        boolean success = tm.addTransaction(userId, type, amount, selectedCategory, date, description, extra);
+        if (success) {
+            messageLabel.setStyle("-fx-text-fill: green;");
+            messageLabel.setText("Transaction saved successfully!");
+            clearForm();
+        } else {
+            messageLabel.setStyle("-fx-text-fill: red;");
+            messageLabel.setText("Failed to save transaction. Please check your input (e.g., date, amount) and try again.");
+        }
     }
 
     /**

@@ -102,29 +102,27 @@ public class BudgetManager {
      * @param transactionDate the date of the transaction to match against budget cycles
      */
 
-    // Updated method: only update budgets whose cycle includes the transaction date
-    public void updateBudgetSpent(int userId, int categoryId, double amount, Date transactionDate) {
-        List<Budget> budgets = db.fetchBudgets(userId);
-        User user = db.fetchUser(userId);
-        double balance = user.getBalance();
-        if (budgets == null) {
-            return;
-        }
-        boolean updated = false;
-        for (Budget b : budgets) {
-            if (b.getCategoryId() == categoryId
-                    && !transactionDate.before(b.getStartDate())
-                    && !transactionDate.after(b.getEndDate())) {
-                b.addObserver(notificationManager);
-                b.updateSpent(amount, balance);
-                db.updateBudget(b);
-                updated = true;
-                // If you want only the first matching budget (no overlaps):
-                // break;
-            }
-        }
-        if (!updated) {
-            System.out.println("No active budget matched for this transaction's date and category.");
+    // only update budgets whose cycle includes the transaction date
+   public void updateBudgetSpent(int userId, int categoryId, double amount, Date transactionDate) {
+    List<Budget> budgets = db.fetchBudgets(userId);
+    User user = db.fetchUser(userId);
+    double balance = user.getBalance();
+    if (budgets == null) {
+        return;
+    }
+    boolean updated = false;
+    for (Budget b : budgets) {
+        if (b.getCategoryId() == categoryId
+                && !transactionDate.before(b.getStartDate())
+                && !transactionDate.after(b.getEndDate())) {
+            b.addObserver(notificationManager);
+            b.updateSpent(amount, balance);
+            db.updateBudget(b);
+            updated = true;
         }
     }
+    if (!updated) {
+        System.out.println("No active budget matched for this transaction's date and category.");
+    }
+}
 }

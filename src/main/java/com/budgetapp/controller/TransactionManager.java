@@ -52,46 +52,73 @@ public class TransactionManager {
      * @param description a {@link java.lang.String} object
      * @param extra a {@link java.lang.String} object
      */
-    public void addTransaction(int userId, String type, double amount,
-            Category cat, Date date,
-            String description, String extra) {
-        Transaction t;
+  /**
+ * @return A success flag (true if added, false if input/DB errors)
+ */
+public boolean addTransaction(int userId, String type, double amount,Category cat, Date date,String description, String extra) {
+    Transaction t;
 
-        if(amount<=0){
-            System.out.println("Amount must be positive");
-            return;
-        }
-
-        if (type.equalsIgnoreCase("income")) {
-            t = TransactionFactory.CreateIncome(
-                    0, userId, cat.getCategoryId(), amount, date, description, extra
-            );
-        } else {
-            t = TransactionFactory.CreateExpense(
-                    0, userId, cat.getCategoryId(), amount, date, description, extra
-            );
-        }
-
-        boolean saved = db.saveTransaction(t);
-
-        if (saved) {
-            User user = db.fetchUser(userId);
-            if (user != null) {
-                double change = type.equalsIgnoreCase("income") ? amount : -amount;
-                user.updateBalance(change);
-                db.updateUser(user);
-            }
-
-            if (type.equalsIgnoreCase("expense")) {
-                BudgetManager bm = new BudgetManager();
-                bm.updateBudgetSpent(userId, cat.getCategoryId(), amount, date);
-            }
-
-            System.out.println("Transaction saved successfully");
-        } else {
-            System.out.println("Transaction save failed");
-        }
+    // Input validation
+    if (amount <= 0) {
+        System.out.println("Amount must be positive");
+        return false;
     }
+    if (cat == null) {
+        System.out.println("Category is required");
+        return false;
+    }
+    if (type == null || (!type.equalsIgnoreCase("income") && !type.equalsIgnoreCase("expense"))) {
+        System.out.println("Transaction type must be 'income' or 'expense'");
+        return false;
+    }
+    if (description == null || description.trim().isEmpty()) {
+        System.out.println("Description is required");
+        return false;
+    }
+    if (date == null) {
+        System.out.println("Date is required");
+        return false;
+    }
+    Date now = new Date();
+    if (date.after(now)) {
+        System.out.println("Date cannot be in the future");
+        return false;
+    }
+    User user = db.fetchUser(userId);
+    if (user == null) {
+        System.out.println("User not found");
+        return false;
+    }
+    if (type.equalsIgnoreCase("expense") && user.getBalance() < amount) {
+        System.out.println("Insufficient funds");
+        return false;
+    }
+
+    // Create Transaction
+    if (type.equalsIgnoreCase("income")) {
+        t = TransactionFactory.CreateIncome(0, userId, cat.getCategoryId(), amount, date, description, extra);
+    } else {
+        t = TransactionFactory.CreateExpense(0, userId, cat.getCategoryId(), amount, date, description, extra);
+    }
+
+    boolean saved = db.saveTransaction(t);
+
+    if (saved) {
+        double change = type.equalsIgnoreCase("income") ? amount : -amount;
+        user.updateBalance(change);
+        db.updateUser(user);
+
+        if (type.equalsIgnoreCase("expense")) {
+            BudgetManager bm = new BudgetManager();
+            bm.updateBudgetSpent(userId, cat.getCategoryId(), amount, date);
+        }
+        System.out.println("Transaction saved successfully");
+        return true;
+    } else {
+        System.out.println("Transaction save failed");
+        return false;
+    }
+}
 
     /**
      * Fetches a specific "page" of transactions.

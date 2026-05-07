@@ -1,6 +1,7 @@
 package com.budgetapp.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Abstract base class for all financial transactions. Subclasses
@@ -57,8 +58,8 @@ public abstract class Transaction {
         this.userId = userId;
         this.categoryId = categoryId;
         this.amount = amount;
-        this.date = date;
-        this.description = description;
+        this.date = Objects.requireNonNull(date, "Transaction date cannot be null");
+        this.description = Objects.requireNonNull(description, "Description cannot be null");
     }
 
     // Getters and setters
@@ -163,7 +164,7 @@ public abstract class Transaction {
      * @param date a {@link java.util.Date} object
      */
     public void setDate(Date date) {
-        this.date = date;
+        this.date = Objects.requireNonNull(date, "Transaction date cannot be null");
     }
 
     /**
@@ -183,7 +184,7 @@ public abstract class Transaction {
      * @param description a {@link java.lang.String} object
      */
     public void setDescription(String description) {
-        this.description = description;
+        this.description = Objects.requireNonNull(description, "Description cannot be null");
     }
 
     /**
