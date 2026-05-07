@@ -57,6 +57,11 @@ public class TransactionManager {
             String description, String extra) {
         Transaction t;
 
+        if(amount<=0){
+            System.out.println("Amount must be positive");
+            return;
+        }
+
         if (type.equalsIgnoreCase("income")) {
             t = TransactionFactory.CreateIncome(
                     0, userId, cat.getCategoryId(), amount, date, description, extra
