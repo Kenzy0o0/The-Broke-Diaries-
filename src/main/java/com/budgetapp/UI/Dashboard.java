@@ -13,13 +13,10 @@ import com.budgetapp.model.User;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.stage.Stage;
+import javafx.stage.Popup;
 
 /**
  * <p>
@@ -44,6 +41,10 @@ public class Dashboard {
     private Label budgetWarningLabel;
     @FXML
     private ListView<String> recentTransactionsList;
+    @FXML
+    private Button notificationButton;
+    @FXML
+    private Popup notificationPopup;
 
     /**
      * Manager for session handling and user authentication.
@@ -76,6 +77,7 @@ public class Dashboard {
 
         loadSummary(currentUser);
         loadRecentTransactions(currentUser);
+        welcomeLabel.setText("Welcome back, " + currentUser.getName() + "!");
     }
 
     /**
@@ -177,4 +179,8 @@ public class Dashboard {
         authManager.logout();
         UIManager.switchScene(e, "/fxml/login.fxml");
     }
+
+    /**
+     * Displays a popup with the user's unread notifications.
+     */
 }

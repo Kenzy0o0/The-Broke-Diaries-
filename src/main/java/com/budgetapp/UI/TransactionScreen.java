@@ -193,16 +193,18 @@ public class TransactionScreen {
     /**
      * Returns the user to the main Dashboard view.
      */
-    @FXML
+     @FXML
     private void handleBack() {
         try {
             Parent root = FXMLLoader.load(
-                    getClass().getResource("/fxml/dashboard.fxml")
+                getClass().getResource("/fxml/dashboard.fxml")
             );
             Stage stage = (Stage) amountField.getScene().getWindow();
-            stage.setScene(new Scene(root, 900, 650));
+            stage.setScene(new Scene(root, UIManager.WIDTH, UIManager.HEIGHT));
+            stage.setResizable(false);
+            stage.show();
         } catch (Exception e) {
-            System.out.println("Navigation failed: " + e.getMessage());
+            System.err.println("TransactionScreen: back navigation failed – " + e.getMessage());
         }
     }
 

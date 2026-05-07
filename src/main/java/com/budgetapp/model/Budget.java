@@ -236,6 +236,7 @@ public class Budget {
      * @throws java.lang.IllegalArgumentException if amount is negative
      * @param balance a double
      */
+    
     public void updateSpent(double amount,double balance) {
         if (amount > 0) {
             if(this.currentSpent+amount >=limit || amount>balance){

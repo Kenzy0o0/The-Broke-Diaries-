@@ -53,6 +53,28 @@ public class BudgetManager {
         }
     }
 
+        /**
+     * Checks if adding an expense would exceed the active budget limit for a category.
+     *
+     * @param userId          the user
+     * @param categoryId      the expense category
+     * @param amount          the expense amount
+     * @param transactionDate the date of the expense
+     * @return true if the new spending would exceed the limit, false otherwise
+     */
+    public boolean wouldExceedBudget(int userId, int categoryId, double amount, Date transactionDate) {
+        List<Budget> budgets = db.fetchBudgets(userId);
+        if (budgets == null) return false;
+
+        for (Budget b : budgets) {
+            if(b.getCategoryId() == categoryId && !transactionDate.before(b.getStartDate()) && !transactionDate.after(b.getEndDate())) {
+                double newSpent = b.getCurrentSpent() + amount;
+                return newSpent > b.getLimit();
+            }
+        }
+        return false; 
+    }
+
     /**
      * Modifies the spending limit of an existing budget.
      *
@@ -110,11 +132,10 @@ public class BudgetManager {
     if (budgets == null) {
         return;
     }
+    
     boolean updated = false;
     for (Budget b : budgets) {
-        if (b.getCategoryId() == categoryId
-                && !transactionDate.before(b.getStartDate())
-                && !transactionDate.after(b.getEndDate())) {
+        if (b.getCategoryId() == categoryId && !transactionDate.before(b.getStartDate()) && !transactionDate.after(b.getEndDate())) {
             b.addObserver(notificationManager);
             b.updateSpent(amount, balance);
             db.updateBudget(b);

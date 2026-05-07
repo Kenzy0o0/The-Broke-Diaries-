@@ -70,7 +70,7 @@ fitToHeight="true"
     <!-- Recent Transactions -->
     <Label text="Recent Transactions" styleClass="section-label"/>
     <ListView fx:id="recentTransactionsList" prefHeight="180"/>
-
+    
 
 </VBox>
 </content>

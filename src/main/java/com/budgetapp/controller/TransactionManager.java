@@ -103,21 +103,32 @@ public boolean addTransaction(int userId, String type, double amount,Category ca
 
     boolean saved = db.saveTransaction(t);
 
-    if (saved) {
-        double change = type.equalsIgnoreCase("income") ? amount : -amount;
-        user.updateBalance(change);
-        db.updateUser(user);
+   if (saved) {
+    double change = type.equalsIgnoreCase("income") ? amount : -amount;
 
-        if (type.equalsIgnoreCase("expense")) {
-            BudgetManager bm = new BudgetManager();
-            bm.updateBudgetSpent(userId, cat.getCategoryId(), amount, date);
+    // BUDGET CHECK for expenses
+    if (type.equalsIgnoreCase("expense")) {
+        BudgetManager bm = new BudgetManager();
+        if (bm.wouldExceedBudget(userId, cat.getCategoryId(), amount, date)) {
+            System.out.println("Transaction rejected: would exceed budget limit for category " + cat.getName());
+            return false;
         }
-        System.out.println("Transaction saved successfully");
-        return true;
-    } else {
-        System.out.println("Transaction save failed");
-        return false;
     }
+
+    user.updateBalance(change);
+    db.updateUser(user);
+
+    if (type.equalsIgnoreCase("expense")) {
+        BudgetManager bm = new BudgetManager();
+        bm.updateBudgetSpent(userId, cat.getCategoryId(), amount, date);
+    }
+
+    System.out.println("Transaction saved successfully");
+    return true;
+} else {
+    System.out.println("Transaction save failed");
+    return false;
+}
 }
 
     /**

@@ -19,8 +19,8 @@ import javafx.stage.Stage;
 public class UIManager {
 
     // Constants for your consistent dimensions
-    private static final double WIDTH = 900;
-    private static final double HEIGHT = 650;
+   static final double WIDTH = 900;
+    static final double HEIGHT = 650;
 
     /**
      * Utility method to transition the application to a different view.
@@ -31,32 +31,23 @@ public class UIManager {
      */
     public static void switchScene(ActionEvent event, String fxmlPath) {
         try {
-            // load new fxml
-            Parent root = FXMLLoader.load(UIManager.class.getResource(fxmlPath));
-
-            // 2. Get the current Stage from the button/event that was clicked
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            double currentWidth = stage.getWidth();
-            double currentHeight = stage.getHeight();
-            boolean isMaximized = stage.isMaximized();
-
-            Scene scene = new Scene(root, 900, 650);
-            stage.setScene(scene);
+            Parent root = FXMLLoader.load(
+                UIManager.class.getResource(fxmlPath)
+            );
+ 
+            Stage stage = (Stage) ((Node) event.getSource())
+                                      .getScene()
+                                      .getWindow();
+ 
+            // Build the new scene at the fixed application size
+            Scene scene = new Scene(root, WIDTH, HEIGHT);
+ 
+            stage.setScene(scene);          // set exactly ONCE
             stage.setResizable(false);
-            // 4. Apply to stage
-            if (isMaximized) {
-                stage.setMaximized(true);
-            } else {
-                stage.setWidth(currentWidth);
-                stage.setHeight(currentHeight);
-            }
-
-            stage.setScene(scene);
             stage.show();
-
+ 
         } catch (IOException e) {
-            System.err.println("Error loading FXML: " + fxmlPath);
+            System.err.println("UIManager: failed to load FXML → " + fxmlPath);
             e.printStackTrace();
         }
     }
