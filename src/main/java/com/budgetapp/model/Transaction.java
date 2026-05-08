@@ -139,16 +139,6 @@ public abstract class Transaction {
 
     /**
      * <p>
-     * Setter for the field <code>categoryId</code>.</p>
-     *
-     * @param categoryId a int
-     */
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    /**
-     * <p>
      * Getter for the field <code>date</code>.</p>
      *
      * @return a {@link java.util.Date} object
@@ -177,15 +167,6 @@ public abstract class Transaction {
         return description;
     }
 
-    /**
-     * <p>
-     * Setter for the field <code>description</code>.</p>
-     *
-     * @param description a {@link java.lang.String} object
-     */
-    public void setDescription(String description) {
-        this.description = Objects.requireNonNull(description, "Description cannot be null");
-    }
 
     /**
      * Polymorphic method to identify the subclass type. Must be implemented by

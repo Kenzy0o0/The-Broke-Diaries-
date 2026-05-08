@@ -279,42 +279,6 @@ public class DatabaseManager {
         return null;
     }
 
-    //** account
-    /**
-     * <p>
-     * fetchAccountByUserId.</p>
-     *
-     * @param userId a int
-     * @return a {@link com.budgetapp.model.Account} object
-     */
-    public Account fetchAccountByUserId(int userId) {
-
-        String command = "SELECT * FROM accounts WHERE uId = ?";
-
-        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
-            ps.setInt(1, userId);
-
-            // we use executeQuery for select statements, it returns a ResultSet object that contains the data returned by the query
-            // we can use the ResultSet object to iterate through the rows of the result and get the values of the columns by using the getString, getInt, etc. methods
-            // for example, if we want to get the fullName column value of the first row, we can use rs.getString("fullName") or rs.getString(2) if fullName is the second column in the select statement
-            // we can also check if there are more rows by using rs.next() method, which returns true if there is a next row and moves the cursor to that row, or false if there are no more rows
-            // in this case, we expect only one row to be returned, so we can just check if rs.next() is true and then get the values of the columns to create a User object and return it
-            // if rs.next() is false, it means there is no user with the given userId, so we can return null
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                Account account = new Account(
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getInt("uId"));
-                // get returns the attributes of the current row
-                return account;
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Account fetch failed: " + e.getMessage());
-        }
-        return null;
-    }
 
     /**
      * Retrieves a user's account credentials based on their unique email
@@ -367,26 +331,6 @@ public class DatabaseManager {
         return false;
     }
 
-    /**
-     * <p>
-     * updateAccount.</p>
-     *
-     * @param a a {@link com.budgetapp.model.Account} object
-     * @return a boolean
-     */
-    public boolean updateAccount(Account a) {
-        String command = "UPDATE accounts SET email = ?, password = ? WHERE uId = ?";
-        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
-            ps.setString(1, a.getEmail());
-            ps.setString(2, a.getPassword());
-            ps.setInt(3, a.getUserId());
-            ps.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.err.println("Account update failed: " + e.getMessage());
-        }
-        return false;
-    }
 
     //** transaction
     // you can save an income or an expense using the same method, because they are both transactions, and they have the same attributes, except for the source and paymentMethod, which can be null for one of them
@@ -420,77 +364,7 @@ public class DatabaseManager {
         return false;
     }
 
-    /**
-     * <p>
-     * updateTransaction.</p>
-     *
-     * @param t a {@link com.budgetapp.model.Transaction} object
-     * @return a boolean
-     */
-    public boolean updateTransaction(Transaction t) {
-        String command = "UPDATE transactions SET amount = ?, cId = ?, description = ?, date = ?, source = ?, paymentMethod = ? WHERE tId = ?";
-        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
-            ps.setDouble(1, t.getAmount());
-            ps.setInt(2, t instanceof Income ? ((Income) t).getCategoryId() : ((Expense) t).getCategoryId());
-            ps.setString(3, t.getDescription());
-            ps.setDate(4, new java.sql.Date(t.getDate().getTime()));
-            ps.setString(5, t instanceof Income ? ((Income) t).getSource() : null);
-            ps.setString(6, t instanceof Income ? null : ((Expense) t).getPaymentMethod());
-            ps.setInt(7, t.getId());
-            ps.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.err.println("Transaction update failed: " + e.getMessage());
-        }
-        return false;
-    }
 
-    /**
-     * <p>
-     * fetchTransaction.</p>
-     *
-     * @param tId a int
-     * @return a {@link com.budgetapp.model.Transaction} object
-     */
-    public Transaction fetchTransaction(int tId) {
-        String command = "SELECT * FROM transactions WHERE tId = ?";
-
-        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
-            ps.setInt(1, tId);
-
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                Transaction t;
-                if (rs.getString("type").equals("income")) {
-                    t = new Income(
-                            rs.getInt("tId"),
-                            rs.getInt("uId"),
-                            rs.getInt("cId"),
-                            rs.getDouble("amount"),
-                            rs.getDate("date"),
-                            rs.getString("description"),
-                            rs.getString("source")
-                    );
-                } else {
-                    t = new Expense(
-                            rs.getInt("tId"),
-                            rs.getInt("uId"),
-                            rs.getInt("cId"),
-                            rs.getDouble("amount"),
-                            rs.getDate("date"),
-                            rs.getString("description"),
-                            rs.getString("paymentMethod")
-                    );
-                }
-                return t;
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Transaction fetch failed: " + e.getMessage());
-        }
-        return null;
-    }
 
     /**
      * Retrieves all transactions for a specific user, ordered by date
@@ -690,24 +564,7 @@ public class DatabaseManager {
         return false;
     }
 
-    /**
-     * <p>
-     * deleteBudgetsByUserId.</p>
-     *
-     * @param userId a int
-     * @return a boolean
-     */
-    public boolean deleteBudgetsByUserId(int userId) {
-        String command = "DELETE from budgets where uId = ?";
-        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
-            ps.setInt(1, userId);
-            ps.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.err.println("Budgets delete failed: " + e.getMessage());
-        }
-        return false;
-    }
+
 
     /**
      * <p>
@@ -823,25 +680,7 @@ public class DatabaseManager {
         return null;
     }
 
-    //** category
-    /**
-     * <p>
-     * saveCategory.</p>
-     *
-     * @param c a {@link com.budgetapp.model.Category} object
-     * @return a boolean
-     */
-    public boolean saveCategory(Category c) {
-        String command = "Insert into categories (name) values(?);";
-        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
-            ps.setString(1, c.getName());
-            ps.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.err.println("Category save failed: " + e.getMessage());
-        }
-        return false;
-    }
+
 
     /**
      * <p>
@@ -893,24 +732,7 @@ public class DatabaseManager {
         return null;
     }
 
-    /**
-     * <p>
-     * deleteCategory.</p>
-     *
-     * @param cId a int
-     * @return a boolean
-     */
-    public boolean deleteCategory(int cId) {
-        String command = "DELETE FROM categories WHERE cId = ?";
-        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(command)) {
-            ps.setInt(1, cId);
-            ps.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.err.println("Category delete failed: " + e.getMessage());
-        }
-        return false;
-    }
+
 
     //** */ notification
     /**

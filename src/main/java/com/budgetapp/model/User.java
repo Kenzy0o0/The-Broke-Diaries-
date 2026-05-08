@@ -104,15 +104,7 @@ public class User {
         return name;
     }
 
-    /**
-     * <p>
-     * Setter for the field <code>balance</code>.</p>
-     *
-     * @param balance a double
-     */
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
+
 
     /**
      * <p>

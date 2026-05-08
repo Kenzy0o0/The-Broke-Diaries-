@@ -113,28 +113,7 @@ public class NotificationManager implements IBudgetObserver {
         popup.show();
     }
 
-    /**
-     * Retrieves all notifications for a user that have not been marked as read.
-     *
-     * @param userId the unique ID of the user
-     * @return a list of unread {@link Notification} objects; empty list if none
-     */
-    public List<Notification> getUnreadNotifications(int userId) {
-        List<Notification> all = DatabaseManager.getInstance().fetchNotifications(userId);
-        if (all == null) {
-            return new ArrayList<>();
-        }
-        return all.stream()
-                  .filter(n -> !n.isRead())
-                  .collect(Collectors.toList());
-    }
 
-    /**
-     * Updates a specific notification's status to 'read' in the database.
-     *
-     * @param notificationId the unique ID of the notification to update
-     */
-    public void markAsRead(int notificationId) {
-        DatabaseManager.getInstance().markNotificationRead(notificationId);
-    }
+
+
 }

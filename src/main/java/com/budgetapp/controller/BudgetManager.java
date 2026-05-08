@@ -81,22 +81,6 @@ public class BudgetManager {
         return false; 
     }
 
-    /**
-     * Modifies the spending limit of an existing budget.
-     *
-     * @param budgetId the unique ID of the budget to edit
-     * @param newLimit the updated threshold value
-     */
-    public void editBudget(int budgetId, double newLimit) {
-        Budget b = db.fetchBudget(budgetId);
-        if (b == null) {
-            System.out.println("Budget not found");
-            return;
-        }
-        b.setLimit(newLimit);
-        db.updateBudget(b);
-        System.out.println("Budget updated");
-    }
 
     /**
      * <p>

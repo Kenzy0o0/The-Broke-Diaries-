@@ -112,24 +112,7 @@ public boolean addTransaction(int userId, String type, double amount, Category c
     }
 }
 
-    /**
-     * Fetches a specific "page" of transactions.
-     *
-     * @param limit how many transactions to return.
-     * @param offset where to start in the list.
-     * @return a sublist of transactions for targeted display.
-     * @param userId a int
-     */
-    public List<Transaction> getTransactions(int userId, int limit, int offset) {
 
-        List<Transaction> all = db.fetchTransactions(userId);
-        if (all == null) {
-            return null;
-        }
-        int fromIndex = Math.min(offset, all.size());
-        int toIndex = Math.min(offset + limit, all.size());
-        return all.subList(fromIndex, toIndex);
-    }
 
     /**
      * The single shared instance of the manager.
@@ -146,43 +129,6 @@ public boolean addTransaction(int userId, String type, double amount, Category c
             instance = new TransactionManager();
         }
         return instance;
-    }
-
-    /**
-     * <p>
-     * deleteTransaction.</p>
-     *
-     * @param transactionId a int
-     */
-    public void deleteTransaction(int transactionId) {
-
-        boolean deleted = db.deleteTransaction(transactionId);
-        if (deleted) {
-            System.out.println("Transaction deleted");
-        } else {
-            System.out.println("Transaction delete failed");
-        }
-    }
-
-    /**
-     * <p>
-     *   * deactivateCategory.</p>
-     *
-     * @param categoryId a int
-     */
-    public void deactivateCategory(int categoryId) {
-        List<Category> categories = db.fetchCategories(0);
-        if (categories == null) {
-            return;
-        }
-        for (Category c : categories) {
-            if (c.getCategoryId() == categoryId) {
-                c.deactivate();
-                db.updateCategory(c);
-                System.out.println("Category deactivated: " + c.getName());
-                return;
-            }
-        }
     }
 
     /**
@@ -241,28 +187,5 @@ public boolean addTransaction(int userId, String type, double amount, Category c
     public double getCurrentBalance(User currentUser) {
         User fresh = db.fetchUser(currentUser.getId());
         return fresh != null ? fresh.getBalance() : 0;
-    }
-
-    /**
-     * <p>
-     * getAllTransactions.</p>
-     *
-     * @param userId a int
-     * @return a {@link java.util.List} object
-     */
-    public List<Transaction> getAllTransactions(int userId) {
-        return db.fetchTransactions(userId);
-    }
-
-    /**
-     * <p>
-     * getTransactionsByCategory.</p>
-     *
-     * @param userId a int
-     * @param categoryId a int
-     * @return a {@link java.util.List} object
-     */
-    public List<Transaction> getTransactionsByCategory(int userId, int categoryId) {
-        return db.fetchTransactionsByCategory(userId, categoryId);
     }
 }

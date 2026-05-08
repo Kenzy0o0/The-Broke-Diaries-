@@ -90,15 +90,7 @@ public class Budget {
         return budgetId;
     }
 
-    /**
-     * <p>
-     * Setter for the field <code>budgetId</code>.</p>
-     *
-     * @param budgetId a int
-     */
-    public void setBudgetId(int budgetId) {
-        this.budgetId = budgetId;
-    }
+
 
     /**
      * <p>
@@ -130,15 +122,6 @@ public class Budget {
         return categoryId;
     }
 
-    /**
-     * <p>
-     * Setter for the field <code>categoryId</code>.</p>
-     *
-     * @param categoryId a int
-     */
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
 
     /**
      * <p>
@@ -174,20 +157,7 @@ public class Budget {
         return currentSpent;
     }
 
-    /**
-     * <p>
-     * Setter for the field <code>currentSpent</code>.</p>
-     *
-     * @param currentSpent a double
-     */
-//    public void setCurrentSpent(double currentSpent) {
-//        if (currentSpent >= 0) {
-//            this.currentSpent = currentSpent;
-//            checkLimit();
-//        } else {
-//            throw new IllegalArgumentException("Current spent must be non negative");
-//        }
-//    }
+
 
     /**
      * <p>
@@ -199,15 +169,6 @@ public class Budget {
         return startDate;
     }
 
-    /**
-     * <p>
-     * Setter for the field <code>startDate</code>.</p>
-     *
-     * @param startDate a {@link java.util.Date} object
-     */
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
 
     /**
      * <p>
@@ -219,15 +180,7 @@ public class Budget {
         return endDate;
     }
 
-    /**
-     * <p>
-     * Setter for the field <code>endDate</code>.</p>
-     *
-     * @param endDate a {@link java.util.Date} object
-     */
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
+
 
    /**
      * Increments the current spending amount and triggers a limit check.
@@ -270,14 +223,6 @@ public class Budget {
         }
     }
 
-    /**
-     * Removes a registered observer so it no longer receives alerts.
-     *
-     * @param observer the listener to remove
-     */
-    public void removeObserver(IBudgetObserver observer) {
-        observers.remove(observer);
-    }
 
 //    /**
 //     * Iterates through all observers and triggers their update method. This is

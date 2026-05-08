@@ -96,25 +96,6 @@ public class Category {
     }
 
     /**
-     * <p>
-     *
-     * setActive.</p>
-     *
-     * @param active a boolean
-     */
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
-    /**
-     * Sets the category status to true. Useful for restoring a previously
-     * disabled category.
-     */
-    public void activate() {
-        isActive = true;
-    }
-
-    /**
      * Sets the category status to false. Use this instead of deletion to
      * maintain database integrity for existing transactions.
      */

@@ -69,25 +69,8 @@ public class Account {
         return password;
     }
 
-    /**
-     * <p>
-     * Setter for the field <code>email</code>.</p>
-     *
-     * @param email the new email address for this account.
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
-    /**
-     * <p>
-     * Setter for the field <code>password</code>.</p>
-     *
-     * @param password the new hashed password.
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
+
 
     /**
      * <p>

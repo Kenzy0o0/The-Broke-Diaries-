@@ -74,15 +74,6 @@ public class Income extends Transaction {
         return source;
     }
 
-    /**
-     * <p>
-     * Setter for the field <code>source</code>.</p>
-     *
-     * @param source the new origin string for this income.
-     */
-    public void setSource(String source) {
-        this.source = source;
-    }
 
     /**
      * {@inheritDoc}

@@ -148,15 +148,7 @@ public class Notification {
         return message;
     }
 
-    /**
-     * <p>
-     * Setter for the field <code>message</code>.</p>
-     *
-     * @param message a {@link java.lang.String} object
-     */
-    public void setMessage(String message) {
-        this.message = message;
-    }
+
 
     /**
      * <p>
@@ -168,23 +160,6 @@ public class Notification {
         return isRead;
     }
 
-    /**
-     * <p>
-     * setRead.</p>
-     *
-     * @param read a boolean
-     */
-    public void setRead(boolean read) {
-        isRead = read;
-    }
-
-    /**
-     * Updates the status of the notification to 'read'. Syntactic sugar for
-     * setRead(true).
-     */
-    public void markAsRead() {
-        isRead = true;
-    }
 
     /**
      * <p>

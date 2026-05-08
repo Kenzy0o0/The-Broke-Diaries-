@@ -80,16 +80,6 @@ public class Expense extends Transaction {
     }
 
     /**
-     * <p>
-     * Setter for the field <code>paymentMethod</code>.</p>
-     *
-     * @param paymentMethod a {@link java.lang.String} object
-     */
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    /**
      * {@inheritDoc}
      *
      * Identifies the nature of this transaction for UI rendering and reporting.
