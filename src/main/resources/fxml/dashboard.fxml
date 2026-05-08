@@ -16,7 +16,7 @@ fitToHeight="true"
             styleClass="scroll-pane"
             xmlns="http://javafx.com/javafx/17" 
             xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="com.budgetapp.UI.Dashboard">
+            fx:controller="com.budgetapp.UI.DashboardController">
 
     <!-- The VBox now acts as the main content area -->
     <content>

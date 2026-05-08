@@ -19,7 +19,7 @@
             styleClass="scroll-pane"
             xmlns="http://javafx.com/javafx/17" 
             xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="com.budgetapp.UI.BudgetScreen">
+            fx:controller="com.budgetapp.UI.BudgetController">
 
     <content>
         <VBox styleClass="main-container" spacing="20">

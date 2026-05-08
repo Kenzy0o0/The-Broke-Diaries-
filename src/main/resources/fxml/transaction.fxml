@@ -20,7 +20,7 @@
             styleClass="scroll-pane"
             xmlns="http://javafx.com/javafx/17" 
             xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="com.budgetapp.UI.TransactionScreen">
+            fx:controller="com.budgetapp.UI.TransactionController">
 
     <content>
         <VBox styleClass="main-container" alignment="TOP_CENTER" spacing="20">
