@@ -35,7 +35,7 @@ fitToHeight="true"
     </VBox>
 
     <Label fx:id="label" text=""/>
-    <Button mnemonicParsing="false" text="Login" styleClass="btn-primary" onAction="#handleLoginAction" prefHeight="35.0" prefWidth="290.0"  />
+    <Button mnemonicParsing="false" text="Login" styleClass="btn-primary" onAction="#handleLoginAction" prefWidth="290.0"  />
     <Hyperlink onAction="#handleGoToRegister" styleClass="link-label" text="Don't have an account?" />
 </VBox>
 

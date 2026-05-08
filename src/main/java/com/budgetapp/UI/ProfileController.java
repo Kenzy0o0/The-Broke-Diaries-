@@ -9,15 +9,10 @@ import com.budgetapp.model.User;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 /**
  * <p>
@@ -117,7 +112,6 @@ public class ProfileController implements Initializable {
      */
     @FXML
     public void handleGoTODashboard(ActionEvent e) throws IOException {
-        label.setText("Returning to DashBoard");
         UIManager.switchScene(e, "/fxml/dashboard.fxml");
         //???
     }

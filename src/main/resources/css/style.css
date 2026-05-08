@@ -6,11 +6,11 @@
   -fx-font-size: 13px;
   -fx-background-color: #0f1923;
 
-  CHART_COLOR_1: #00c2a8; 
-  CHART_COLOR_2: #ff4d4d; 
-  CHART_COLOR_3: #00d97e;
-  CHART_COLOR_4: #f59e0b;
-  CHART_COLOR_5: #3b82f6;
+  chart_color_1: #00c2a8;
+  chart_color_2: #ff4d4d;
+  chart_color_3: #00d97e;
+  chart_color_4: #f59e0b;
+  chart_color_5: #3b82f6;
 }
 
 .main-container {
@@ -90,58 +90,58 @@
 
 /* ───── DatePicker ────────────────────────────── */
 .date-picker {
-    -fx-background-color: #1a2535;
-    -fx-border-color: #2d3d55;
-    -fx-border-radius: 6;
+  -fx-background-color: #1a2535;
+  -fx-border-color: #2d3d55;
+  -fx-border-radius: 6;
 }
 .date-picker:focused {
-    -fx-border-color: #00c2a8;
+  -fx-border-color: #00c2a8;
 }
 .date-picker .text-field {
-    -fx-background-color: transparent;
-    -fx-text-fill: #e8edf4;
-    -fx-border-color: transparent;
+  -fx-background-color: transparent;
+  -fx-text-fill: #e8edf4;
+  -fx-border-color: transparent;
 }
 .date-picker .arrow-button {
-    -fx-background-color: transparent;
+  -fx-background-color: transparent;
 }
 .date-picker .arrow-button .arrow {
-    -fx-background-color: #e8edf4;
+  -fx-background-color: #e8edf4;
 }
 
 .date-picker-popup,
 .date-picker-popup > *,
 .date-picker-popup .calendar-grid {
-    -fx-background-color: #1a2535;
-    -fx-border-color: #2d3d55;
+  -fx-background-color: #1a2535;
+  -fx-border-color: #2d3d55;
 }
 .date-picker-popup .month-year-pane {
-    -fx-background-color: #232f42;
+  -fx-background-color: #232f42;
 }
 .date-picker-popup > * > .spinner .label {
-    -fx-text-fill: #e8edf4;
+  -fx-text-fill: #e8edf4;
 }
 .date-picker-popup .day-name-cell {
-    -fx-background-color: #1a2535;
-    -fx-text-fill: #6b7f99;
+  -fx-background-color: #1a2535;
+  -fx-text-fill: #6b7f99;
 }
 .date-picker-popup .day-cell,
 .date-picker-popup .day-cell .day-cell-label {
-    -fx-background-color: transparent;
-    -fx-text-fill: #e8edf4;
+  -fx-background-color: transparent;
+  -fx-text-fill: #e8edf4;
 }
 .date-picker-popup .day-cell:hover {
-    -fx-background-color: #2d3d55;
+  -fx-background-color: #2d3d55;
 }
 .date-picker-popup .today .day-cell-label {
-    -fx-text-fill: #00c2a8;
+  -fx-text-fill: #00c2a8;
 }
 .date-picker-popup .selected,
 .date-picker-popup .selected:hover {
-    -fx-background-color: #00c2a8;
+  -fx-background-color: #00c2a8;
 }
 .date-picker-popup .selected .day-cell-label {
-    -fx-text-fill: #0f1923;
+  -fx-text-fill: #0f1923;
 }
 
 /* ───── Buttons (simple, colourful) ───────────── */
@@ -152,6 +152,11 @@
   -fx-font-size: 13px;
   -fx-font-weight: bold;
   -fx-cursor: hand;
+  transition-property: -fx-background-color;
+
+  transition-duration: 0.5s;
+
+  transition-timing-function: ease-out;
 }
 .button:hover {
   -fx-opacity: 0.88;
@@ -163,6 +168,14 @@
 .btn-primary {
   -fx-background-color: #00c2a8;
   -fx-text-fill: #0f1923;
+}
+.btn-primary:hover {
+  /* -fx-background-color: transparent;
+  -fx-border-color: #00c2a8;
+  -fx-text-fill: #00c2a8; */
+  -fx-background-color: #00dfc4;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 194, 168, 0.5), 12, 0, 0, 0);
+  -fx-cursor: hand;
 }
 .btn-success {
   -fx-background-color: #00d97e;
@@ -179,11 +192,14 @@
 .btn-outline {
   -fx-background-color: transparent;
   -fx-border-color: #00c2a8;
-  -fx-border-width: 1.5px;
   -fx-text-fill: #00c2a8;
 }
 .btn-outline:hover {
-  -fx-background-color: #00c2a815;
+  /* -fx-background-color: #00c2a8;
+  -fx-text-fill: #0f1923; */
+  -fx-background-color: rgba(0, 194, 168, 0.1);
+  -fx-border-color: #00dfc4;
+  -fx-text-fill: #00dfc4;
 }
 
 /* ───── Dashboard card & amounts ──────────────── */
@@ -396,24 +412,24 @@
 
 /* 1. Remove the white background from the graph */
 .chart-plot-background {
-    -fx-background-color: transparent;
+  -fx-background-color: transparent;
 }
 
 /* 2. Style the Legend Box */
 .chart-legend {
-    -fx-background-color: #1a2535;
-    -fx-border-color: #2d3d55;
-    -fx-border-radius: 6;
-    -fx-background-radius: 6;
+  -fx-background-color: #1a2535;
+  -fx-border-color: #2d3d55;
+  -fx-border-radius: 6;
+  -fx-background-radius: 6;
 }
 .chart-legend-item {
-    -fx-text-fill: #e8edf4;
+  -fx-text-fill: #e8edf4;
 }
 
 /* 3. Text colors for axes */
 .axis {
-    -fx-tick-label-fill: #8a99b3;
+  -fx-tick-label-fill: #8a99b3;
 }
 .axis-label {
-    -fx-text-fill: #e8edf4;
+  -fx-text-fill: #e8edf4;
 }
