@@ -83,16 +83,16 @@
                 <Label fx:id="messageLabel" text="" styleClass="msg-error"/>
 
                 <HBox spacing="20">
-                    <Button text="Save Transaction"
-                            styleClass="btn-success"
-                            HBox.hgrow="ALWAYS"
-                            maxWidth="Infinity"
-                            onAction="#handleSave"/>
                     <Button text="Back"
                             styleClass="btn-outline"
                             HBox.hgrow="ALWAYS"
                             maxWidth="Infinity"
                             onAction="#handleBack"/>
+                    <Button text="Save Transaction"
+                            styleClass="btn-success"
+                            HBox.hgrow="ALWAYS"
+                            maxWidth="Infinity"
+                            onAction="#handleSave"/>
                 </HBox>
             </VBox>
         </VBox>

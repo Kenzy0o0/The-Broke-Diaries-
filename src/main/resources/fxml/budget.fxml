@@ -24,7 +24,13 @@
     <content>
         <VBox styleClass="main-container" spacing="20">
 
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="250">
+        <Button text="← Back" styleClass="btn-outline" maxWidth="Infinity" onAction="#handleBack"/>
+
             <Label text="Manage Budgets" styleClass="title-label"/>
+    </HBox>
+
 
             <HBox spacing="30" VBox.vgrow="ALWAYS">
                 
@@ -74,7 +80,6 @@
                 </VBox>
             </HBox>
 
-            <Button text="Back to Dashboard" styleClass="btn-outline" maxWidth="Infinity" onAction="#handleBack"/>
 
         </VBox>
     </content>

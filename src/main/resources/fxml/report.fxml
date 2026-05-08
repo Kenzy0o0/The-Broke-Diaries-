@@ -20,7 +20,7 @@ fitToHeight="true"
         <VBox styleClass="main-container">
 
     <!-- Header -->
-    <HBox alignment="CENTER_LEFT" spacing="10">
+    <HBox alignment="CENTER_LEFT" spacing="230">
         <Button text="← Back" onAction="#handleGoToDashboard" styleClass="btn-outline"
                 />
         <Label text="Reports and Analytics" styleClass="title-label"
