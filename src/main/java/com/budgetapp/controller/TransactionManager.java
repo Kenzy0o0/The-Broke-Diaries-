@@ -52,7 +52,9 @@ public class TransactionManager {
      * @param description a {@link java.lang.String} object
      * @param extra a {@link java.lang.String} object
      */
-  /**
+/**
+ * <p>addTransaction.</p>
+ *
  * @return A success flag (true if added, false if input/DB errors)
  */
 public boolean addTransaction(int userId, String type, double amount, Category cat, Date date, String description, String extra) {

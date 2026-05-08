@@ -64,6 +64,12 @@ public class RegisterController {
         authManager = AuthManager.getInstance();
     }
 
+    /**
+     * <p>handleRegisterAction.</p>
+     *
+     * @param e a {@link javafx.event.ActionEvent} object
+     * @throws java.io.IOException if any.
+     */
     @FXML
     public void handleRegisterAction(ActionEvent e) throws IOException {
         String name = nameField.getText();

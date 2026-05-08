@@ -27,6 +27,9 @@ import javafx.stage.StageStyle;
  * and shows a popup alert on the JavaFX UI thread.
  *
  * Implements {@link com.budgetapp.observer.IBudgetObserver}.
+ *
+ * @author 20240
+ * @version $Id: $Id
  */
 public class NotificationManager implements IBudgetObserver {
 

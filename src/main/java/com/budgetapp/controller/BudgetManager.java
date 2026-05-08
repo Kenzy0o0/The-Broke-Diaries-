@@ -52,9 +52,15 @@ public class BudgetManager {
         }
     }
 
-        /**
+    /**
      * Checks if adding an expense would exceed the active budget limit for a category.
      * Triggers a notification popup if the limit is exceeded.
+     *
+     * @param userId a int
+     * @param categoryId a int
+     * @param amount a double
+     * @param transactionDate a {@link java.util.Date} object
+     * @return a boolean
      */
     public boolean wouldExceedBudget(int userId, int categoryId, double amount, Date transactionDate) {
         List<Budget> budgets = db.fetchBudgets(userId);
@@ -103,16 +109,16 @@ public class BudgetManager {
         db.deleteBudget(budgetId);
     }
 
-    /**
-     * Logic to update spending totals whenever a new transaction occurs. It
-     * searches for an active budget matching the user and category, triggers
-     * the internal spending update, and saves the new total.
-     *
-     * @param userId the user performing the transaction
-     * @param categoryId the category of the expense
-     * @param amount the cost to add to the budget
-     * @param transactionDate the date of the transaction to match against budget cycles
-     */
+  /**
+   * Logic to update spending totals whenever a new transaction occurs. It
+   * searches for an active budget matching the user and category, triggers
+   * the internal spending update, and saves the new total.
+   *
+   * @param userId the user performing the transaction
+   * @param categoryId the category of the expense
+   * @param amount the cost to add to the budget
+   * @param transactionDate the date of the transaction to match against budget cycles
+   */
 
     // only update budgets whose cycle includes the transaction date
   public void updateBudgetSpent(int userId, int categoryId, double amount, Date transactionDate) {

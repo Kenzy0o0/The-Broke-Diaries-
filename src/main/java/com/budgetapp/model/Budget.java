@@ -182,7 +182,7 @@ public class Budget {
 
 
 
-   /**
+    /**
      * Increments the current spending amount and triggers a limit check.
      *
      * @param amount the value of the new expense to add

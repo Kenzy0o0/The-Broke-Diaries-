@@ -79,9 +79,7 @@ public class ReportController implements Initializable {
     private ReportGenerator reportGenerator = ReportGenerator.getInstance();
     private AuthManager authManager = AuthManager.getInstance();
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         User currentUser = authManager.getCurrentUser();

@@ -25,9 +25,8 @@ public class UIManager {
     /**
      * Utility method to transition the application to a different view.
      *
-     * @param e The ActionEvent triggered by the button click
-     * @param path The relative path to the target .fxml file
-     * @throws IOException if the FXML file cannot be found or loaded
+     * @param event a {@link javafx.event.ActionEvent} object
+     * @param fxmlPath a {@link java.lang.String} object
      */
     public static void switchScene(ActionEvent event, String fxmlPath) {
         try {
