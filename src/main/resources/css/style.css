@@ -5,6 +5,12 @@
   -fx-font-family: "Segoe UI", Arial, sans-serif;
   -fx-font-size: 13px;
   -fx-background-color: #0f1923;
+
+  CHART_COLOR_1: #00c2a8; 
+  CHART_COLOR_2: #ff4d4d; 
+  CHART_COLOR_3: #00d97e;
+  CHART_COLOR_4: #f59e0b;
+  CHART_COLOR_5: #3b82f6;
 }
 
 .main-container {
@@ -20,7 +26,7 @@
 
 /* ───── Base labels (all text) ────────────────── */
 .label {
-  -fx-text-fill: #e8edf4;
+  -fx-text-fill: #00c2a8;
 }
 
 /* ───── Titles and sections ───────────────────── */
@@ -411,18 +417,3 @@
 .axis-label {
     -fx-text-fill: #e8edf4;
 }
-
-/* 4. First Series (Income - Teal) */
-.default-color0.chart-bar { -fx-bar-fill: #00c2a8; }
-.default-color0.chart-pie { -fx-pie-color: #00c2a8; }
-.default-color0.chart-legend-item-symbol { -fx-background-color: #00c2a8; }
-
-/* 5. Second Series (Expenses - Red) */
-.default-color1.chart-bar { -fx-bar-fill: #ff4d4d; }
-.default-color1.chart-pie { -fx-pie-color: #ff4d4d; }
-.default-color1.chart-legend-item-symbol { -fx-background-color: #ff4d4d; }
-
-/* Extra Pie Chart Colors */
-.default-color2.chart-pie { -fx-pie-color: #00d97e; }
-.default-color3.chart-pie { -fx-pie-color: #f59e0b; }
-.default-color4.chart-pie { -fx-pie-color: #3b82f6; }
