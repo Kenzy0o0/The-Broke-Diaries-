@@ -5,9 +5,12 @@ Course: CS251 Introduction to Software Engineering
 Team:
 
 - Rawan Ahmed Said
-- Kenzy Khalil
-- Ramy Zaher
+- Kenzy Khalil Esmail
+- Ramy Zaher Mohamed
+  
+
 ![img alt](https://github.com/Kenzy0o0/The-Broke-Diaries-/blob/913ea129b38c1b474d919b878af4a631a5e824f6/image.png)
+
 # Budget App File Structure
 ```
 src/
